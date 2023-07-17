@@ -1,5 +1,5 @@
 <?php
-namespace OCA\TokenBaseDav\DAVPlugin
+namespace OCA\TokenBaseDav\DAVPlugin;
 
 use Sabre\DAV;
 use Sabre\DAV\Exception\BadRequest;
