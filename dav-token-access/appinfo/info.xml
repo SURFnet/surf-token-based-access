@@ -1,0 +1,13 @@
+<info>
+    <id>tokenbasedav</id>
+    <name>Token base DAV</name>
+    <description>enabling token acces on DAV file sharing</description>
+    <licence>AGPL</licence>
+    <author>Ponder source</author>
+    <version>0.0.1</version>
+    <namespace>TokenBaseDav</namespace>
+    <category>tool</category>
+    <dependencies>
+        <owncloud min-version="10" max-version="10" />
+    </dependencies>
+</info>
