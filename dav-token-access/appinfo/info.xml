@@ -10,4 +10,13 @@
     <dependencies>
         <owncloud min-version="10" max-version="10" />
     </dependencies>
+    <types>
+        <dav>
+    </types>
+
+    <sabre>
+		<plugins>
+			<plugin>OCA\TokenBaseDav\DAVPlugin\TokenAuth</plugin>
+		</plugins>
+	</sabre>
 </info>
