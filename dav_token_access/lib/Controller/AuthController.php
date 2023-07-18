@@ -37,9 +37,11 @@ class AuthController extends Controller {
 		$this->logger = $logger;
 		$this->session = $session;
 	}
-    /**
+
+	/**
+     * @NoAdminRequired
      * @NoCSRFRequired
-	 * @PublicPage
+     * @PublicPage
      */
     public function login() {
 		$username = $this->request->getParam("username");
@@ -50,5 +52,15 @@ class AuthController extends Controller {
 			return new JSONResponse(["token" => $token], Http::STATUS_OK);
 		}
 		return new JSONResponse([], Http::STATUS_UNAUTHORIZED);
+    }
+
+	/**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     * @PublicPage
+     */
+	public function test() {
+		error_log("oh I am there");
+		return new JSONResponse(["opps"=> "hitted"], Http::STATUS_OK);
     }
 }
