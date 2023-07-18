@@ -2,7 +2,7 @@
 return [
 'routes' => [
 	// Groups
-	['name' => "auth#getGroups", 'url' => '/auth/login', 'verb' => 'POST'],
+	['name' => "auth#login", 'url' => '/auth/login', 'verb' => 'POST'],
 ],
 	'resources' => []
 ];

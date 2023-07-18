@@ -40,7 +40,6 @@ class AuthController extends Controller {
     /**
      * @NoCSRFRequired
 	 * @PublicPage
-	 * @NoAdminRequired
      */
     public function login() {
 		$username = $this->request->getParam("username");
