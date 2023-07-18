@@ -2,6 +2,7 @@
 namespace OCA\TokenBaseDav\AppInfo;
 
 use OC\AppFramework\DependencyInjection\DIContainer;
+use OC\Core\Controller\LoginController;
 use OCA\TokenBaseDav\Services\CertificateProvider;
 use OCA\TokenBaseDav\Services\ConfigManager;
 use OCA\TokenBaseDav\Services\JWTHelper;
@@ -15,7 +16,7 @@ class Application extends App {
         $container = $this->getContainer();
 		$server = $container->getServer();
 
-        $container->registerService('AuthController', function(DIContainer $c) {
+        $container->registerService('AuthController', function($c) {
 			$server = $c->getServer();
 			$logger = $server->getLogger();
 			$config = $server->getConfig();
