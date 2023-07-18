@@ -14,8 +14,6 @@ class Application extends App {
         parent::__construct('tokenbasedav', $urlParams);
 
         $container = $this->getContainer();
-		$server = $container->getServer();
-
         $container->registerService('AuthController', function($c) {
 			$server = $c->getServer();
 			$logger = $server->getLogger();
@@ -24,11 +22,12 @@ class Application extends App {
 			$configManager = new ConfigManager($config);
 			$certificateProvider = new CertificateProvider($configManager, $encodingType, $logger);
 			$jwtHelper = new JWTHelper($certificateProvider, $logger);
-
+            $userSession = $server->getUserSession();
             return new AuthController(
                 $c->query('AppName'),
                 $c->query('Request'),
 				$jwtHelper,
+				$userSession,
 				$logger
             );
         });
