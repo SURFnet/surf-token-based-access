@@ -12,9 +12,11 @@ use \OCA\TokenBaseDav\Controller\AuthController;
 class Application extends App {
     public function __construct(array $urlParams=array()){
         parent::__construct('tokenbasedav', $urlParams);
-
+		error_log("inside application const");
         $container = $this->getContainer();
         $container->registerService('AuthController', function($c) {
+			error_log("inside registering");
+
 			$server = $c->getServer();
 			$logger = $server->getLogger();
 			$config = $server->getConfig();
@@ -31,5 +33,25 @@ class Application extends App {
 				$logger
             );
         });
+
+		$container->registerService('OCA\TokenBaseDav\Controller\AuthController', function($c) {
+			error_log("inside registering2");
+
+			$server = $c->getServer();
+			$logger = $server->getLogger();
+			$config = $server->getConfig();
+			$encodingType = $config->getSystemValue('dav.jwtEncodeType', CertificateProvider::AUTO_ENCODE_TYPE);
+			$configManager = new ConfigManager($config);
+			$certificateProvider = new CertificateProvider($configManager, $encodingType, $logger);
+			$jwtHelper = new JWTHelper($certificateProvider, $logger);
+			$userSession = $server->getUserSession();
+			return new AuthController(
+				$c->query('AppName'),
+				$c->query('Request'),
+				$jwtHelper,
+				$userSession,
+				$logger
+			);
+		});
     }
 }
