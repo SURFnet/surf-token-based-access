@@ -27,16 +27,16 @@ class AuthController extends Controller {
 	private $logger;
 	public function __construct(
 		$appName,
-		IRequest $request//,
-		//JWTHelper $jwtHelper,
-		//Session $session,
-		//ILogger $logger
+		IRequest $request,
+		JWTHelper $jwtHelper,
+		Session $session,
+		ILogger $logger
 	) {
 		parent::__construct($appName, $request);
 		error_log("inside controller ctor");
-		//$this->jwtHelper = $jwtHelper;
-		//$this->logger = $logger;
-		//$this->session = $session;
+		$this->jwtHelper = $jwtHelper;
+		$this->logger = $logger;
+		$this->session = $session;
 	}
 
 	/**
@@ -44,7 +44,7 @@ class AuthController extends Controller {
      * @NoCSRFRequired
      * @PublicPage
      */
-   /* public function login() {
+    public function login() {
 		$username = $this->request->getParam("username");
 		$pass = $this->request->getParam("password");
 		if ($this->session->login($username, $pass)) {
@@ -53,7 +53,7 @@ class AuthController extends Controller {
 			return new JSONResponse(["token" => $token], Http::STATUS_OK);
 		}
 		return new JSONResponse([], Http::STATUS_UNAUTHORIZED);
-    }*/
+    }
 
 	/**
      * @NoAdminRequired

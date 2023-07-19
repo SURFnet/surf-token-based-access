@@ -10,27 +10,25 @@ use \OCP\AppFramework\App;
 use \OCA\TokenBaseDav\Controller\AuthController;
 
 class Application extends App {
-    public function __construct(array $urlParams=array()){
-        parent::__construct('tokenbasedav', $urlParams);
-        $container = $this->getContainer();
-        /*$container->registerService('AuthController', function($c) {
-			error_log("inside registering");
+	public function __construct(array $urlParams=array()){
+		parent::__construct('tokenbasedav', $urlParams);
+		$container = $this->getContainer();
 
+		$container->registerService('OCA\TokenBaseDav\Services\CertificateProvider', function($c) {
 			$server = $c->getServer();
 			$logger = $server->getLogger();
 			$config = $server->getConfig();
 			$encodingType = $config->getSystemValue('dav.jwtEncodeType', CertificateProvider::AUTO_ENCODE_TYPE);
 			$configManager = new ConfigManager($config);
-			$certificateProvider = new CertificateProvider($configManager, $encodingType, $logger);
-			$jwtHelper = new JWTHelper($certificateProvider, $logger);
-            $userSession = $server->getUserSession();
-            return new AuthController(
-                $c->query('AppName'),
-                $c->query('Request'),
-				$jwtHelper,
-				$userSession,
-				$logger
-            );
-        });*/
-    }
+			return new CertificateProvider($configManager, $encodingType, $logger);
+		});
+
+		$container->registerService('OCA\TokenBaseDav\Services\JWTHelper', function(DIContainer $c) {
+			$server = $c->getServer();
+			$logger = $server->getLogger();
+			$certificateProvider = $c->query('OCA\TokenBaseDav\Services\CertificateProvider');
+			return new JWTHelper($certificateProvider, $logger);
+		});
+
+	}
 }
