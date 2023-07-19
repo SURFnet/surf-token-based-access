@@ -33,7 +33,6 @@ class AuthController extends Controller {
 		ILogger $logger
 	) {
 		parent::__construct($appName, $request);
-		error_log("inside controller ctor");
 		$this->jwtHelper = $jwtHelper;
 		$this->logger = $logger;
 		$this->session = $session;
@@ -61,7 +60,6 @@ class AuthController extends Controller {
      * @PublicPage
      */
 	public function test() {
-		error_log("oh I am there");
 		return new JSONResponse(["opps"=> "hitted"], Http::STATUS_OK);
     }
 }
