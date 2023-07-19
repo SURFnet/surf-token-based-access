@@ -13,9 +13,7 @@ class Application extends App {
         parent::__construct('tokenbasedav', $urlParams);
 
         $container = $this->getContainer();
-		$server = $container->getServer();
-
-        $container->registerService('AuthController', function(DIContainer $c) {
+        /*$container->registerService('AuthController', function($c) {
 			$server = $c->getServer();
 			$logger = $server->getLogger();
 			$config = $server->getConfig();
@@ -30,6 +28,6 @@ class Application extends App {
 				$jwtHelper,
 				$logger
             );
-        });
+        });*/
     }
 }
