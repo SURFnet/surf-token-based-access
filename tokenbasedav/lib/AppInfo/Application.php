@@ -37,14 +37,16 @@ class Application extends App {
 			return new JWTHelper($certificateProvider, $configManager, $logger);
 		});
 
-		$container->registerService('OCA\TokenBaseDav\Controller\AuthController', function ($c) {
+		$container->registerService('OCA\TokenBaseDav\Controller\AuthController', function (DIContainer $c) {
 			$server = $c->getServer();
 			$logger = $server->getLogger();
 			$session = $server->getUserSession();
+			$groupManager = $server->getGroupManager();
 			$jwtHelper = $c->query('OCA\TokenBaseDav\Services\JWTHelper');
 			return new AuthController(
 				$c->query('AppName'),
 				$c->query('Request'),
+				$groupManager,
 				$jwtHelper,
 				$session,
 				$logger
