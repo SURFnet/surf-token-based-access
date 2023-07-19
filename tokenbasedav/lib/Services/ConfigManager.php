@@ -11,6 +11,8 @@ class ConfigManager {
 	private const certPathKey="ssl_cert_path";
 	private const simpleEncodeSecretKey="encoding_secret";
 
+	private const tokenTTLKey = "token_ttl";
+
 	/**
 	 * @var IConfig
 	 */
@@ -35,6 +37,18 @@ class ConfigManager {
 
 	public function getCertPassPhrase() {
 		return $this->config->getAppValue(self::appName, self::certPassPhraseKey, null);
+	}
+
+	/**
+	 * set the token valitity duration based on seconds
+	 * @param long $ttl
+	 */
+	public function setTokenTTL($ttl) {
+		$this->config->setAppValue(self::appName, self::tokenTTLKey, $ttl);
+	}
+
+	public function getTokenTTL() {
+		return $this->config->getAppValue(self::appName, self::tokenTTLKey, 8*60*60);
 	}
 
 	public function getEncodeSecret(){
