@@ -15,8 +15,6 @@ class Application extends App {
 		error_log("inside application const");
         $container = $this->getContainer();
         $container->registerService('AuthController', function($c) {
-			error_log("inside registering");
-
 			$server = $c->getServer();
 			$logger = $server->getLogger();
 			$config = $server->getConfig();
