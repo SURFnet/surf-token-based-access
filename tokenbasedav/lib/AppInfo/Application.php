@@ -12,9 +12,12 @@ use \OCA\TokenBaseDav\Controller\AuthController;
 class Application extends App {
     public function __construct(array $urlParams=array()){
         parent::__construct('tokenbasedav', $urlParams);
-		error_log("inside application const");
+		error_log("inside application ctor");
         $container = $this->getContainer();
-        $container->registerService('AuthController', function($c) {
+		error_log("app name is :".$container->query('AppName'));
+        /*$container->registerService('AuthController', function($c) {
+			error_log("inside registering");
+
 			$server = $c->getServer();
 			$logger = $server->getLogger();
 			$config = $server->getConfig();
@@ -50,6 +53,6 @@ class Application extends App {
 				$userSession,
 				$logger
 			);
-		});
+		});*/
     }
 }
