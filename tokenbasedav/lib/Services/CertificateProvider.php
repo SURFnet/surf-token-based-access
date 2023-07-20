@@ -53,7 +53,7 @@ class CertificateProvider {
 			$this->selectedEncodingType = $encodingType;
 		}
 
-		if (in_array($this->encodingType, $this->supportedEncodingType,true)) {
+		if (!in_array($this->encodingType, $this->supportedEncodingType,true)) {
 			throw new \Exception("unsupported encoding type. allowed types are: "
 				. self::RS256_ENCODE_TYPE . ", " . self::HS256_ENCODE_TYPE . ", " . self::AUTO_ENCODE_TYPE);
 		}
