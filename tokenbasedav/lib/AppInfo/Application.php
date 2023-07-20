@@ -24,7 +24,7 @@ class Application extends App {
 			$server = $c->getServer();
 			$logger = $server->getLogger();
 			$config = $server->getConfig();
-			$encodingType = $config->getSystemValue('dav.jwtEncodeType', CertificateProvider::AUTO_ENCODE_TYPE);
+			$encodingType = $config->getSystemValue('dav.JWTEncodeType', CertificateProvider::AUTO_ENCODE_TYPE);
 			$configManager = $c->query('OCA\TokenBaseDav\Services\ConfigManager');
 			return new CertificateProvider($configManager, $encodingType, $logger);
 		});
@@ -32,9 +32,8 @@ class Application extends App {
 		$container->registerService('OCA\TokenBaseDav\Services\JWTHelper', function ($c) {
 			$server = $c->getServer();
 			$logger = $server->getLogger();
-			$configManager = $c->query('OCA\TokenBaseDav\Services\ConfigManager');
 			$certificateProvider = $c->query('OCA\TokenBaseDav\Services\CertificateProvider');
-			return new JWTHelper($certificateProvider, $configManager, $logger);
+			return new JWTHelper($certificateProvider, $logger);
 		});
 
 		$container->registerService('OCA\TokenBaseDav\Controller\AuthController', function (DIContainer $c) {

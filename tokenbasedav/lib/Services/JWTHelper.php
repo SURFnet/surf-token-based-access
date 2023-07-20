@@ -26,19 +26,17 @@ class JWTHelper {
 
 	/**
 	 * @param CertificateProvider $provider
-	 * @param ConfigManager $configManager
 	 * @param ILogger $logger
 	 */
-	public function __construct(CertificateProvider $provider, ConfigManager $configManager, ILogger $logger) {
+	public function __construct(CertificateProvider $provider, ILogger $logger) {
 		$this->provider = $provider;
-		$this->configManager = $configManager;
 		$this->logger = $logger;
 	}
 
 	public function issueToken($payload){
 		$time = time();
 		$payload["iat"] = $time;
-		$payload["exp"] = $time + $this->configManager->getTokenTTL();
+		$payload["exp"] = $time + $this->provider->getConfigManager()->getTokenTTL();
 		$key = $this->provider->getEncodeSecret();
 		return JWT::encode($payload, $key, $this->provider->getEncodingType());
 	}

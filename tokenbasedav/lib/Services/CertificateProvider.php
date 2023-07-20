@@ -67,6 +67,9 @@ class CertificateProvider {
 		}
 	}
 
+	public function getConfigManager(){
+		return $this->configManager;
+	}
 	public function getDecodeSecret()
 	{
 		if ($this->encodingType == CertificateProvider::AUTO_ENCODE_TYPE) {
