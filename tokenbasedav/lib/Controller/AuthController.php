@@ -51,7 +51,7 @@ class AuthController extends Controller {
      * @NoCSRFRequired
      * @PublicPage
      */
-    public function login() {
+    public function issueToken() {
 		$username = $this->request->getParam("username");
 		$pass = $this->request->getParam("password");
 		if ($this->session->login($username, $pass)) {
