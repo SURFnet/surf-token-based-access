@@ -1,4 +1,7 @@
 <?php
+namespace OCA\TokenBaseDav\Tests;
+
+use Exception;
 
 class CertificateProviderTest extends \Test\TestCase {
 
@@ -27,6 +30,11 @@ class CertificateProviderTest extends \Test\TestCase {
 	}
 
 	public function testGetEncodeSecretUnsupportedType(){
+
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage("unsupported encoding type. allowed types are: RS256, HS256, Auto");
+		
+
 		$this->configManager->expects($this->never())->
 		method("getCertPassPhrase")->willReturn("");
 
@@ -36,14 +44,13 @@ class CertificateProviderTest extends \Test\TestCase {
 		$this->configManager->expects($this->never())->
 		method("getEncodeSecret")->willReturn(self::HS256Secret);
 
-		$certReader = new \tests\FakeCertificateReader(true);
+		$certReader = new FakeCertificateReader(true);
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
 			$certReader,
 			"Unsupported_type",
 			$this->logger);
 
-		$this->expectException(Exception::class);
 	}
 
 	public function testGetEncodeSecretAutoModeExistingPEMPath(){
@@ -56,7 +63,7 @@ class CertificateProviderTest extends \Test\TestCase {
 		$this->configManager->expects($this->never())->
 		method("getEncodeSecret")->willReturn(self::HS256Secret);
 
-		$certReader = new \tests\FakeCertificateReader(true);
+		$certReader = new FakeCertificateReader(true);
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
 			$certReader,
@@ -81,7 +88,7 @@ class CertificateProviderTest extends \Test\TestCase {
 
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
-			new \tests\FakeCertificateReader(false),
+			new FakeCertificateReader(false),
 			\OCA\TokenBaseDav\Services\CertificateProvider::AUTO_ENCODE_TYPE,
 			$this->logger);
 
@@ -104,7 +111,7 @@ class CertificateProviderTest extends \Test\TestCase {
 
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
-			new \tests\FakeCertificateReader(true),
+			new FakeCertificateReader(true),
 			\OCA\TokenBaseDav\Services\CertificateProvider::HS256_ENCODE_TYPE,
 			$this->logger);
 
@@ -125,7 +132,7 @@ class CertificateProviderTest extends \Test\TestCase {
 		$this->configManager->expects($this->never())->
 		method("getEncodeSecret")->willReturn(self::HS256Secret);
 
-		$certReader = new \tests\FakeCertificateReader(true);
+		$certReader = new FakeCertificateReader(true);
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
 			$certReader,
@@ -134,7 +141,7 @@ class CertificateProviderTest extends \Test\TestCase {
 
 		$result = $this->certificateProvider->getEncodeSecret();
 
-		$this->assertEquals($result, $certReader->getPrivateKey());
+		$this->assertEquals($result, $certReader->getPrivateKey("some\\address", "some-pass"));
 		$this->assertEquals($this->certificateProvider->getEncodingType(), \OCA\TokenBaseDav\Services\CertificateProvider::RS256_ENCODE_TYPE);
 	}
 
@@ -151,7 +158,7 @@ class CertificateProviderTest extends \Test\TestCase {
 
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
-			new \tests\FakeCertificateReader(false),
+			new FakeCertificateReader(false),
 			\OCA\TokenBaseDav\Services\CertificateProvider::RS256_ENCODE_TYPE,
 			$this->logger);
 
@@ -171,7 +178,7 @@ class CertificateProviderTest extends \Test\TestCase {
 		$this->configManager->expects($this->never())->
 		method("getEncodeSecret")->willReturn(self::HS256Secret);
 
-		$fakeCertReader = new \tests\FakeCertificateReader(true);
+		$fakeCertReader = new FakeCertificateReader(true);
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
 			$fakeCertReader,
@@ -180,7 +187,7 @@ class CertificateProviderTest extends \Test\TestCase {
 
 		$result = $this->certificateProvider->getDecodeSecret();
 
-		$this->assertEquals($result, $fakeCertReader->getPublicKey());
+		$this->assertEquals($result, $fakeCertReader->getPublicKey("not important parameter"));
 		$this->assertEquals($this->certificateProvider->getEncodingType(), \OCA\TokenBaseDav\Services\CertificateProvider::RS256_ENCODE_TYPE);
 	}
 
@@ -194,7 +201,7 @@ class CertificateProviderTest extends \Test\TestCase {
 		$this->configManager->expects($this->once())->
 		method("getEncodeSecret")->willReturn(self::HS256Secret);
 
-		$fakeCertReader = new \tests\FakeCertificateReader(true);
+		$fakeCertReader = new FakeCertificateReader(false);
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
 			$fakeCertReader,
@@ -217,7 +224,7 @@ class CertificateProviderTest extends \Test\TestCase {
 		$this->configManager->expects($this->once())->
 		method("getEncodeSecret")->willReturn(self::HS256Secret);
 
-		$fakeCertReader = new \tests\FakeCertificateReader(true);
+		$fakeCertReader = new FakeCertificateReader(true);
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
 			$fakeCertReader,
@@ -240,7 +247,7 @@ class CertificateProviderTest extends \Test\TestCase {
 		$this->configManager->expects($this->never())->
 		method("getEncodeSecret")->willReturn(self::HS256Secret);
 
-		$fakeCertReader = new \tests\FakeCertificateReader(true);
+		$fakeCertReader = new FakeCertificateReader(true);
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
 			$fakeCertReader,
@@ -254,6 +261,8 @@ class CertificateProviderTest extends \Test\TestCase {
 	}
 
 	public function testGetDecodeSecretRS256ModeFailure(){
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage("Cannot find the certificate private key");
 		$this->configManager->expects($this->once())->
 		method("getCertPassPhrase")->willReturn("");
 
@@ -263,7 +272,7 @@ class CertificateProviderTest extends \Test\TestCase {
 		$this->configManager->expects($this->never())->
 		method("getEncodeSecret")->willReturn(self::HS256Secret);
 
-		$fakeCertReader = new \tests\FakeCertificateReader(false);
+		$fakeCertReader = new FakeCertificateReader(false);
 		$this->certificateProvider = new \OCA\TokenBaseDav\Services\CertificateProvider(
 			$this->configManager,
 			$fakeCertReader,
@@ -272,7 +281,7 @@ class CertificateProviderTest extends \Test\TestCase {
 
 		$result = $this->certificateProvider->getDecodeSecret();
 
-		$this->expectException(Exception::class);
+		
 		$this->assertEquals($this->certificateProvider->getEncodingType(), \OCA\TokenBaseDav\Services\CertificateProvider::RS256_ENCODE_TYPE);
 	}
 

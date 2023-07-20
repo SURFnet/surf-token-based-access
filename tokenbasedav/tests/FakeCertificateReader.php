@@ -1,6 +1,5 @@
 <?php
-
-namespace tests;
+namespace OCA\TokenBaseDav\Tests;
 
 class FakeCertificateReader implements \OCA\TokenBaseDav\Services\ICertificateReader {
 

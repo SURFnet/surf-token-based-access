@@ -1,8 +1,6 @@
 <?php
 namespace OCA\TokenBaseDav\AppInfo;
 
-use OC\AppFramework\DependencyInjection\DIContainer;
-use OC\Core\Controller\LoginController;
 use OCA\TokenBaseDav\Services\CertificateProvider;
 use OCA\TokenBaseDav\Services\CertificateReader;
 use OCA\TokenBaseDav\Services\ConfigManager;
