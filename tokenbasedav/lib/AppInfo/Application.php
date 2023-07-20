@@ -4,6 +4,7 @@ namespace OCA\TokenBaseDav\AppInfo;
 use OC\AppFramework\DependencyInjection\DIContainer;
 use OC\Core\Controller\LoginController;
 use OCA\TokenBaseDav\Services\CertificateProvider;
+use OCA\TokenBaseDav\Services\CertificateReader;
 use OCA\TokenBaseDav\Services\ConfigManager;
 use OCA\TokenBaseDav\Services\JWTHelper;
 use \OCP\AppFramework\App;
@@ -26,7 +27,8 @@ class Application extends App {
 			$config = $server->getConfig();
 			$encodingType = $config->getSystemValue('dav.JWTEncodeType', CertificateProvider::AUTO_ENCODE_TYPE);
 			$configManager = $c->query('OCA\TokenBaseDav\Services\ConfigManager');
-			return new CertificateProvider($configManager, $encodingType, $logger);
+			$certificateReader = new CertificateReader();
+			return new CertificateProvider($configManager, $certificateReader, $encodingType, $logger);
 		});
 
 		$container->registerService('OCA\TokenBaseDav\Services\JWTHelper', function ($c) {

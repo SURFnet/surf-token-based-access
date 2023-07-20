@@ -33,16 +33,29 @@ class CertificateProvider {
 	private $logger;
 
 	/**
+	 * @var ICertificateReader
+	 */
+	private $certificateReader;
+
+	private $supportedEncodingType = [self::RS256_ENCODE_TYPE, self::HS256_ENCODE_TYPE, self::AUTO_ENCODE_TYPE];
+	/**
 	 * @param ConfigManager $configManager
+	 * @param ICertificateReader $certificateReader
 	 * @param ILogger $logger
 	 */
-	public function __construct(ConfigManager $configManager, $encodingType, \OCP\ILogger $logger)
+	public function __construct(ConfigManager $configManager, ICertificateReader $certificateReader, $encodingType, \OCP\ILogger $logger)
 	{
 		$this->configManager = $configManager;
+		$this->certificateReader = $certificateReader;
 		$this->logger = $logger;
 		$this->encodingType = $encodingType;
 		if ($encodingType !== self::AUTO_ENCODE_TYPE){
 			$this->selectedEncodingType = $encodingType;
+		}
+
+		if (in_array($this->encodingType, $this->supportedEncodingType,true)) {
+			throw new \Exception("unsupported encoding type. allowed types are: "
+				. self::RS256_ENCODE_TYPE . ", " . self::HS256_ENCODE_TYPE . ", " . self::AUTO_ENCODE_TYPE);
 		}
 	}
 
@@ -56,15 +69,10 @@ class CertificateProvider {
 			}
 			$this->selectedEncodingType = self::HS256_ENCODE_TYPE;
 			return $this->configManager->getEncodeSecret();
-		} else if ($this->encodingType === self::HS256_ENCODE_TYPE) {
+		} elseif ($this->encodingType === self::HS256_ENCODE_TYPE) {
 			return $this->configManager->getEncodeSecret();
-		} else if ($this->encodingType === self::RS256_ENCODE_TYPE) {
-			return $this->readCertificate();
-		} else {
-
-			throw new \Exception("unsupported encoding type. allowed types are: "
-				. self::RS256_ENCODE_TYPE . ", " . self::HS256_ENCODE_TYPE . ", " . self::AUTO_ENCODE_TYPE);
 		}
+		return $this->readCertificate();
 	}
 
 	public function getConfigManager(){
@@ -75,7 +83,7 @@ class CertificateProvider {
 		if ($this->encodingType == CertificateProvider::AUTO_ENCODE_TYPE) {
 			$privateKey = $this->readCertificate();
 			if ($privateKey) {
-				$publicKey = openssl_pkey_get_details($privateKey)['key'];
+				$publicKey = $this->certificateReader->getPublicKey($privateKey);
 				$this->selectedEncodingType = self::RS256_ENCODE_TYPE;
 				return $publicKey;
 			} else {
@@ -88,7 +96,7 @@ class CertificateProvider {
 
 		$privateKey = $this->readCertificate();
 		if ($privateKey) {
-			$publicKey = openssl_pkey_get_details($privateKey)['key'];
+			$publicKey = $this->certificateReader->getPublicKey($privateKey);
 			return $publicKey;
 		}
 		throw new \Exception("Cannot find the certificate private key");
@@ -108,10 +116,7 @@ class CertificateProvider {
 		$certPath = $this->configManager->getCertPath();
 		if (!empty($certPath)) {
 			try {
-				$privateKey = openssl_pkey_get_private(
-					file_get_contents($certPath),
-					$certPass
-				);
+				$privateKey = $this->certificateReader->getPrivateKey($certPath, $certPass);
 				if ($privateKey) {
 					return $privateKey;
 				}
