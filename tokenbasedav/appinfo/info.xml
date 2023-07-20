@@ -7,6 +7,9 @@
     <author>Ponder source</author>
     <version>0.0.1</version>
     <namespace>TokenBaseDav</namespace>
+    <website>https://github.com/pondersource/dav-token-access</website>
+	<bugs>https://github.com/pondersource/dav-token-access/issues</bugs>
+	<repository type="git">https://github.com/pondersource/dav-token-access.git</repository>
     <category>tool</category>
     <dependencies>
         <owncloud min-version="10" max-version="10" />
