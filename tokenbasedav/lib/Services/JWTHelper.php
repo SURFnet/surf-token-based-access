@@ -2,6 +2,7 @@
 
 namespace OCA\TokenBaseDav\Services;
 
+use Error;
 use Firebase\JWT\JWT;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IConfig;

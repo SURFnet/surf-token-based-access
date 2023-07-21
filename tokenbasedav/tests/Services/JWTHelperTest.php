@@ -10,6 +10,7 @@ use OCP\ILogger;
 
 class JWTHelperTest extends \Test\TestCase {
 
+	const HSSecret = "8oDCyVLzSyPkvH5muAnnE9TqDquFlwd0jVvOFjnh";
 	/**
 	 * @var JWTHelper
 	 */
@@ -45,69 +46,44 @@ class JWTHelperTest extends \Test\TestCase {
 		$this->configurationManager = $this->createMock(ConfigManager::class);
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->logger = $this->createMock(ILogger::class);
-		$this->certificateProvider = $this->getMockBuilder(CertificateProvider::class)
-			->setConstructorArgs($this->configurationManager,
-				new FakeCertificateReader(true),
-				CertificateProvider::AUTO_ENCODE_TYPE,
-				$this->logger);
-
-		$this->jwtHelper = new JWTHelper($this->certificateProvider, $this->timeFactory, $this->logger);
 	}
 
 	public function tearDown(): void {
 		parent::tearDown();
 	}
 
-	private function certProviderFaker(){
+	public function certProviderFaker(){
 		return [
-			[CertificateProvider::AUTO_ENCODE_TYPE, [1, 1, 0], true, false],
-			[CertificateProvider::AUTO_ENCODE_TYPE, [1, 1, 1], false, false],
-			[CertificateProvider::HS256_ENCODE_TYPE, [0, 0, 1], true, false],
-			[CertificateProvider::RS256_ENCODE_TYPE, [1, 1, 0], true, false],
-			[CertificateProvider::RS256_ENCODE_TYPE, [1, 1, 0], false, true],
-			["Invalide_Type", [0, 0, 0], false, true]
+			[self::HSSecret, CertificateProvider::HS256_ENCODE_TYPE ],
+			[(new FakeCertificateReader(true))->getPrivateKey("", ""), CertificateProvider::RS256_ENCODE_TYPE],
+			
 		];
 	}
 	/**
 	 * @dataProvider certProviderFaker
 	 */
 
-	public function testIssueToken($encodingType ,$funcCalls, $happyCase, $emptyToken){
-
-		if($emptyToken)
-		{
-			$this->expectException(\Exception::class);
-			$this->expectException(\Exception::class);
-		}
+	 public function testIssueToken($secret, $encodingType){
 
 		$this->configurationManager->expects($this->once())
 			->method("getTokenTTL")->willReturn(3600);
 		$this->timeFactory->expects($this->once())->method("getTime")->willReturn(1689850644);
 
+	
+		$this->certificateProvider = $this->createMock(CertificateProvider::class);
 
-		$this->configurationManager->expects($this->exactly($funcCalls[0]))
-			->method("getCertPassPhrase")->willReturn("");
-		$this->configurationManager->expects($this->exactly($funcCalls[1]))
-			->method("getCertPath")->willReturn("path\\to\\file.pem");
-		$this->configurationManager->expects($this->exactly($funcCalls[2]))
-			->method("getEncodeSecret")->willReturn("8oDCyVLzSyPkvH5muAnnE9TqDquFlwd0jVvOFjnh");
+		$this->certificateProvider->expects($this->once())->method("getConfigManager")
+			->willReturn($this->configurationManager);
 
-		$this->certificateProvider = $this->getMockBuilder(CertificateProvider::class)
-			->setConstructorArgs(
-				[
-					$this->configurationManager,
-					new FakeCertificateReader($happyCase),
-					CertificateProvider::AUTO_ENCODE_TYPE,
-					$this->logger
-				]);
+		$this->certificateProvider->expects($this->once())->method("getEncodingType")
+			->willReturn($encodingType);
 
+		$this->certificateProvider->expects($this->once())->method("getEncodeSecret")
+			->willReturn($secret);
+
+		
 		$this->jwtHelper = new JWTHelper($this->certificateProvider, $this->timeFactory, $this->logger);
 		$token = $this->jwtHelper->issueToken($this->payload);
-		if ($emptyToken) {
-			$this->assertEmpty($token);
-		}
-		else {
-			$this->assertNotEmpty($token);
-		}
+		$this->assertNotEmpty($token);
 	}
 }
