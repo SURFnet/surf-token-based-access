@@ -1,6 +1,7 @@
 <?php
 namespace OCA\TokenBaseDav\AppInfo;
 
+use OC\AppFramework\Utility\TimeFactory;
 use OCA\TokenBaseDav\Services\CertificateProvider;
 use OCA\TokenBaseDav\Services\CertificateReader;
 use OCA\TokenBaseDav\Services\ConfigManager;
@@ -32,8 +33,9 @@ class Application extends App {
 		$container->registerService('OCA\TokenBaseDav\Services\JWTHelper', function ($c) {
 			$server = $c->getServer();
 			$logger = $server->getLogger();
+			$timeFactory = new TimeFactory();
 			$certificateProvider = $c->query('OCA\TokenBaseDav\Services\CertificateProvider');
-			return new JWTHelper($certificateProvider, $logger);
+			return new JWTHelper($certificateProvider, $timeFactory, $logger);
 		});
 
 		$container->registerService('OCA\TokenBaseDav\Controller\AuthController', function ($c) {
