@@ -3,6 +3,7 @@
 namespace OCA\TokenBaseDav\Services;
 
 use OCP\IConfig;
+use OCP\Security\ISecureRandom;
 
 class ConfigManager {
 	private const appName= "tokenbasedav";
@@ -18,8 +19,19 @@ class ConfigManager {
 	 */
 	private $config;
 
-	public function __construct(IConfig $config) {
+	/**
+	 * @var ISecureRandom
+	 */
+	private $secureRandom;
+
+	/**
+	 * @param IConfig $config
+	 * @param ISecureRandom $secureRandom
+	 */
+
+	public function __construct(IConfig $config, ISecureRandom $secureRandom) {
 		$this->config = $config;
+		$this->secureRandom = $secureRandom;
 	}
 
 
@@ -54,13 +66,13 @@ class ConfigManager {
 	public function getEncodeSecret(){
 		$secret = $this->config->getAppValue(self::appName, self::simpleEncodeSecretKey, "");
 		if ($secret === ""){
-			$secret = $this->generateRandomString(40);
+			$secret = $this->secureRandom->generate(40);
 			$this->config->setAppValue(self::appName, self::simpleEncodeSecretKey, $secret);
 		}
 		return $secret;
 	}
 
-	private function generateRandomString($length = 40){
+	/*private function generateRandomString($length = 40){
 		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$charactersLength = strlen($characters);
 		$randomString = '';
@@ -68,5 +80,5 @@ class ConfigManager {
 			$randomString .= $characters[random_int(0, $charactersLength - 1)];
 		}
 		return $randomString;
-	}
+	}*/
 }

@@ -41,7 +41,7 @@ class JWTHelper {
 		$this->logger = $logger;
 	}
 
-	public function issueToken($payload){
+	public function issueAccessToken($payload){
 		$time = $this->timeFactory->getTime();
 		$payload["iat"] = $time;
 		$payload["exp"] = $time + $this->provider->getConfigManager()->getTokenTTL();
@@ -49,6 +49,9 @@ class JWTHelper {
 		return JWT::encode($payload, $key, $this->provider->getEncodingType());
 	}
 
+	public function generateRefreshToken(){
+
+	}
 	public function validateToken($token){
 		$key = $this->provider->getDecodeSecret();
 		return JWT::decode($token, $key);

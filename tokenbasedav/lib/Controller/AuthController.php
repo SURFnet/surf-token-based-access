@@ -58,7 +58,7 @@ class AuthController extends Controller {
 			$user = $this->session->getUser();
 			$groups = $this->groupManager->getUserGroupIds($user);
 			$payload = [ "username" => $username, "groups" => $groups];
-			$token = $this->jwtHelper->issueToken($payload);
+			$token = $this->jwtHelper->issueAccessToken($payload);
 			return new JSONResponse(["token" => $token], Http::STATUS_OK);
 		}
 		return new JSONResponse([], Http::STATUS_UNAUTHORIZED);

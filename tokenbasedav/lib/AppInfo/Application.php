@@ -1,6 +1,7 @@
 <?php
 namespace OCA\TokenBaseDav\AppInfo;
 
+use OC\AppFramework\DependencyInjection\DIContainer;
 use OC\AppFramework\Utility\TimeFactory;
 use OCA\TokenBaseDav\Services\CertificateProvider;
 use OCA\TokenBaseDav\Services\CertificateReader;
@@ -14,10 +15,11 @@ class Application extends App {
 		parent::__construct('tokenbasedav', $urlParams);
 		$container = $this->getContainer();
 
-		$container->registerService('OCA\TokenBaseDav\Services\ConfigManager', function ($c) {
+		$container->registerService('OCA\TokenBaseDav\Services\ConfigManager', function (DIContainer $c) {
 			$server = $c->getServer();
 			$config = $server->getConfig();
-			return new ConfigManager($config);
+			$random = $server->getSecureRandom();
+			return new ConfigManager($config, $random);
 		});
 
 		$container->registerService('OCA\TokenBaseDav\Services\CertificateProvider', function ($c) {
