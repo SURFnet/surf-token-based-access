@@ -6,7 +6,6 @@
     <licence>AGPL</licence>
     <author>Ponder source</author>
     <version>0.0.2</version>
-	<use-migrations>true</use-migrations>
     <namespace>TokenBaseDav</namespace>
     <website>https://github.com/pondersource/dav-token-access</website>
 	<bugs>https://github.com/pondersource/dav-token-access/issues</bugs>
