@@ -9,7 +9,6 @@ use OCA\TokenBaseDav\Services\JWTHelper;
 use OCP\ILogger;
 use OCP\IRequest;
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 class AuthController extends Controller {
 
@@ -43,6 +42,7 @@ class AuthController extends Controller {
 		$this->logger = $logger;
 	}
 
+	
 	/**
      * @NoAdminRequired
      * @NoCSRFRequired
@@ -82,17 +82,9 @@ RLnGP9p3pVgFCktORuYS2J/6t84I3+A17nEoB4xvhTLeAinAW/uTQOUmNicOP4Ek
 2MsLL2kHgL8bLTmvXV4FX+PXphrDKg1XxzOYn0otuoqdAQrkK4og
 -----END RSA PRIVATE KEY-----
 EOD;
-		return JWT::encode($payload, $privateKey, 'RS256');
-	}
 
-	/**
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     * @PublicPage
-     */
-	public function test() {
 
-		$publicKey = <<<EOD
+$publicKey = <<<EOD
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuzWHNM5f+amCjQztc5QT
 fJfzCC5J4nuW+L/aOxZ4f8J3FrewM2c/dufrnmedsApb0By7WhaHlcqCh/ScAPyJ
@@ -103,7 +95,20 @@ TTqo1SCSH2pooJl9O8at6kkRYsrZWwsKlOFE2LUce7ObnXsYihStBUDoeBQlGG/B
 wQIDAQAB
 -----END PUBLIC KEY-----
 EOD;
+$this->jwtHelper->getconfig()->setPublicKey($publicKey);
+
+
+		return JWT::encode($payload, $privateKey, 'RS256');
+	}
+
+	/**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     * @PublicPage
+     */
+	public function test() {
+
 		$token = $this->request->getParam("token"); 
-		return $decoded = JWT::decode($token, new Key($publicKey, 'RS256'));
+		return $this->jwtHelper->validateToken($token); 
     }
 }

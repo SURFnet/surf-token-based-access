@@ -4,6 +4,7 @@ namespace OCA\TokenBaseDav\Services;
 
 use Error;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IConfig;
 use OCP\ILogger;
@@ -32,8 +33,11 @@ class JWTHelper {
 
 	public function validateToken($token){
 		$key = $this->configManager->getPublicKey();
-		return JWT::decode($token, [$key]);
+		return JWT::decode($token, new Key($key, 'RS256'));
 	}
 
+	public function getconfig(){
+		return $this->configManager;
+	}
 
 }
