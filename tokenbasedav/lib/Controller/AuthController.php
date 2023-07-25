@@ -34,35 +34,14 @@ class AuthController extends Controller {
 	public function __construct(
 		$appName,
 		IRequest $request,
-		Manager $manager,
 		JWTHelper $jwtHelper,
-		Session $session,
 		ILogger $logger
 	) {
 		parent::__construct($appName, $request);
 		$this->jwtHelper = $jwtHelper;
 		$this->logger = $logger;
-		$this->session = $session;
-		$this->groupManager = $manager;
 	}
 
-	/**
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     * @PublicPage
-     */
-    public function issueToken() {
-		$username = $this->request->getParam("username");
-		$pass = $this->request->getParam("password");
-		if ($this->session->login($username, $pass)) {
-			$user = $this->session->getUser();
-			$groups = $this->groupManager->getUserGroupIds($user);
-			$payload = [ "username" => $username, "groups" => $groups];
-			$token = $this->jwtHelper->issueAccessToken($payload);
-			return new JSONResponse(["token" => $token], Http::STATUS_OK);
-		}
-		return new JSONResponse([], Http::STATUS_UNAUTHORIZED);
-    }
 
 	/**
      * @NoAdminRequired

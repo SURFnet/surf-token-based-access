@@ -11,11 +11,6 @@ use OCP\ILogger;
 class JWTHelper {
 
 	/**
-	 * @var CertificateProvider
-	 */
-	private $provider;
-
-	/**
 	 * @var ILogger
 	 */
 	private $logger;
@@ -26,35 +21,18 @@ class JWTHelper {
 	 */
 	private $configManager;
 
+
 	/**
-	 * @var ITimeFactory
-	 */
-	private $timeFactory;
-	/**
-	 * @param CertificateProvider $provider
-	 * @param ITimeFactory $timeFactory
 	 * @param ILogger $logger
 	 */
-	public function __construct(CertificateProvider $provider, ITimeFactory $timeFactory, ILogger $logger) {
-		$this->provider = $provider;
-		$this->timeFactory = $timeFactory;
+	public function __construct(ConfigManager $configManager, ILogger $logger) {
+		$this->configManager = $configManager;
 		$this->logger = $logger;
 	}
 
-	public function issueAccessToken($payload){
-		$time = $this->timeFactory->getTime();
-		$payload["iat"] = $time;
-		$payload["exp"] = $time + $this->provider->getConfigManager()->getTokenTTL();
-		$key = $this->provider->getEncodeSecret();
-		return JWT::encode($payload, $key, $this->provider->getEncodingType());
-	}
-
-	public function generateRefreshToken(){
-
-	}
 	public function validateToken($token){
-		$key = $this->provider->getDecodeSecret();
-		return JWT::decode($token, $key);
+		$key = $this->configManager->getPublicKey();
+		return JWT::decode($token, [$key]);
 	}
 
 

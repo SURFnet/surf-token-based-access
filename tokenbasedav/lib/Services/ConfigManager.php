@@ -8,11 +8,7 @@ use OCP\Security\ISecureRandom;
 class ConfigManager {
 	private const appName= "tokenbasedav";
 
-	private const certPassPhraseKey = "ssl_pass_phrase";
-	private const certPathKey="ssl_cert_path";
-	private const simpleEncodeSecretKey="encoding_secret";
-
-	private const tokenTTLKey = "token_ttl";
+	private const tokenIssuerPublicKey = "token_issuer_public_key";
 
 	/**
 	 * @var IConfig
@@ -20,65 +16,30 @@ class ConfigManager {
 	private $config;
 
 	/**
-	 * @var ISecureRandom
-	 */
-	private $secureRandom;
-
-	/**
 	 * @param IConfig $config
-	 * @param ISecureRandom $secureRandom
 	 */
 
-	public function __construct(IConfig $config, ISecureRandom $secureRandom) {
+	public function __construct(IConfig $config) {
 		$this->config = $config;
-		$this->secureRandom = $secureRandom;
 	}
 
 
-	public function setCertPath($certPath) {
-		$this->config->setAppValue(self::appName, self::certPathKey, $certPath);
-	}
-
-	public function getCertPath() {
-		return $this->config->getAppValue(self::appName, self::certPathKey, "");
-	}
-
-	public function setCertPassPhrase($phrase) {
-		$this->config->setAppValue(self::appName, self::certPassPhraseKey, $phrase);
-	}
-
-	public function getCertPassPhrase() {
-		return $this->config->getAppValue(self::appName, self::certPassPhraseKey, null);
+	/**
+	 * @description set the public key of token Issuer inside config table
+	 * @param $certPath
+	 * @return void
+	 */
+	public function setPublicKey($certPath) {
+		$this->config->setAppValue(self::appName, self::tokenIssuerPublicKey, $certPath);
 	}
 
 	/**
-	 * set the token valitity duration based on seconds
-	 * @param long $ttl
+	 * @description get the public key of token Issuer from config table
+	 * @return string
 	 */
-	public function setTokenTTL($ttl) {
-		$this->config->setAppValue(self::appName, self::tokenTTLKey, $ttl);
+	public function getPublicKey() {
+		return $this->config->getAppValue(self::appName, self::tokenIssuerPublicKey, "");
 	}
 
-	public function getTokenTTL() {
-		return $this->config->getAppValue(self::appName, self::tokenTTLKey, 8*60*60);
-	}
 
-	public function getEncodeSecret(){
-		$secret = $this->config->getAppValue(self::appName, self::simpleEncodeSecretKey, "");
-		if ($secret === ""){
-			$secret = $this->secureRandom->generate(40);
-			$this->config->setAppValue(self::appName, self::simpleEncodeSecretKey, $secret);
-		}
-		return $secret;
-	}
-
-	/*private function generateRandomString($length = 40){
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$charactersLength = strlen($characters);
-		$randomString = '';
-		for ($i = 0; $i < $length; $i++) {
-			$randomString .= $characters[random_int(0, $charactersLength - 1)];
-		}
-		return $randomString;
-	}*/
 }
