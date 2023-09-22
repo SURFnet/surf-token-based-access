@@ -8,11 +8,10 @@ cd dev-stock
 ```
 Then:
 ```
-curl -i -X POST http://localhost:8080/index.php/apps/tokenbaseddav/auth/token
-curl -i -X POST http://localhost:8080/index.php/apps/tokenbaseddav/auth/test
+echo "{\"token\":`curl -X POST http://localhost:8080/index.php/apps/tokenbaseddav/auth/token`}" > token.json
+curl -X POST  -H "Content-Type:application/json" --data-binary @token.json http://localhost:8080/index.php/apps/tokenbaseddav/auth/test
+rm token.json
 ```
-
-FIXME: update these docs with conclusions from spelonking
 
 ## JWT token:
 you can configure the app behavior according to this table: (they should be inserted in the oc_appconfig table with `appid` = `tokenbaseddav`)
