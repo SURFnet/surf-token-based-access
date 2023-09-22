@@ -3,56 +3,43 @@
 namespace OCA\TokenBaseDav\Services;
 
 use OCP\IConfig;
+use OCP\Security\ISecureRandom;
 
 class ConfigManager {
 	private const appName= "tokenbasedav";
 
-	private const certPassPhraseKey = "ssl_pass_phrase";
-	private const certPathKey="ssl_cert_path";
-	private const simpleEncodeSecretKey="encoding_secret";
+	private const tokenIssuerPublicKey = "token_issuer_public_key";
 
 	/**
 	 * @var IConfig
 	 */
 	private $config;
 
+	/**
+	 * @param IConfig $config
+	 */
+
 	public function __construct(IConfig $config) {
 		$this->config = $config;
 	}
 
 
-	public function setCertPath($certPath) {
-		$this->config->setAppValue(self::appName, self::certPathKey, $certPath);
+	/**
+	 * @description set the public key of token Issuer inside config table
+	 * @param $certPath
+	 * @return void
+	 */
+	public function setPublicKey($certPath) {
+		$this->config->setAppValue(self::appName, self::tokenIssuerPublicKey, $certPath);
 	}
 
-	public function getCertPath() {
-		return $this->config->getAppValue(self::appName, self::certPathKey, "");
+	/**
+	 * @description get the public key of token Issuer from config table
+	 * @return string
+	 */
+	public function getPublicKey() {
+		return $this->config->getAppValue(self::appName, self::tokenIssuerPublicKey, "");
 	}
 
-	public function setCertPassPhrase($phrase) {
-		$this->config->setAppValue(self::appName, self::certPassPhraseKey, $phrase);
-	}
 
-	public function getCertPassPhrase() {
-		return $this->config->getAppValue(self::appName, self::certPassPhraseKey, null);
-	}
-
-	public function getEncodeSecret(){
-		$secret = $this->config->getAppValue(self::appName, self::simpleEncodeSecretKey, "");
-		if ($secret === ""){
-			$secret = $this->generateRandomString(40);
-			$this->config->setAppValue(self::appName, self::simpleEncodeSecretKey, $secret);
-		}
-		return $secret;
-	}
-
-	private function generateRandomString($length = 40){
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$charactersLength = strlen($characters);
-		$randomString = '';
-		for ($i = 0; $i < $length; $i++) {
-			$randomString .= $characters[random_int(0, $charactersLength - 1)];
-		}
-		return $randomString;
-	}
 }

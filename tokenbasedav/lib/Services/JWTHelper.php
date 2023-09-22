@@ -2,40 +2,42 @@
 
 namespace OCA\TokenBaseDav\Services;
 
+use Error;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IConfig;
 use OCP\ILogger;
 
 class JWTHelper {
 
 	/**
-	 * @var CertificateProvider
-	 */
-	private $provider;
-
-	/**
 	 * @var ILogger
 	 */
 	private $logger;
 
+
 	/**
-	 * @param CertificateProvider $provider
+	 * @var ConfigManager
+	 */
+	private $configManager;
+
+
+	/**
 	 * @param ILogger $logger
 	 */
-	public function __construct(CertificateProvider $provider, ILogger $logger) {
-		$this->provider = $provider;
+	public function __construct(ConfigManager $configManager, ILogger $logger) {
+		$this->configManager = $configManager;
 		$this->logger = $logger;
 	}
 
-	public function issueToken($payload){
-		$key = $this->provider->getEncodeSecret();
-		return JWT::encode($payload, $key, $this->provider->getEncodingType());
-	}
-
 	public function validateToken($token){
-		$key = $this->provider->getDecodeSecret();
-		return JWT::decode($token, $key);
+		$key = $this->configManager->getPublicKey();
+		return JWT::decode($token, new Key($key, 'RS256'));
 	}
 
+	public function getconfig(){
+		return $this->configManager;
+	}
 
 }

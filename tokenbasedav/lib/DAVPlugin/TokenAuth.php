@@ -20,6 +20,5 @@ class TokenAuth extends DAV\ServerPlugin
 			return;
 		}
 
-		error_log("you just pocked me :)");
 	}
 }
