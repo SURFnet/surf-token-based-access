@@ -1,11 +1,11 @@
 <?php
-namespace OCA\TokenBaseDav\Controller;
+namespace OCA\TokenBasedDav\Controller;
 
 use OCP\AppFramework\{Controller, Http\JSONResponse, Http\TemplateResponse};
 use OC\AppFramework\Http;
 use OC\Group\Manager;
 use OC\User\Session;
-use OCA\TokenBaseDav\Services\JWTHelper;
+use OCA\TokenBasedDav\Services\JWTHelper;
 use OCP\ILogger;
 use OCP\IRequest;
 use Firebase\JWT\JWT;

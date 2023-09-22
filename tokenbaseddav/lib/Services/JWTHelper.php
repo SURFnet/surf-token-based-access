@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\TokenBaseDav\Services;
+namespace OCA\TokenBasedDav\Services;
 
 use Error;
 use Firebase\JWT\JWT;

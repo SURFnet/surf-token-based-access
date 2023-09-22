@@ -1,12 +1,12 @@
 <?php
 
-namespace OCA\TokenBaseDav\Services;
+namespace OCA\TokenBasedDav\Services;
 
 use OCP\IConfig;
 use OCP\Security\ISecureRandom;
 
 class ConfigManager {
-	private const appName= "tokenbasedav";
+	private const appName= "tokenbaseddav";
 
 	private const tokenIssuerPublicKey = "token_issuer_public_key";
 

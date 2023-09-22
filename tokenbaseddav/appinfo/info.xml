@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <info>
-    <id>tokenbasedav</id>
+    <id>tokenbaseddav</id>
     <name>Token base DAV</name>
     <description>enabling token acces on DAV file sharing</description>
     <licence>AGPL</licence>
     <author>Ponder source</author>
     <version>0.0.2</version>
-    <namespace>TokenBaseDav</namespace>
+    <namespace>TokenBasedDav</namespace>
     <website>https://github.com/pondersource/dav-token-access</website>
 	<bugs>https://github.com/pondersource/dav-token-access/issues</bugs>
 	<repository type="git">https://github.com/pondersource/dav-token-access.git</repository>
@@ -21,7 +21,7 @@
 
     <sabre>
 		<plugins>
-			<plugin>OCA\TokenBaseDav\DAVPlugin\TokenAuth</plugin>
+			<plugin>OCA\TokenBasedDav\DAVPlugin\TokenAuth</plugin>
 		</plugins>
 	</sabre>
 </info>

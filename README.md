@@ -8,14 +8,14 @@ cd dev-stock
 ```
 Then:
 ```
-curl -i -X POST http://localhost:8080/index.php/apps/tokenbasedav/auth/token
-curl -i -X POST http://localhost:8080/index.php/apps/tokenbasedav/auth/test
+curl -i -X POST http://localhost:8080/index.php/apps/tokenbaseddav/auth/token
+curl -i -X POST http://localhost:8080/index.php/apps/tokenbaseddav/auth/test
 ```
 
 FIXME: update these docs with conclusions from spelonking
 
 ## JWT token:
-you can configure the app behavior according to this table: (they should be inserted in the oc_appconfig table with `appid` = `tokenbasedav`)
+you can configure the app behavior according to this table: (they should be inserted in the oc_appconfig table with `appid` = `tokenbaseddav`)
 
 |config key | description | default value |
 |-----------|-------------|---------------|
