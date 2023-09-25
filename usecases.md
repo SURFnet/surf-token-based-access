@@ -12,10 +12,10 @@
 * Money moves from the bank account of John's research department to the bank account of the university's internal webshop, and the spectrometer is delivered the next day.
 
 ## 3. Vlogging: John has recorded a video with his smartphone's camera app and now wants to publish this to the TikTok account of his university.
-• The university's TikTok account is connected to SRAM
-• John's smartphone is also connected to SRAM
-• John is somehow able to select "publish to @Funiversity on TikTok" from some UI in the camera app on his smartphone
-• The video is uploaded
+* The university's TikTok account is connected to SRAM
+* John's smartphone is also connected to SRAM
+* John is somehow able to select "publish to @Funiversity on TikTok" from some UI in the camera app on his smartphone
+* The video is uploaded
 
 # Terminology
 * SRC/shop/tiktok = client,
