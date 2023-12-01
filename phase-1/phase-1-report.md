@@ -1,4 +1,15 @@
 # SURF token-based access project
+
+Abbreviations:
+* AS: Authorisation Server (in OAuth and in general)
+* GUI: Graphical User Interface
+* RD: SURF Research Drive (a service that provisions file servers including GUI)
+* RS: Resource Server (in OAuth)
+* SURF: The ICT cooperation of Dutch research and education institutes
+* SRAM: SURF Research Access Management
+* SRC: SURF Research Cloud (a service that provisions virtual machines)
+* VM: Virtual Machine
+ 
 ## Report of phase 1
 Ponder Source was asked to look into the possibilities for establishing token-based access between SURF Research Cloud (SRC) in the role of client, SURF Research Drive (RD) in the role of resource server, leveraging the position of SURF Reseach Access Management (SRAM) in the role of authorisation server.
 
@@ -8,54 +19,42 @@ Given the following existing infrastructure:
 
 ![existing infrastructure](./existing-infrastructure.jpeg)
 
-Researchers from various institutes come together in a Collaborative Organisation ("CO" in SRAM terms), to work on a science project together. They use a Virtual Machine ("VM") which is provisioned through SURF Research Cloud. The researchers will then want to establish both read and write access between the VM and files from various Research Drive instances.
+Researchers from various institutes come together in a Collaborative Organisation ("CO" in SRAM terms), to work on a science project together. They use Virtual Machines ("VMs") which are provisioned through SURF Research Cloud ("SRC"). The researchers will then want to establish both read and write access between some of the VMs and some of the files from Research Drive instances they have access to.
 
+A naive way to achieve this is if the researcher puts their own WebDAV credentials into the VM. The downside of this is that everybody who can access the VM can then also access all files on this researcher's entire Research Drive account.
 
-### Initial Exploration
-In the meetings on 17 January, 3 April, 7 July we prepared a plan for a project around token-based access for mounting Research Drive WebDAV folders into SURF Research Cloud Virtual Machines:
+We want to investigate if we can do better, giving out a scopes access token by which the code running on the VM can only access for instance one folder on the researcher's VM.
 
-Milestone 2.1: Token-based access to Research Drive: (30 person days) * 300 = 9,000 euros
+We want the solution to benefit from the fact that SRAM connects multiple services, and could define access policies on the basis of the group membership information it already contains. This way, not each resource providing service needs to set up its own authorization server, and a many-to-many matrix between various resource providing and resource receiving services within the eco system can be avoided.
 
-It is already possible to access the WebDAV interface of ResearchDrive using a token, but these tokens
-give root access to all documents on a user’s account, and don’t expire. In this milestone:
+We want the solution to sit somewhere in-between a full enterprise-style setup where nothing gets provisioned unless the central administration agrees, and a fully open system where functionality and group membership information is duplicated many times.
 
-● We will show how short-lived tokens can be used instead
-● We will show how access can be restricted to only a certain folder or share
-● For selecting which resources (folders) to share with which SRAM group, this will build on
-the Federated Group work from the RD-SRAM project
-● We don’t expect this to require any changes to the core server code of OC-10
-● Deliverable: an open source OC-10 app that can be installed on a ResearchDrive server
-Milestone 2.2: Token-based remote folder in Research Cloud: (30 person days) * 300 = 9,000 euros
+### The tricky part
 
-It is already possible to mount a WebDAV folder into a Research Cloud Workspace (VM). But now:
+We realised that most existing OAuth implementations benefit from a tight coupling and shared domain knowledge between the authorisation server and the resource server. For instance, when interacting with the GUI of the authorisation server for GitHub, one sees a list of one's own GitHub repositories to include or exclude. There is a "backdoor" through which the GitHub AS and the GitHub RS can talk to each other, and they do so in a GitHub-specific way.
 
-● We will show how to combine such a mount with a process that refreshes the short-lived
-tokens, using a refresh token
-● This will probably require some kind of scheduled task that refreshes the token in time
-before it expires
-● If the access was revoked since the last refresh, the mounted folder will be removed from
-the VM
-● Deliverable: a command-line tool on the VM that triggers a web view in the user’s browser,
-or vice versa, plus the refresh task to be scheduled
+In the case of giving access to a Research Drive (RD) resource, we would like the user to select a folder from a file system tree viewer. And maybe this file system viewer even has specific icons for some RD-specific attributes of folders, that don't make sense when selecting a folder on iRods, or a time series from an oscillograph, etc. The user will need to go through some domain-specific interactions in order to precisely select which resource to share. Therefore, it seems appropriate that the scope selection somehow happens on the GUI of the RS instead of in the client or on the AS.
 
-Attachment: SURF-Ponder Source Contract 2 Milestones and deliverables (part 2, continued)
+### Initial Attempt: Federated Group Shares
+In the meetings on 17 January, 3 April and 7 July 2023 we came up with a potential solution for this problem.
 
-Milestone 2.3: Token-based access via SRAM: (30 person days) * 300 = 9,000 euros
+Whereas OAuth generally starts the user journey at the client, there are other mechanisms, such as when you share a photo from the Gallery app of your smartphone, or [Open Cloud Mesh](https://github.com/cs3org/OCM-API), where the user journey starts in the GUI of the RS.
 
-As discussed, groups can play a very useful role in granting access; on the resource side (Research
-Drive, see milestone 2.1) an SRAM group is given access to a given folder or share, this is something that
-was already introduced in the RD-SRAM project. And on the relying party side (Research Cloud, see
-milestone 2.2), access can simply be requested to “whatever resources have been tied to this group
-elsewhere”, in a nicely decoupled way. Therefore:
+RD already has a "federated group shares" features where users can share a file or folder with an SRAM-defined group of people.
 
-● We will show how an authorization server can allow an authenticated user to give out an
-access token to a service, delineating the scope of access in terms of choosing a specific
-SRAM group from a list.
-● We will probably use an off-the-shelf open source OAuth server, and have it take its
-scopes configuration and user administration from the SRAM groups list and users list,
-respectively.
-● Deliverable: the full Proof-of-Concept in a reproducible test network (using
-Docker-Compose or similar), demonstrating the integration between resource server
-(Research Drive), authorization server (configured from SRAM), and relying party
-(Research Cloud).
-### Problem analysis
+Our initial idea was, whenever a VM is assigned to a group of people, simply mount all the shared folders for that group into the VM.
+
+In July, we started to implement a WebDAV endpoint to plug into RD as a proof-of-concept for this. However, after some discussion we concluded that this solution would not be generic enough, and we decided to abandon this initial attempt.
+
+### Solution Design
+
+After abandoning this initial attempt, we decided to:
+1) define a few more specific use cases,
+2) create a swimlanes diagram and a clickable demo of how the flow could work, using SRAM as the authorisation server but having a domain-specific GUI on RD for selecting the exact resource to share, and
+3) research whether there are any existing protocols or protocol extensions that can already support what we need.
+
+#### Use cases
+
+#### Flow
+
+#### Protocols
