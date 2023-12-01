@@ -6,7 +6,7 @@ Ponder Source was asked to look into the possibilities for establishing token-ba
 
 Given the following existing infrastructure:
 
-
+![existing infrastructure](./existing-infrastructure.jpeg)
 
 Researchers from various institutes come together in a Collaborative Organisation ("CO" in SRAM terms), to work on a science project together. They use a Virtual Machine ("VM") which is provisioned through SURF Research Cloud. The researchers will then want to establish both read and write access between the VM and files from various Research Drive instances.
 
