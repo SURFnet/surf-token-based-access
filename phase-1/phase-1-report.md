@@ -104,13 +104,13 @@ Rather than requiring the full policy of what may be shared when with whom for a
 
 ##### Client First
 In OAuth, all flows start at the client, and not at the resource server. We don't really know why this is, but it does make the flow feel more natural, because the end point (where you have the shared resource at the place where you want it and can start using it) coincides with the starting point.
-![rs-first-many-to-many](./rs-first-many-to-many.jpeg)
+![client-first-many-to-many](./client-first-many-to-many.jpeg)
 
 And again, adding the broker in the middle.
-![rs-first-brokered](./rs-first-brokered.jpeg)
+![client-first-brokered](./client-first-brokered.jpeg)
 
 And again, adding third-party OK.
-![rs-first-brokered-3rd-party-ok](./rs-first-brokered-3rd-party-ok.jpeg)
+![client-first-brokered-3rd-party-ok](./client-first-brokered-3rd-party-ok.jpeg)
 
 
 We decided to go with the client-first brokered flow. This is also what we used for the [clickable demo](https://pondersource.github.io/surf-token-based-access/phase-1/clickable-demo/) which we developed as part of the conversation for this milestone.
