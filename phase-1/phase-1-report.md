@@ -65,9 +65,9 @@ In the case of SSK, the sharing will be read-only. In the case of SRC it might b
 
 Use case 1: Sharing a folder to SSK
 
-Use case 2: Sharing a folder read-only to a particular SRC VM
+Use case 2: Sharing a folder read-only to a particular SRC VM within the context of one CO
 
-Use case 3: Sharing a folder read-write to a particular SRC VM
+Use case 3: Sharing a folder read-write to a particular SRC VM within the context of one CO
 
 
 A policy could apply that states that the VM to share with needs to belong to the CO of which the user is a member.
