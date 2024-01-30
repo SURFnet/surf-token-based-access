@@ -11,7 +11,7 @@ Select which RD-specific resource you want to share
     <li>2021</li>
     <li>2022</li>
     <li><ul>
-      <li><a href="http://localhost:3002/callback?scope=structured&ticket=`
+      <li><a href="http://localhost:3002/callback?scope=structured&state=`
 const dialogpart2 = `">January</a></li>
       <li>...</li>
     </ul></li>    
@@ -40,10 +40,10 @@ http.createServer((req, res) => {
     if (req.url?.startsWith('/scope')) {
         console.log('new transaction', query);
         res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(dialogpart1 + query.ticket + dialogpart2);
+        res.end(dialogpart1 + query.state + dialogpart2);
     } else {
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify(data));
     }
 }).listen(3003);
-console.log("Research Drive is running on port 3003");
+console.log("Resource is running on port 3003");

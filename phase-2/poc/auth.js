@@ -7,7 +7,7 @@ const screen1part1 = `
 <h2>Auth server (SRAM)</h2>
 Here are some services you may want to share resources from, connected to your account:
 <ul>
-  <li><a href="http://localhost:3003/scope?redirect_uri=http://localhost:3002/callback&ticket=`;  
+  <li><a href="http://localhost:3003/scope?redirect_uri=http://localhost:3002/callback&state=`;  
 const screen1part2 = `">Research Drive</a></li>  
   <li><a href="">iRods</a></li>
   <li><a href="">Microsoft Outlook Calendar</a></li>
@@ -17,7 +17,9 @@ const screen2part1 = `
 <body style="background-color:#faf9e3">
 <h2>Are you sure?</h2>
 Are you sure you want to share "`;
-const screen2part2 = `" with client "SRC VM 1234"?<a href="http://localhost:3001/callback?ticket=`;
+const screen2part2 = `" with client "SRC VM 1234"?<a href="http://localhost:3001/callback?` +
+    `code=eeKahdahkeedohw4ohza&` +
+    `state=`;
 const screen2part3 = `&scope=`;
 const screen2part4 = `">yes</a> / <a href="no.html">no</a>`;
 
@@ -30,7 +32,7 @@ http.createServer((req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
     if (req.url?.startsWith('/callback')) {
         console.log('callback on transaction', query);
-        const resourceTicket = query.ticket;
+        const resourceTicket = query.state;
         if (typeof tickets[resourceTicket] == 'undefined') {
             res.end('Session not found, please <a href="http://localhost:3001">try again</a>.');
             return;
@@ -62,8 +64,8 @@ http.createServer((req, res) => {
         const url_parts = url.parse(req.url, true);
         const query = url_parts.query;
         console.log('new transaction', query);
-        if (query.ticket && query.redirect_uri) {
-            const clientTicket = query.ticket;
+        if (query.state && query.redirect_uri) {
+            const clientTicket = query.state;
             const resourceTicket = makeid(8);
             tickets[resourceTicket] = {
                 redirectUri: query.redirect_uri,
@@ -74,4 +76,4 @@ http.createServer((req, res) => {
         }
     }
 }).listen(3002);
-console.log("SRAM is running on port 3002");
+console.log("Auth is running on port 3002");

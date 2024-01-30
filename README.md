@@ -36,6 +36,27 @@ generated `ticket` which acts as a transaction identifier and a `redirect_uri` p
   * Con: might leak some traceability of users across services
   * Con: might make it harder if multiple resource servers are involved in a single transaction
 
+Client should maybe request types of resources it can handle
+It then gets the refresh token from the auth server and the API details from the resource server.
+
+Part 1: resource access description
+This is for client to deal with dynamic API discovery
+It can maybe be done together with OCM?
+In its basic form it's a WebDAV URL
+
+
+Part 2: resource selection
+Most of this can be done with tickets between auth server and resource server.
+Except that the auth server should have a way to retrieve human-readable transaction details.
+
+The resource scope description is what the resource server gives to the auth server, to help the decision
+The resource access description is what the resource server gives to the client, to help the access
+They describe the same resource so it makes sense to join them into one, right? That's also very SemWeb. :)
+The scope is identified by a dereferenceable URL
+
+
+
+
 ## JWT in ownCloud PoC
 ### Development
 ```
