@@ -10,7 +10,7 @@ const screen1part1 = `
     `response_type=code&` +
     `client_id=ahxoh2ohTu&` +
     `redirect_uri=http://localhost:3001/callback&` +
-    `scope=tbd&state=`;
+    `scope=a-webdav-folder&state=`;
     
 const screen1part2 = `">here</a> to discover SRAM-based services to connect with your VM.</li>
     <li>Click <a href="">here</a> to discover Danish services to connect with your VM.</li>
