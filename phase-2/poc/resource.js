@@ -11,8 +11,9 @@ Select which RD-specific resource you want to share
     <li>2021</li>
     <li>2022</li>
     <li><ul>
-      <li><a href="http://localhost:3002/callback?scope=structured&state=`
-const dialogpart2 = `">January</a></li>
+      <li><a href="http://localhost:3002/callback?scope=http://localhost:3003/api/`;
+const dialogpart2 = `.json&state=`;
+const dialogpart3 = `">January</a></li>
       <li>...</li>
     </ul></li>    
     <li>2023</li>
@@ -40,7 +41,7 @@ http.createServer((req, res) => {
     if (req.url?.startsWith('/scope')) {
         console.log('new transaction', query);
         res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(dialogpart1 + query.state + dialogpart2);
+        res.end(dialogpart1 + query.state + dialogpart2 + query.state + dialogpart3);
     } else {
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify(data));

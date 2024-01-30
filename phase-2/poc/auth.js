@@ -17,11 +17,11 @@ const screen2part1 = `
 <body style="background-color:#faf9e3">
 <h2>Are you sure?</h2>
 Are you sure you want to share "`;
-const screen2part2 = `" with client "SRC VM 1234"?<a href="http://localhost:3001/callback?` +
+const screen2part2 = `" with client "SRC VM 1234"?<br><a href="http://localhost:3001/callback?` +
     `code=eeKahdahkeedohw4ohza&` +
     `state=`;
-const screen2part3 = `&scope=`;
-const screen2part4 = `">yes</a> / <a href="no.html">no</a>`;
+const screen2part3 = `&scope=http://localhost:3003/api/`;
+const screen2part4 = `.json">yes</a> / <a href="no.html">no</a>`;
 
 const tickets = {};
 
