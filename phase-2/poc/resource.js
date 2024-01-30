@@ -28,8 +28,7 @@ const data = {
     "protocols": {
         "webdav": {
             "url": "https://dav.rd123.surf.nl:4523/pietjepuk/files/photos/2023/January",
-            "protocol-version": "8.6n",
-            "token": "rtgrvsfgdrtewg3qd4g"
+            "protocol-version": "8.6n"
         }
     }
 };
@@ -44,7 +43,7 @@ http.createServer((req, res) => {
         res.end(dialogpart1 + query.state + dialogpart2 + query.state + dialogpart3);
     } else {
         res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(JSON.stringify(data));
+        res.end(JSON.stringify(data, null, 2));
     }
 }).listen(3003);
 console.log("Resource is running on port 3003");
