@@ -1,0 +1,13 @@
+{
+    "type": "scope and capability",
+    "id": "eing7uNg",
+    "humanReadable": "the RD folder photos -> 2023 -> January",
+    "machineReadableInternal": "RD://pietjepuk/files/photos/2023/January",
+    "protocols": {
+        "webdav": {
+            "url": "https://dav.rd123.surf.nl:4523/pietjepuk/files/photos/2023/January",
+            "protocol-version": "8.6n",
+            "token": "rtgrvsfgdrtewg3qd4g"
+        }
+    }
+}
