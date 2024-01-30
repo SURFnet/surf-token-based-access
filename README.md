@@ -11,23 +11,15 @@ git clone https://github.com/pondersource/surf-token-based-access
 cd surf-token-based-access
 cd phase-2
 cd poc
-node src.js & node sram.js & node rd.js
+node client.js & node auth.js & node resource.js
 ```
-
-### OAuth Scope Gathering Clickable Demo
-(deprecated, replaced by PoC ^)
-```
-git clone https://github.com/pondersource/surf-token-based-access
-cd surf-token-based-access
-cd phase-2
-cd clickable-demo
-npx serve
-```
-Now you can use your browser to see the clickable demo
+Now you can use your browser to see the PoC;
+* Start in the client on http://localhost:3001
+* You will be redirected to the auth server on http://localhost:3002
 * The auth server gets a standard OAuth request from one of its registered client, but without `requested_scope`
 * TODO: indicate explicitly at this point that scope is to be negotiated interactively
 * The user selects a scope selection server from a list. Unlike the auth server, these scope selection servers are tightly coupled to specific resource servers and their offerings.
-* The user's browser is redirected to the scope selection server, at this point only with a randomly
+* The user's browser is redirected to the resource server (or more precisely, the scope selection server) on http://localhost:3003, at this point only with a randomly
 generated `ticket` which acts as a transaction identifier and a `redirect_uri` pointing the way back to the auth server.
 * TODO: rename `ticket` to `transaction`?
 * The user can provide credentials and interactively select the resource details to be offered in this transaction.
