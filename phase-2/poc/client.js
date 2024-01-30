@@ -4,8 +4,8 @@ const screen1 = `
 <h2>SURF Research Cloud</h2>
 <ul>
 
-    <li>Click <a href="sram1.html#redirect_uri=https://src.surf.nl/connect&ticket=peesox4I">here</a> to discover SRAM-based services to connect with your VM.</li>
-    <li>Click <a href="dtu.html#redirect_uri=https://src.surf.nl/connect&ticket=peesox4I">here</a> to discover Danish services to connect with your VM.</li>
+    <li>Click <a href="http://localhost:3002/authorize?redirect_uri=https://src.surf.nl/connect&ticket=peesox4I">here</a> to discover SRAM-based services to connect with your VM.</li>
+    <li>Click <a href="">here</a> to discover Danish services to connect with your VM.</li>
     <li>etc&hellip;</li>
 </ul>
 `;

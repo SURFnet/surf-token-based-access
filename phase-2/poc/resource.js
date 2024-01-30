@@ -9,7 +9,7 @@ Select which RD-specific resource you want to share
     <li>2021</li>
     <li>2022</li>
     <li><ul>
-      <li><a href="sram2.html#scope=structured&ticket=eing7uNg">January</a></li>
+      <li><a href="http://localhost:3002/selected?scope=structured&ticket=eing7uNg">January</a></li>
       <li>...</li>
     </ul></li>    
     <li>2023</li>
