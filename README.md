@@ -5,7 +5,17 @@
 
 
 ## Phase 2 (proof of concept)
-## OAuth Scope Gathering Clickable Demo
+### OAuth Scope Gathering PoC
+```
+git clone https://github.com/pondersource/surf-token-based-access
+cd surf-token-based-access
+cd phase-2
+cd poc
+node src.js & node sram.js & node rd.js
+```
+
+### OAuth Scope Gathering Clickable Demo
+(deprecated, replaced by PoC ^)
 ```
 git clone https://github.com/pondersource/surf-token-based-access
 cd surf-token-based-access
