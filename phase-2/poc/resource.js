@@ -9,7 +9,7 @@ Select which RD-specific resource you want to share
     <li>2021</li>
     <li>2022</li>
     <li><ul>
-      <li><a href="http://localhost:3002/selected?scope=structured&ticket=eing7uNg">January</a></li>
+      <li><a href="http://localhost:3002/callback?scope=structured&ticket=eing7uNg">January</a></li>
       <li>...</li>
     </ul></li>    
     <li>2023</li>
@@ -30,7 +30,13 @@ const data = {
     }
 };
 http.createServer((req, res) => {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end(dialog);
+    console.log(req.url.toString());
+    if (req.url?.startsWith('/scope')) {
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end(dialog);
+    } else {
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify(data));
+    }
 }).listen(3003);
 console.log("Research Drive is running on port 3003");

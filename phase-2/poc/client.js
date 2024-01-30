@@ -4,7 +4,7 @@ const screen1 = `
 <h2>SURF Research Cloud</h2>
 <ul>
 
-    <li>Click <a href="http://localhost:3002/authorize?redirect_uri=https://src.surf.nl/connect&ticket=peesox4I">here</a> to discover SRAM-based services to connect with your VM.</li>
+    <li>Click <a href="http://localhost:3002/authorize?redirect_uri=http://localhost:3001/callback&ticket=peesox4I">here</a> to discover SRAM-based services to connect with your VM.</li>
     <li>Click <a href="">here</a> to discover Danish services to connect with your VM.</li>
     <li>etc&hellip;</li>
 </ul>
@@ -26,6 +26,11 @@ The remote WebDAV folder <tt id="webdavURL">(loading WebDAV URL&hellip;)</tt> wa
 `;
 http.createServer((req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end(screen1);
+    console.log(req.url.toString());
+    if (req.url.startsWith('/callback')) {
+        res.end(screen2);
+    } else {
+        res.end(screen1);
+    }
 }).listen(3001);
 console.log("SURF Research Cloud is running on port 3001");
