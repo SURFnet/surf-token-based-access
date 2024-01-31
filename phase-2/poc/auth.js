@@ -17,18 +17,18 @@ const screen2part1 = `
 <body style="background-color:#faf9e3">
 <h2>Are you sure?</h2>
 Are you sure you want to share "`;
-const screen2part2 = `" with client "SRC VM 1234"?<br><a href="http://localhost:3001/callback?` +
+const screen2part2 = `" with client "SRC VM 1234"?<br><a href="http://localhost:3001/callback1?` +
     `code=eeKahdahkeedohw4ohza&` +
     `state=`;
-const screen2part3 = `&scope=http://localhost:3003/api/`;
-const screen2part4 = `.json">yes</a> / <a href="no.html">no</a>`;
+const screen2part3 = `&scope=`;
+const screen2part4 = `">yes</a> / <a href="no.html">no</a>`;
 
 const tickets = {};
 
 http.createServer((req, res) => {
     const url_parts = url.parse(req.url, true);
     const query = url_parts.query;
-
+    console.log("auth server sees request", req.url.toString());
     res.writeHead(200, {'Content-Type': 'text/html'});
     if (req.url?.startsWith('/callback')) {
         console.log('callback on transaction', query);
@@ -38,12 +38,8 @@ http.createServer((req, res) => {
             return;
         }
         const clientTicket = tickets[resourceTicket].clientTicket;
-        console.log(`Linking back resource ticket ${resourceTicket} to client ticket ${clientTicket}`);
-        http.request({
-            host: 'localhost',
-            port: 3003,
-            path: `/api/${resourceTicket}.json`
-        }, (res2) => {
+        console.log(`Linking back resource ticket ${resourceTicket} with scope picking result ${query.scope} to client ticket ${clientTicket}`);
+        http.request(query.scope, (res2) => {
             res2.on('data', (d) => {
                 try {
                     const obj = JSON.parse(d);
@@ -51,7 +47,7 @@ http.createServer((req, res) => {
                     res.end(
                         screen2part1 + obj.humanReadable +
                         screen2part2 + clientTicket +
-                        screen2part3 + resourceTicket +
+                        screen2part3 + query.scope +
                         screen2part4
                     );
                 } catch (e) {
@@ -60,19 +56,41 @@ http.createServer((req, res) => {
                 }
             });
         }).end();
-    } else {
+    } else if (req.url?.startsWith('/authorize')) {
         const url_parts = url.parse(req.url, true);
         const query = url_parts.query;
         console.log('new transaction', query);
-        if (query.state && query.redirect_uri) {
-            const clientTicket = query.state;
-            const resourceTicket = makeid(8);
-            tickets[resourceTicket] = {
-                redirectUri: query.redirect_uri,
-                clientTicket
-            };
-            console.log(tickets);
-            res.end(screen1part1 + resourceTicket + screen1part2);
+        if (query.scope == 'a-webdav-folder') {
+            console.log(`need to pick ${query.scope}!`);
+            if (query.state && query.redirect_uri) {
+                const clientTicket = query.state;
+                const resourceTicket = makeid(8);
+                tickets[resourceTicket] = {
+                    redirectUri: query.redirect_uri,
+                    clientTicket
+                };
+                console.log(tickets);
+                res.end(screen1part1 + resourceTicket + screen1part2);
+            }
+        } else {
+            console.log(`need to dereference ${query.scope}`);
+            http.request(query.scope, (res2) => {
+                res2.on('data', (d) => {
+                    try {
+                        const obj = JSON.parse(d);
+                        console.log(`fetched scope details for ticket ${query.scope}`, obj);
+                        res.end(
+                            screen2part1 + obj.humanReadable +
+                            screen2part2 + query.state +
+                            screen2part3 + query.scope +
+                            screen2part4
+                        );
+                    } catch (e) {
+                        console.log('error parsing JSON', e);
+                        res.end('error parsing JSON');
+                    }
+                });
+            }).end();
         }
     }
 }).listen(3002);
