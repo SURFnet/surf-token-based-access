@@ -45,11 +45,7 @@ http.createServer((req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
     console.log(req.url.toString());
     if (req.url.startsWith('/callback1')) {
-        http.request({
-            host: 'localhost',
-            port: 3003,
-            path: `/api/${query.scope}.json`
-        }, (res2) => {
+        http.request(query.scope, (res2) => {
             res2.on('data', (d) => {
                 try {
                     const obj = JSON.parse(d);
@@ -66,18 +62,14 @@ http.createServer((req, res) => {
             });
         }).end();
     } else if (req.url.startsWith('/callback2')) {
-        http.request({
-            host: 'localhost',
-            port: 3003,
-            path: `/api/${query.scope}.json`
-        }, (res2) => {
+        http.request(query.scope, (res2) => {
             res2.on('data', (d) => {
                 try {
                     const obj = JSON.parse(d);
                     console.log(`fetched details for scope ${query.scope} from Research Drive`, obj);
                     const webdavUrl = obj.protocols.webdav.url;
                     res.end(
-                        screen3part1 + 'http://localhost:3003/api/' + query.scope + '.json' +
+                        screen3part1 + query.scope +
                         screen3part2 + makeid(8) +
                         screen3part3 + webdavUrl
                     );
