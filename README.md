@@ -5,7 +5,10 @@
 
 
 ## Phase 2 (proof of concept)
-### OAuth Scope Gathering PoC
+### OAuth Scope Picker spec
+See [draft](./phase-2/spec/draft.md).
+
+### OAuth Scope Picker PoC
 ```
 git clone https://github.com/pondersource/surf-token-based-access
 cd surf-token-based-access
