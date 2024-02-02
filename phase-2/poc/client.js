@@ -10,11 +10,11 @@ const screen1part1 = `
     `response_type=code&` +
     `client_id=ahxoh2ohTu&` +
     `redirect_uri=` + encodeURIComponent(`http://localhost:3001/callback1`) + `&` +
-    `scope=a-webdav-folder&state=`;
+    `pick=webdav-folder&state=`;
     
 const screen1part2 = `">here</a> to discover SRAM-based services to connect with your VM.</li>
     <li>Click <a href="">here</a> to discover Danish services to connect with your VM.</li>
-    <li>Or go directly to <a href="http://localhost:3003/scope?redirect_uri=` + encodeURIComponent(`http://localhost:3001/callback2`) + `&state=`;
+    <li>Or go directly to <a href="http://localhost:3003/scope?redirect_uri=` + encodeURIComponent(`http://localhost:3001/callback2`) + `&pick=webdav-folder&state=`;
 const screen1part3 = `">Research Drive</a></li>
     <li>etc&hellip;</li>
 </ul>

@@ -8,7 +8,8 @@ const screen1part1 = `
 Here are some services you may want to share resources from, connected to your account:
 <ul>
   <li><a href="http://localhost:3003/scope?redirect_uri=` + encodeURIComponent(`http://localhost:3002/callback`) + `&state=`;
-const screen1part2 = `">Research Drive</a></li>  
+const screen1part2 = `&pick=`;
+const screen1part3 = `">Research Drive</a></li>
   <li><a href="">iRods</a></li>
   <li><a href="">Microsoft Outlook Calendar</a></li>
 </ul>
@@ -60,7 +61,7 @@ http.createServer((req, res) => {
         const url_parts = url.parse(req.url, true);
         const query = url_parts.query;
         console.log('new transaction', query);
-        if (query.scope == 'a-webdav-folder') {
+        if (query.pick == 'webdav-folder') {
             console.log(`need to pick ${query.scope}!`);
             if (query.state && query.redirect_uri) {
                 const clientTicket = query.state;
@@ -70,7 +71,7 @@ http.createServer((req, res) => {
                     clientTicket
                 };
                 console.log(tickets);
-                res.end(screen1part1 + resourceTicket + screen1part2);
+                res.end(screen1part1 + resourceTicket + screen1part2 + query.pick + screen1part3);
             }
         } else {
             console.log(`need to dereference ${query.scope}`);

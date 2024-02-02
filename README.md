@@ -28,7 +28,7 @@ generated `ticket` which acts as a transaction identifier and a `redirect_uri` p
 * The client knows how to contact the auth server to exchange this refresh token for an access token
 * The client now needs to discover access instructions. The client directly asks the resource server for this
 ### How is this different?
-* the client sends 'a-webdav-folder' as the scope, and gets back a URL for a structured scope
+* the client sends 'pick=webdav-folder' instead of 'scope=...', and gets back a URL for a structured scope
 * this scope was chosen by the user at the resource server's scope selection interface, the auth server doesn't understand it, except for the `humanReadable` field which it can display.
 * the client can deference the scope to discover the protocol version, resource URL, etc.
 
