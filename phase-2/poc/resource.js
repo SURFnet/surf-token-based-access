@@ -12,7 +12,7 @@ Select which RD-specific resource you want to share
     <li>2022</li>
     <li><ul>
       <li><a href="`;
-const dialogpart2 = `?scope=http://localhost:3003/api/`;
+const dialogpart2 = `?scope=` + encodeURIComponent(`http://localhost:3003/api/`);
 const dialogpart3 = `.json&state=`;
 const dialogpart4 = `">January</a></li>
       <li>...</li>

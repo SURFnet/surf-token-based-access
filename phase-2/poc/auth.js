@@ -7,7 +7,7 @@ const screen1part1 = `
 <h2>Auth server (SRAM)</h2>
 Here are some services you may want to share resources from, connected to your account:
 <ul>
-  <li><a href="http://localhost:3003/scope?redirect_uri=http://localhost:3002/callback&state=`;  
+  <li><a href="http://localhost:3003/scope?redirect_uri=` + encodeURIComponent(`http://localhost:3002/callback`) + `&state=`;
 const screen1part2 = `">Research Drive</a></li>  
   <li><a href="">iRods</a></li>
   <li><a href="">Microsoft Outlook Calendar</a></li>

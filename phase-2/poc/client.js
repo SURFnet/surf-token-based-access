@@ -9,12 +9,12 @@ const screen1part1 = `
     <li>Click <a href="http://localhost:3002/authorize?` +
     `response_type=code&` +
     `client_id=ahxoh2ohTu&` +
-    `redirect_uri=http://localhost:3001/callback1&` +
+    `redirect_uri=` + encodeURIComponent(`http://localhost:3001/callback1`) + `&` +
     `scope=a-webdav-folder&state=`;
     
 const screen1part2 = `">here</a> to discover SRAM-based services to connect with your VM.</li>
     <li>Click <a href="">here</a> to discover Danish services to connect with your VM.</li>
-    <li>Or go directly to <a href="http://localhost:3003/scope?redirect_uri=http://localhost:3001/callback2&state=`;  
+    <li>Or go directly to <a href="http://localhost:3003/scope?redirect_uri=` + encodeURIComponent(`http://localhost:3001/callback2`) + `&state=`;
 const screen1part3 = `">Research Drive</a></li>
     <li>etc&hellip;</li>
 </ul>
@@ -32,7 +32,7 @@ const screen3part1 = `
 Click <a href="http://localhost:3002/authorize?` +
 `response_type=code&` +
 `client_id=ahxoh2ohTu&` +
-`redirect_uri=http://localhost:3001/callback1&` +
+`redirect_uri=` + encodeURIComponent(`http://localhost:3001/callback1`) + `&` +
 `scope=`;
 const screen3part2 = `&state=`;
 const screen3part3 = `">here</a> to request access to remote WebDAV folder you picked, namely: <tt id="webdavURL">`;
