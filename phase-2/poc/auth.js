@@ -47,7 +47,7 @@ http.createServer((req, res) => {
                     res.end(
                         screen2part1 + obj.humanReadable +
                         screen2part2 + clientTicket +
-                        screen2part3 + query.scope +
+                        screen2part3 + encodeURIComponent(query.scope) +
                         screen2part4
                     );
                 } catch (e) {
@@ -82,7 +82,7 @@ http.createServer((req, res) => {
                         res.end(
                             screen2part1 + obj.humanReadable +
                             screen2part2 + query.state +
-                            screen2part3 + query.scope +
+                            screen2part3 + encodeURIComponent(query.scope) +
                             screen2part4
                         );
                     } catch (e) {

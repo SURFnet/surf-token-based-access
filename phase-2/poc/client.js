@@ -69,7 +69,7 @@ http.createServer((req, res) => {
                     console.log(`fetched details for scope ${query.scope} from Research Drive`, obj);
                     const webdavUrl = obj.protocols.webdav.url;
                     res.end(
-                        screen3part1 + query.scope +
+                        screen3part1 + encodeURIComponent(query.scope) +
                         screen3part2 + makeid(8) +
                         screen3part3 + webdavUrl
                     );
