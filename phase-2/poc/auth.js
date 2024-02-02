@@ -22,7 +22,8 @@ const screen2part2 = `" with client "SRC VM 1234"?<br><a href="http://localhost:
     `code=eeKahdahkeedohw4ohza&` +
     `state=`;
 const screen2part3 = `&scope=`;
-const screen2part4 = `">yes</a> / <a href="no.html">no</a>`;
+const screen2part4 = `&scope_secret=`;
+const screen2part5 = `">yes</a> / <a href="no.html">no</a>`;
 
 const tickets = {};
 
@@ -40,7 +41,11 @@ http.createServer((req, res) => {
         }
         const clientTicket = tickets[resourceTicket].clientTicket;
         console.log(`Linking back resource ticket ${resourceTicket} with scope picking result ${query.scope} to client ticket ${clientTicket}`);
-        http.request(query.scope, (res2) => {
+        http.request(query.scope, {
+            headers: {
+                Authorization: 'Bearer ' + query.scope_secret
+            }
+        }, (res2) => {
             res2.on('data', (d) => {
                 try {
                     const obj = JSON.parse(d);
@@ -49,7 +54,8 @@ http.createServer((req, res) => {
                         screen2part1 + obj.humanReadable['en-US'] +
                         screen2part2 + clientTicket +
                         screen2part3 + encodeURIComponent(query.scope) +
-                        screen2part4
+                        screen2part4 + query.scope_secret +
+                        screen2part5
                     );
                 } catch (e) {
                     console.log('error parsing JSON', e);
@@ -75,7 +81,11 @@ http.createServer((req, res) => {
             }
         } else {
             console.log(`need to dereference ${query.scope}`);
-            http.request(query.scope, (res2) => {
+            http.request(query.scope, {
+            headers: {
+                Authorization: 'Bearer ' + query.scope_secret
+            }
+        }, (res2) => {
                 res2.on('data', (d) => {
                     try {
                         const obj = JSON.parse(d);
@@ -84,7 +94,8 @@ http.createServer((req, res) => {
                             screen2part1 + obj.humanReadable['en-US'] +
                             screen2part2 + query.state +
                             screen2part3 + encodeURIComponent(query.scope) +
-                            screen2part4
+                            screen2part4 + query.scope_secret +
+                            screen2part5
                         );
                     } catch (e) {
                         console.log('error parsing JSON', e);

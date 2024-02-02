@@ -6,16 +6,16 @@ the 'predance', which is pretty close to existing work on GNAP and OAuth for ban
 ## Predance Flow
 In this flow, the client first interacts with the resource server to pick a scope. This scope is assigned a URL which it can be dereferenced to obtain its machine-readable and human-readable descriptions. After this predance is completed, the client initiates a normal authorization code flow with this URL as the scope.
 
-The auth server can fetch the JSON document from this URL and display the text from the `humanReadable[locale]` field, so the user knows which scope is meant. The client can fetch the same document to discover the protocol and API endpoint for interacting with the resource server.
+The auth server can fetch the JSON document from this URL using an `Authorization: Bearer <scope_secret>` request header and display the text from the `humanReadable[locale]` field, so the user knows which scope is meant. The client can fetch the same document to discover the protocol and API endpoint for interacting with the resource server.
 
 Example:
 Step 1) the client redirects the user to the scope picking GUI of the resource server, with a `redirect_uri` and a `pick=` query parameter referring to the requirements of the resource and scope to be picked. For instance, `pick=photo`.
 Step 2) the resource server shows a GUI where the user can select a (structured) scope.
 Step 3) the details of what the user selected are stored in a JSON document at a URL
-Step 4) this URL is returned as a `scope` query parameter to the `redirect_uri` from step 1.
+Step 4) this URL is returned as a `scope` query parameter to the `redirect_uri` from step 1, along with a `scope_secret`.
 Step 5) the `scope` is used in a standard OAuth flow
 Step 6) even though the auth server has presumably never seen this `scope` before, it can still
-display a description of it, but fetching the JSON document from this URL and taking the `humanReadable[locale]` field from there.
+display a description of it, but fetching the JSON document from this URL using an `Authorization: Bearer <scope_secret>` request header and taking the `humanReadable[locale]` field from there.
 
 ```
 Client  Auth  Resource
@@ -49,7 +49,7 @@ Client  Auth  Resource
 ```
 
 ## Security considerations
-The client and authorization server have a way to access the scope document [TODO: How?] but it should, for privacy reasons, not be exposed to the public internet.
+The client and authorization server have a way to access the scope document using the `scope_secret` which should, for privacy reasons, not be exposed to the public internet.
 
 The resource server is responsible for:
 * making sure that the `humanReadable[locale]` string in the scope document is easy for the auth server to display and for the user to recognise as describing the scope they just picked
