@@ -46,7 +46,7 @@ http.createServer((req, res) => {
                     const obj = JSON.parse(d);
                     console.log('fetched scope details for ticket eing7uNg from Research Drive', obj);
                     res.end(
-                        screen2part1 + obj.humanReadable +
+                        screen2part1 + obj.humanReadable['en-US'] +
                         screen2part2 + clientTicket +
                         screen2part3 + encodeURIComponent(query.scope) +
                         screen2part4
@@ -81,7 +81,7 @@ http.createServer((req, res) => {
                         const obj = JSON.parse(d);
                         console.log(`fetched scope details for ticket ${query.scope}`, obj);
                         res.end(
-                            screen2part1 + obj.humanReadable +
+                            screen2part1 + obj.humanReadable['en-US'] +
                             screen2part2 + query.state +
                             screen2part3 + encodeURIComponent(query.scope) +
                             screen2part4

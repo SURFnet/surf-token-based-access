@@ -24,7 +24,9 @@ const dialogpart4 = `">January</a></li>
 const data = {
     "type": "scope and capability",
     "id": "eing7uNg",
-    "humanReadable": "the RD folder photos -> 2023 -> January",
+    "humanReadable": {
+        "en-US": "the RD folder photos -> 2023 -> January"
+    },
     "machineReadableInternal": "RD://pietjepuk/files/photos/2023/January",
     "protocols": {
         "webdav": {
