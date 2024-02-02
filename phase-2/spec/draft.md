@@ -17,8 +17,36 @@ Step 5) the `scope` is used in a standard OAuth flow
 Step 6) even though the auth server has presumably never seen this `scope` before, it can still
 display a description of it, but fetching the JSON document from this URL and taking the `humanReadable[locale]` field from there.
 
+```
+Client  Auth  Resource
+   |      |      |
+   |--------1--->|
+   |      |      2
+   |      |      3
+   |<--4---------|
+   |---5->|      |
+   |<-----|      |
+   |      |      |
+```
+
+
 ## Subdance Flow
- 
+The subdance flow works slightly differently:
+1) the client initiates an OAuth authorization code flow request where instead of a `scope` parameter, there is a `pick` parameter.
+2) based on the `pick` parameter the auth server offers one or more options for the user to be redirected to a scope picker
+3) the interaction with the scope picker is identical to steps 2 to 4 of the predance flow, except that the `redirect_uri` now points to the auth server instead of to the client
+4) the auth server can now continue as from step 5 of the predance flow.
+
+```
+Client  Auth  Resource
+   |      |      |
+   |---1->|      |
+   |      2      |
+   |      |---3->|
+   |      |<-----|
+   |<--4--|      |
+   |      |      |
+```
 
 ## Security considerations
 The client and authorization server have a way to access the scope document [TODO: How?] but it should, for privacy reasons, not be exposed to the public internet.
