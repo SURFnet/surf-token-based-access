@@ -1,18 +1,18 @@
 In Research and Education we want to avoid too tight coupling between the authorization server and the resource server.
-+The organisations in control of the various resource server are often separate from the organisation in control of the authorization server, and we don't want to interlink their deployment schedules.
-+Therefore authorization server should not have detailed knowledge about the resources and access modes a resource server can offer, and is therefore not well placed to present the scope selection GUI.
-+
-+We considered solving this with an intent lodging "pre-dance", where the client obtains a structured scope definition before initiating the main OAuth dance, but rejected this approach because it creates an undesirable many-to-many relationship between clients and resource servers. Instead, we want to hide the resource server behind the authorization server which act as a trusted broker in the middle between the various clients of various organisations and the various resource servers of various other organisations.
-+
-+Another option would be to leave scope descriptions vague and generic, but this hinders fine-grained access control.
-+
-+We therefore want to propose an OAuth extension which adds a "scope picker" service, close to each resource server, to which the authorization server redirects the user in a "sub-dance", leaving the GUI of the authorization server generic and easy to maintain.
-+
-+This works as follows: using standard authorization code flow, the client redirects the user to the authorization server with a generic scope description  - for instance 'photo', 'webdav folder', or 'ActivityPub feed'. The authorization server then redirects the user to a well-known endpoint on the scope picker service, specifying this generic scope description.
-+
-+The scope picker shows a GUI in which the user can select a specific photo, folder, news feed, etc, from the ones they have access to, and to which it wants to give the client access. This structured scope is given a human-readble name, either suggested by the scope picker or chosen by the user. This human-readable description, a description that the resource server will understand (e.g. a local resource ID and access mode), and a description that the client will understand (e.g. a WebDAV URL), are put into a JSON document for which a unique URL is minted. This URL is then used as the scope name from this point onward.
-+
-+The scope picker redirects the user back to the authorization server, which is able to display the human-readable description in its GUI, even though the authorization server doesn't fully understand what it stands for. When the user clicks 'grant access', the OAuth authorization scope dance is continued back to the client as normal.
-+
-+
-+FIXME: dynamic RS choice should be an advanced thing, default should be where the client hard-codes the RS
+The organisations in control of the various resource server are often separate from the organisation in control of the authorization server, and we don't want to interlink their deployment schedules.
+Therefore authorization server should not have detailed knowledge about the resources and access modes a resource server can offer, and is therefore not well placed to present the scope selection GUI.
+
+We considered solving this with an intent lodging "pre-dance", where the client obtains a structured scope definition before initiating the main OAuth dance, but rejected this approach because it creates an undesirable many-to-many relationship between clients and resource servers. Instead, we want to hide the resource server behind the authorization server which act as a trusted broker in the middle between the various clients of various organisations and the various resource servers of various other organisations.
+
+Another option would be to leave scope descriptions vague and generic, but this hinders fine-grained access control.
+
+We therefore want to propose an OAuth extension which adds a "scope picker" service, close to each resource server, to which the authorization server redirects the user in a "sub-dance", leaving the GUI of the authorization server generic and easy to maintain.
+
+This works as follows: using standard authorization code flow, the client redirects the user to the authorization server with a generic scope description  - for instance 'photo', 'webdav folder', or 'ActivityPub feed'. The authorization server then redirects the user to a well-known endpoint on the scope picker service, specifying this generic scope description.
+
+The scope picker shows a GUI in which the user can select a specific photo, folder, news feed, etc, from the ones they have access to, and to which it wants to give the client access. This structured scope is given a human-readble name, either suggested by the scope picker or chosen by the user. This human-readable description, a description that the resource server will understand (e.g. a local resource ID and access mode), and a description that the client will understand (e.g. a WebDAV URL), are put into a JSON document for which a unique URL is minted. This URL is then used as the scope name from this point onward.
+
+The scope picker redirects the user back to the authorization server, which is able to display the human-readable description in its GUI, even though the authorization server doesn't fully understand what it stands for. When the user clicks 'grant access', the OAuth authorization scope dance is continued back to the client as normal.
+
+
+FIXME: dynamic RS choice should be an advanced thing, default should be where the client hard-codes the RS
