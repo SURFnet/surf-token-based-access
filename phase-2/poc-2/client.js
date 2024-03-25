@@ -9,7 +9,6 @@ const screen1part1 = `
     <li>Click <a href="http://localhost:3002/authorize?` +
     `response_type=code&` +
     `client_id=ahxoh2ohTu&` +
-    `redirect_uri=` + encodeURIComponent(`http://localhost:3001/callback1`) + `&` +
     `scope=webdav-folder&state=`;
     
 const screen1part2 = `">here</a> to discover SRAM-based services to connect with your VM.</li>
@@ -19,8 +18,7 @@ const screen1part2 = `">here</a> to discover SRAM-based services to connect with
 const screen2part1 = `
 <body style="background-color:#e3f2fa">
 <h2>SURF Research Cloud</h2>
-The remote WebDAV folder <tt id="webdavURL">`;
-const screen2part2 = `</tt> was successfully mounted under <tt>/mnt/fed/photos/2022/January</tt>!
+The remote WebDAV folder was successfully mounted under <tt>/mnt/fed/photos/2022/January</tt>!
 `;
 
 http.createServer((req, res) => {
@@ -30,26 +28,9 @@ http.createServer((req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
     console.log(req.url.toString());
     if (req.url.startsWith('/callback1')) {
-        http.request(query.scope, {
-            headers: {
-                Authorization: 'Bearer ' + query.scope_secret
-            }
-        }, (res2) => {
-            res2.on('data', (d) => {
-                try {
-                    const obj = JSON.parse(d);
-                    console.log(`fetched details for scope ${query.scope} from Research Drive`, obj);
-                    const webdavUrl = obj.protocols.webdav.url;
-                    res.end(
-                        screen2part1 + webdavUrl +
-                        screen2part2
-                    );
-                } catch (e) {
-                    console.log('error parsing JSON', e);
-                    res.end('error parsing JSON');
-                }
-            });
-        }).end();
+        res.end(
+            screen2part1
+        );
     } else {
         res.end(screen1part1 + makeid(8) + screen1part2);
     }

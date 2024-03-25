@@ -14,7 +14,7 @@ Select which RD-specific resource you want to share
     <li><ul>
       <li><a href="`;
 const dialogpart2 = `?scope=`;
-const dialogpart3 = `&scope_secret=`;
+const dialogpart3 = `&code=`;
 const dialogpart4 = `&state=`;
 const dialogpart5 = `">January</a></li>
       <li>...</li>
@@ -26,9 +26,6 @@ const dialogpart5 = `">January</a></li>
 const data = {
     "type": "scope and capability",
     "id": null, //"eing7uNg",
-    "humanReadable": {
-        "en-US": "the RD folder photos -> 2023 -> January"
-    },
     "machineReadableInternal": "RD://pietjepuk/files/photos/2023/January",
     "protocols": {
         "webdav": {
@@ -37,8 +34,15 @@ const data = {
         }
     }
 };
-const scopeSecrets = {
+const authorizationCodes = {
 
+};
+
+
+const clients = {
+    'sram': {
+        redirect_uri: 'http://localhost:3002/callback'
+    }
 };
 
 http.createServer((req, res) => {
@@ -48,25 +52,26 @@ http.createServer((req, res) => {
     console.log(req.url.toString());
     if (req.url?.startsWith('/scope')) {
         const scopeId = makeid(8);
-        const scopeSecret = makeid(16);
+        const authorizationCode = makeid(16);
         const scopeDocUrlRelative = `/api/${scopeId}.json`;
         const scopeDocUrlAbsolute = `http://localhost:3003${scopeDocUrlRelative}`;
-        scopeSecrets[scopeDocUrlRelative] = scopeSecret;
-        console.log(`new transaction; minting scope ${scopeId} at ${scopeDocUrlAbsolute} with secret ${scopeSecret}`, query);
+        authorizationCodes[scopeDocUrlRelative] = authorizationCode;
+        console.log('preparing for redirect to client', query.client_id, clients[query.client_id].redirect_uri);
+        console.log(`new transaction; minting scope ${scopeId} at ${scopeDocUrlAbsolute} with secret ${authorizationCode}`, query);
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end(
-            dialogpart1 + query.redirect_uri +
+            dialogpart1 + clients[query.client_id].redirect_uri +
             dialogpart2 + encodeURIComponent(scopeDocUrlAbsolute) +
-            dialogpart3 + scopeSecret +
+            dialogpart3 + authorizationCode +
             dialogpart4 + query.state +
             dialogpart5);
     } else {
         // console.log('scope request', url_parts);
-        if (url_parts.pathname in scopeSecrets) {
+        if (url_parts.pathname in authorizationCodes) {
             console.log('scope request with secret', url_parts.pathname);
             const authHeader = req.headers['authorization'];
-            console.log('auth header check', authHeader, `Bearer ${scopeSecrets[url_parts.pathname]}`);
-            if (authHeader == `Bearer ${scopeSecrets[url_parts.pathname]}`) {
+            console.log('auth header check', authHeader, `Bearer ${authorizationCodes[url_parts.pathname]}`);
+            if (authHeader == `Bearer ${authorizationCodes[url_parts.pathname]}`) {
                 res.writeHead(200, {'Content-Type': 'application/json'});
                 res.end(JSON.stringify(data, null, 2));
             } else {

@@ -2,12 +2,18 @@ const http = require('http');
 const url = require('url');
 const { makeid } = require('./shared');
 
+const clients = {
+    'ahxoh2ohTu': {
+        redirect_uri: 'http://localhost:3001/callback1'
+    }
+};
+
 const screen1part1 = `
 <body style="background-color:#faf9e3">
 <h2>Auth server (SRAM)</h2>
 Here are some services you may want to share resources from, connected to your account:
 <ul>
-  <li><a href="http://localhost:3003/scope?redirect_uri=` + encodeURIComponent(`http://localhost:3002/callback`) + `&state=`;
+  <li><a href="http://localhost:3003/scope?client_id=sram&state=`;
 const screen1part2 = `&scope=`;
 const screen1part3 = `">Research Drive</a></li>
   <li><a href="">iRods</a></li>
@@ -22,10 +28,12 @@ const screen2part2 = `" with client "SRC VM 1234"?<br><a href="http://localhost:
     `code=eeKahdahkeedohw4ohza&` +
     `state=`;
 const screen2part3 = `&scope=`;
-const screen2part4 = `&scope_secret=`;
-const screen2part5 = `">yes</a> / <a href="no.html">no</a>`;
+const screen2part4 = `">yes</a> / <a href="no.html">no</a>`;
 
 const tickets = {};
+
+// FIXME: how does it get this?
+const humanReadable = "the RD folder photos -> 2023 -> January";
 
 http.createServer((req, res) => {
     const url_parts = url.parse(req.url, true);
@@ -41,68 +49,28 @@ http.createServer((req, res) => {
         }
         const clientTicket = tickets[resourceTicket].clientTicket;
         console.log(`Linking back resource ticket ${resourceTicket} with scope picking result ${query.scope} to client ticket ${clientTicket}`);
-        http.request(query.scope, {
-            headers: {
-                Authorization: 'Bearer ' + query.scope_secret
-            }
-        }, (res2) => {
-            res2.on('data', (d) => {
-                try {
-                    const obj = JSON.parse(d);
-                    console.log('fetched scope details for ticket eing7uNg from Research Drive', obj);
-                    res.end(
-                        screen2part1 + obj.humanReadable['en-US'] +
-                        screen2part2 + clientTicket +
-                        screen2part3 + encodeURIComponent(query.scope) +
-                        screen2part4 + query.scope_secret +
-                        screen2part5
-                    );
-                } catch (e) {
-                    console.log('error parsing JSON', e);
-                    res.end('error parsing JSON');
-                }
-            });
-        }).end();
+        res.end(
+            screen2part1 + humanReadable +
+            screen2part2 + clientTicket +
+            screen2part3 + encodeURIComponent(query.scope) +
+            screen2part4
+        );
     } else if (req.url?.startsWith('/authorize')) {
         const url_parts = url.parse(req.url, true);
         const query = url_parts.query;
         console.log('new transaction', query);
         if (query.scope == 'webdav-folder') {
             console.log(`need to pick ${query.scope}!`);
-            if (query.state && query.redirect_uri) {
+            if (query.state && query.client_id) {
                 const clientTicket = query.state;
                 const resourceTicket = makeid(8);
                 tickets[resourceTicket] = {
-                    redirectUri: query.redirect_uri,
+                    redirectUri: clients[query.client_id].redirect_uri,
                     clientTicket
                 };
                 console.log(tickets);
                 res.end(screen1part1 + resourceTicket + screen1part2 + query.scope + screen1part3);
             }
-        } else {
-            console.log(`need to dereference ${query.scope}`);
-            http.request(query.scope, {
-            headers: {
-                Authorization: 'Bearer ' + query.scope_secret
-            }
-        }, (res2) => {
-                res2.on('data', (d) => {
-                    try {
-                        const obj = JSON.parse(d);
-                        console.log(`fetched scope details for ticket ${query.scope}`, obj);
-                        res.end(
-                            screen2part1 + obj.humanReadable['en-US'] +
-                            screen2part2 + query.state +
-                            screen2part3 + encodeURIComponent(query.scope) +
-                            screen2part4 + query.scope_secret +
-                            screen2part5
-                        );
-                    } catch (e) {
-                        console.log('error parsing JSON', e);
-                        res.end('error parsing JSON');
-                    }
-                });
-            }).end();
         }
     }
 }).listen(3002);
