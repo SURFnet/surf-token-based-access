@@ -1,12 +1,14 @@
 const http = require('http');
 const url = require('url');
 const { AuthServer } = require('./AuthServer');
+const { makeid } = require('./util');
 
 const OUR_PORT = 3003
 const server = new AuthServer({
   clients: {
     'sram': {
-      redirect_uri: 'http://localhost:3002/callback'
+      clientSecret: 'ooD4butoomaiGhoo3EiH',
+      redirectUri: 'http://localhost:3002/callback'
     }
   }
 });
@@ -47,15 +49,39 @@ const data = {
     }
 };
 
-http.createServer((req, res) => {  
-  res.writeHead(200, {'Content-Type': 'text/html'});
+http.createServer((req, res) => { 
   console.log(req.url.toString());
   if (req.url?.startsWith('/authorize')) {
-    server.handleSecondaryAuthorize(req, res);
+    const scopeId = makeid(8);
+    const code = makeid(16);
+    server.storeGrant(code, scopeId);
+    const url_parts = url.parse(req.url, true);
+    const query = url_parts.query;
+    const clientId = query.client_id;
+    const state = query.state;
+    console.log(`new transaction; minting scope ${scopeId} with code ${code}`, query);
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end(`
+      <body style="background-color:#e3fae7">
+      <h2>Research Drive</h2>
+      Select which RD-specific resource you want to share
+      <ul>
+        <li>photos</li>
+        <li><ul>
+          <li>2021</li>
+          <li>2022</li>
+          <li><ul>
+            <li><a href="${server.createCallbackUrl({ clientId, code, scope: scopeId, state })}">January</a></li>
+            <li>...</li>
+          </ul></li>    
+          <li>2023</li>
+        </ul></li>
+      </ul>
+    `);
   } else  if (req.url?.startsWith('/token')) {
     server.handleToken(req, res);
   } else  if (req.url?.startsWith('/scope')) {
-    server.handleScopeInfo(req, res);
+    server.handleSecondaryScopeInfo(req, res);
   }
 }).listen(OUR_PORT);
-console.log(`Primary is running on port ${OUR_PORT}`);
+console.log(`Secondary is running on port ${OUR_PORT}`);

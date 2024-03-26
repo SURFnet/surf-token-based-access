@@ -14,34 +14,45 @@ class Client {
     this.clientSecret = options.clientSecret;
   }
 
+  makeAuthorizeUrl(scope, state) {
+    return `${this.authServerUrls.authorize}?` +
+      `response_type=code&` +
+      `client_id=${this.clientId}&` +
+      `scope=${encodeURIComponent(scope)}&` +
+      `state=${encodeURI(state)}`;
+  }
   makeStartScreen() {
-    const screen1part1 = `
+    return `
       <body style="background-color:#e3f2fa">
       <h2>SURF Research Cloud</h2>
       <ul>
-      <li>Click <a href="${this.authServerUrls.authorize}?` +
-      `response_type=code&` +
-      `client_id=${this.clientId}&` +
-      `scope=webdav-folder&state=`;
-    
-    const screen1part2 = `">here</a> to discover SRAM-based services to connect with your VM.</li>
+      <li>Click <a href="${this.makeAuthorizeUrl('webdav-folder', makeid(8))}">here</a> to discover SRAM-based services to connect with your VM.</li>
       <li>Click <a href="">here</a> to discover Danish services to connect with your VM.</li>
       </ul>
     `;
-    return screen1part1 + makeid(8) + screen1part2;
   }
   getCodeFromCallback(urlStr) {
     const url_parts = url.parse(urlStr, true);
     const query = url_parts.query;
     return query.code;
   }
-  async makeCallbackScreen(scopeInfo) {
+  getScopeFromCallback(urlStr) {
+    const url_parts = url.parse(urlStr, true);
+    const query = url_parts.query;
+    return query.scope;
+  }
+  getStateFromCallback(urlStr) {
+    const url_parts = url.parse(urlStr, true);
+    const query = url_parts.query;
+    return query.state;
+  }
+  makeCallbackScreen(scopeInfo) {
     console.log('scope info', scopeInfo);
     return `
       <body style="background-color:#e3f2fa">
       <h2>SURF Research Cloud</h2>
-      The remote WebDAV folder you shared as ${scopeInfo.humanReadable['en-US']} was successfully mounted!
-      This client will be able to access it at ${scopeInfo.protocols.webdav.url}
+      The remote WebDAV folder you shared as: <p><tt>${scopeInfo.humanReadable['en-US']}</tt></p> was successfully mounted!
+      This client will be able to access it at:<br> ${scopeInfo.protocols.webdav.url}
     `;
   }
   authServerRequest(url, code) {
@@ -49,6 +60,7 @@ class Client {
     const password = this.clientSecret;
     const auth = 'Basic ' + Buffer.from(username + ':' + password).toString('base64');
     return new Promise((resolve, reject) => {
+      console.log(`Fetching ${url} with code ${code}`);
       http.request(url, {
         headers: {
           Authorization: auth,
@@ -59,6 +71,7 @@ class Client {
         res2.on('data', (d) => {
             try {
               const obj = JSON.parse(d);
+              console.log('fetched JSON', obj)
               resolve(obj);
             } catch (e) {
               console.log('error parsing JSON', e);

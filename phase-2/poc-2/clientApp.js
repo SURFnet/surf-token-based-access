@@ -8,12 +8,12 @@ const client = new Client({
   clientSecret: 'oodeiB2deikeer4doopa'
 });
 
-http.createServer((req, res) => {
+http.createServer(async (req, res) => {
   res.writeHead(200, {'Content-Type': 'text/html'});
   console.log(req.url.toString());
   if (req.url.startsWith('/callback')) {
     const code = client.getCodeFromCallback(req.url);
-    const scopeInfo = client.fetchScopeInfo(code);
+    const scopeInfo = await client.fetchScopeInfo(code);
     res.end(client.makeCallbackScreen(scopeInfo));
   } else {
     res.end(client.makeStartScreen());

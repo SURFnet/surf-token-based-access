@@ -4,61 +4,30 @@ const { makeid } = require('./util');
 const basicAuth = require('basic-auth');
 
 class AuthServer {
-  constructor(clients) {
-    this.clients = clients;
+  constructor(options) {
+    console.log('AuthServer created with options', options);
+    this.clients = options.clients;
+    this.scopePickerPort = options.scopePickerPort;
     this.grants = {};
+    this.tickets = {};
   }
-  handleAuthorize(req, res) {
-    const url_parts = url.parse(req.url, true);
-    const query = url_parts.query;
-    console.log('new transaction', query);
-    if (query.scope == 'webdav-folder') {
-      console.log(`need to pick ${query.scope}!`);
-      if (query.state && query.client_id) {
-        const clientTicket = query.state;
-        const resourceTicket = makeid(8);
-        this.grants[resourceTicket] = {
-          redirectUri: query.redirect_uri,
-          clientTicket
-        };
-        console.log(tickets);
-        res.end(screen1part1 + resourceTicket + screen1part2 + query.pick + screen1part3);
-      }
-    }
+  storeTicket(secondaryState, valuesObj) {
+    console.log('storing ticket', secondaryState, valuesObj)
+    this.tickets[secondaryState] = valuesObj;
   }
-  handleScopePicker(req, res) {
-    const scopeId = makeid(8);
-    const code = makeid(16);
-    this.grants[scopeId] = code;
-    const url_parts = url.parse(req.url, true);
-    const query = url_parts.query;
-    console.log(`new transaction; minting scope ${scopeId} with code ${code}`, query);
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end(`
-      <body style="background-color:#e3fae7">
-      <h2>Research Drive</h2>
-      Select which RD-specific resource you want to share
-      <ul>
-        <li>photos</li>
-        <li><ul>
-          <li>2021</li>
-          <li>2022</li>
-          <li><ul>
-            <li><a href="${query.redirect_uri}?scope=${encodeURIComponent(scopeId)}&code=${code}&state=${query.state}">January</a></li>
-            <li>...</li>
-          </ul></li>    
-          <li>2023</li>
-        </ul></li>
-      </ul>
-    `);
+  getTicket(secondaryState) {
+    console.log('getting ticket', secondaryState, this.tickets[secondaryState]);
+    return this.tickets[secondaryState];
+  }
+  storeGrant(code, scopeId) {
+    this.grants[code] = scopeId;
   }
   handlePrimaryScopeInfo(req, res) {
     const user = basicAuth(req);
     console.log(user);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.end(JSON.stringify({
-      "type": "scope and capability",
-      "id": null, //"eing7uNg",
+      "type": "grant",
       "humanReadable": {
           "en-US": "the RD folder photos -> 2023 -> January"
       },
@@ -76,10 +45,9 @@ class AuthServer {
     console.log(user);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.end(JSON.stringify({
-      "type": "scope and capability",
-      "id": null, //"eing7uNg",
+      "type": "ticket",
       "humanReadable": {
-          "en-US": "the RD folder photos -> 2023 -> January"
+          "en-US": "photos -> 2023 -> January"
       },
       "machineReadableInternal": "RD://pietjepuk/files/photos/2023/January",
       "protocols": {
@@ -89,6 +57,16 @@ class AuthServer {
           }
       }
     }, null, 2));
+  }
+  createCallbackUrl({ clientId, code, scope, state }) {
+    console.log('creating callback url', clientId, code, scope, state);
+    const codeStr = encodeURIComponent(code);
+    const scopeStr = encodeURIComponent(scope);
+    const stateStr = encodeURIComponent(state);
+    return `${this.clients[clientId].redirectUri}?` +
+      `code=${codeStr}&` +
+      `scope=${scopeStr}&` +
+      `state=${stateStr}`;
   }
 }
 
