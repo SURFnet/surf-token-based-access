@@ -14,7 +14,8 @@ generic authorization servers because the complexity of the scope selection stay
 We therefore propose the "scope picker plugin", which exposes the following functionality to the authorization server:
 
 * the scope picker, which acts as an authorization server and grants access to scope definitions.
-* the scopes API which acts as a resource server, providing labels for display in the main authorization server's main consent dialog, as ad-hoc custom scopes
+* these scope definitions themselves don't hold any value and don't represent any authorization until the main authorization server grants an authorization that refers to one of them.
+* the scope-info API which acts as a resource server, providing labels for display in the main authorization server's main consent dialog, as ad-hoc custom scopes
 
 We separately propose the scope-info endpoint for authorization servers, where clients can discover information about the token they received, beyond the information that was
 encoded in the scopes response parameter. For instance, the client may discover the internet address of the resource server, supported protocol versions, and/or the identifier
@@ -40,3 +41,5 @@ of the resource that was selected. There may still be information hidden, so the
 |                 |
 \-----------------/
 ```
+
+In order to respond to scope-info requests from clients, the main authorization server will generally retrieve scope-info from the secondary authorization server, and add some of its own information as necessary.
