@@ -91,6 +91,9 @@ http.createServer((req, res) => {
           <li>2023</li>
         </ul></li>
       </ul>
+      <h2>Data:</h2>
+      <pre>${JSON.stringify(server.getData(), null, 2)}</pre>
+    
     `);
   } else  if (req.url?.startsWith('/token')) {
     server.handleToken(req, res);

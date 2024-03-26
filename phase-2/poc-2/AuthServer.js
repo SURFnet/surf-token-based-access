@@ -23,6 +23,13 @@ class AuthServer {
   storeGrant(code, scopeId) {
     this.grants[code] = scopeId;
   }
+  getData() {
+    return {
+      grants: this.grants,
+      tickets: this.tickets,
+      scopes: this.scopes
+    };
+  }
   storeScopeInfo(scopeId, details) {
     this.scopes[scopeId] = details;
   }

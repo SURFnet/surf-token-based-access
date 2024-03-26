@@ -75,7 +75,9 @@ http.createServer(async (req, res) => {
             <li><a href="">iRods</a></li>
             <li><a href="">Microsoft Outlook Calendar</a></li>
           </ul>
-          `);
+          <h2>Data:</h2>
+          <pre>${JSON.stringify(server.getData(), null, 2)}</pre>
+        `);
       }
     }
   } else  if (req.url?.startsWith('/token')) {

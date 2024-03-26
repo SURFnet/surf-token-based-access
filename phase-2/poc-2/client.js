@@ -12,6 +12,7 @@ class Client {
     };
     this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
+    this.tokens = [];
   }
 
   makeAuthorizeUrl(scope, state) {
@@ -29,6 +30,8 @@ class Client {
       <li>Click <a href="${this.makeAuthorizeUrl('webdav-folder', makeid(8))}">here</a> to discover SRAM-based services to connect with your VM.</li>
       <li>Click <a href="">here</a> to discover Danish services to connect with your VM.</li>
       </ul>
+      <h2>Tokens:</h2>
+      <pre>${JSON.stringify(this.tokens, null, 2)}</pre>
     `;
   }
   getCodeFromCallback(urlStr) {
@@ -48,6 +51,7 @@ class Client {
   }
   makeCallbackScreen(scopeInfo) {
     console.log('scope info', scopeInfo);
+    this.tokens.push(scopeInfo);
     return `
       <body style="background-color:#e3f2fa">
       <h2>SURF Research Cloud</h2>
