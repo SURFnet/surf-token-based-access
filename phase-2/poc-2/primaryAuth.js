@@ -32,9 +32,18 @@ http.createServer(async (req, res) => {
     const { clientState, clientId } = server.getTicket(upstreamState);
     const clientLabel = clients[clientId].label;
     const clientRedirectUri = clients[clientId].redirectUri;
-    const scopeInfo = await client.fetchScopeInfo(upstreamCode);
+    const upstreamInfo = await client.fetchScopeInfo(upstreamCode);
     const downstreamCode = makeid(8);
     const downstreamScopeId = 'research-drive:' + upstreamScope;
+    server.storeGrant(downstreamCode, downstreamScopeId);
+    server.storeScopeInfo(downstreamScopeId, {
+      type: "grant",
+      humanReadable: {
+        "en-US": `the RD folder ${upstreamInfo.humanReadable['en-US']}`
+      },
+      machineReadableInternal: upstreamInfo.machineReadableInternal,
+      protocols: upstreamInfo.protocols
+    });
     const downstreamCallbackUrl = server.createCallbackUrl({
       clientId,
       code: downstreamCode,
@@ -45,7 +54,7 @@ http.createServer(async (req, res) => {
     res.end(`
       <body style="background-color:#faf9e3">
       <h2>Are you sure?</h2>
-      Are you sure you want to share "${scopeInfo.humanReadable['en-US']}" with client "${clientLabel}"?<br><a href="${downstreamCallbackUrl}">yes</a> / <a href="no.html">no</a>`);
+      Are you sure you want to share "${upstreamInfo.humanReadable['en-US']}" with client "${clientLabel}"?<br><a href="${downstreamCallbackUrl}">yes</a> / <a href="no.html">no</a>`);
   } else if (req.url?.startsWith('/authorize')) {
     const url_parts = url.parse(req.url, true);
     const query = url_parts.query;
@@ -72,7 +81,7 @@ http.createServer(async (req, res) => {
   } else  if (req.url?.startsWith('/token')) {
     server.handleToken(req, res);
   } else  if (req.url?.startsWith('/scope')) {
-    server.handlePrimaryScopeInfo(req, res);
+    server.handleScopeInfo(req, res);
   }
 }).listen(OUR_PORT);
 console.log(`Primary is running on port ${OUR_PORT}`);

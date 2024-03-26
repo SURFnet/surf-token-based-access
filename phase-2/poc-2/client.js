@@ -60,13 +60,14 @@ class Client {
     const password = this.clientSecret;
     const auth = 'Basic ' + Buffer.from(username + ':' + password).toString('base64');
     return new Promise((resolve, reject) => {
-      console.log(`Fetching ${url} with code ${code}`);
-      http.request(url, {
+      const body = `grant_type=authorization_code&code=${encodeURIComponent(code)}`;
+      console.log(`Fetching ${url} with code ${code} and body ${body}`);
+      const req = http.request(url, {
+        method: 'POST',
         headers: {
           Authorization: auth,
           'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `grant_type=authorization_code&code=${encodeURIComponent(code)}`
+        }
       }, (res2) => {
         res2.on('data', (d) => {
             try {
@@ -78,7 +79,9 @@ class Client {
               reject(e);
             }
         });
-      }).end();
+      });
+      req.write(body);
+      req.end();
     });
 
   }

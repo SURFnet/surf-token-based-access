@@ -1,6 +1,6 @@
 const http = require('http');
 const url = require('url');
-const { makeid } = require('./util');
+const querystring = require('node:querystring');
 const basicAuth = require('basic-auth');
 
 class AuthServer {
@@ -10,6 +10,7 @@ class AuthServer {
     this.scopePickerPort = options.scopePickerPort;
     this.grants = {};
     this.tickets = {};
+    this.scopes = {};
   }
   storeTicket(secondaryState, valuesObj) {
     console.log('storing ticket', secondaryState, valuesObj)
@@ -22,41 +23,26 @@ class AuthServer {
   storeGrant(code, scopeId) {
     this.grants[code] = scopeId;
   }
-  handlePrimaryScopeInfo(req, res) {
-    const user = basicAuth(req);
-    console.log(user);
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.end(JSON.stringify({
-      "type": "grant",
-      "humanReadable": {
-          "en-US": "the RD folder photos -> 2023 -> January"
-      },
-      "machineReadableInternal": "RD://pietjepuk/files/photos/2023/January",
-      "protocols": {
-          "webdav": {
-              "url": "https://dav.rd123.surf.nl:4523/pietjepuk/files/photos/2023/January",
-              "protocol-version": "8.6n"
-          }
-      }
-    }, null, 2));
+  storeScopeInfo(scopeId, details) {
+    this.scopes[scopeId] = details;
   }
-  handleSecondaryScopeInfo(req, res) {
+  handleScopeInfo(req, res) {
     const user = basicAuth(req);
     console.log(user);
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.end(JSON.stringify({
-      "type": "ticket",
-      "humanReadable": {
-          "en-US": "photos -> 2023 -> January"
-      },
-      "machineReadableInternal": "RD://pietjepuk/files/photos/2023/January",
-      "protocols": {
-          "webdav": {
-              "url": "https://dav.rd123.surf.nl:4523/pietjepuk/files/photos/2023/January",
-              "protocol-version": "8.6n"
-          }
-      }
-    }, null, 2));
+    let body = [];
+    req.on('data', (chunk) => {
+      body.push(chunk)
+    });
+    req.on('end', () => {
+      body = Buffer.concat(body).toString();
+      console.log('parsed body from scope info request', body);
+      const query = querystring.parse(body);
+      const scopeId = this.grants[query.code];
+      console.log('giving scope info for grant/scopeId', scopeId);
+      const details = this.scopes[scopeId];
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.end(JSON.stringify(details, null, 2));
+    });
   }
   createCallbackUrl({ clientId, code, scope, state }) {
     console.log('creating callback url', clientId, code, scope, state);

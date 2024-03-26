@@ -60,6 +60,20 @@ http.createServer((req, res) => {
     const clientId = query.client_id;
     const state = query.state;
     console.log(`new transaction; minting scope ${scopeId} with code ${code}`, query);
+    // FIXME: store this _after_ the user consents, not before!
+    server.storeScopeInfo(scopeId, {
+      type: "ticket",
+      humanReadable: {
+        "en-US": "photos -> 2023 -> January"
+      },
+      machineReadableInternal: "RD://pietjepuk/files/photos/2023/January",
+      protocols: {
+        webdav: {
+          url: "https://dav.rd123.surf.nl:4523/pietjepuk/files/photos/2023/January",
+          "protocol-version": "8.6n"
+        }
+      }
+    });
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(`
       <body style="background-color:#e3fae7">
@@ -81,7 +95,7 @@ http.createServer((req, res) => {
   } else  if (req.url?.startsWith('/token')) {
     server.handleToken(req, res);
   } else  if (req.url?.startsWith('/scope')) {
-    server.handleSecondaryScopeInfo(req, res);
+    server.handleScopeInfo(req, res);
   }
 }).listen(OUR_PORT);
 console.log(`Secondary is running on port ${OUR_PORT}`);
