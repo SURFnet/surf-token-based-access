@@ -12,7 +12,7 @@ class Client {
     };
     this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
-    this.tokens = [];
+    this.tokens = {};
   }
 
   makeAuthorizeUrl(scope, state) {
@@ -51,11 +51,15 @@ class Client {
   }
   async makeCallbackScreen(urlStr) {
     const code = this.getCodeFromCallback(urlStr);
+    const scope = this.getScopeFromCallback(urlStr);
+    const state = this.getStateFromCallback(urlStr);
     const scopeInfo = await this.fetchScopeInfo(code);
-
     console.log('scope info', scopeInfo);
-    // this.tokens[code] = scopeInfo;
-    this.tokens.push(scopeInfo);
+    this.tokens[code] = {
+      scopeInfo,
+      scope,
+      state
+    };
     return `
       <body style="background-color:#e3f2fa">
       <h2>SURF Research Cloud</h2>
