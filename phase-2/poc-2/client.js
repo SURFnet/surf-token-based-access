@@ -49,8 +49,12 @@ class Client {
     const query = url_parts.query;
     return query.state;
   }
-  makeCallbackScreen(scopeInfo) {
+  async makeCallbackScreen(urlStr) {
+    const code = this.getCodeFromCallback(urlStr);
+    const scopeInfo = await this.fetchScopeInfo(code);
+
     console.log('scope info', scopeInfo);
+    // this.tokens[code] = scopeInfo;
     this.tokens.push(scopeInfo);
     return `
       <body style="background-color:#e3f2fa">

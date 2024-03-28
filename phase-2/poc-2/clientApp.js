@@ -12,9 +12,7 @@ http.createServer(async (req, res) => {
   res.writeHead(200, {'Content-Type': 'text/html'});
   console.log(req.url.toString());
   if (req.url.startsWith('/callback')) {
-    const code = client.getCodeFromCallback(req.url);
-    const scopeInfo = await client.fetchScopeInfo(code);
-    res.end(client.makeCallbackScreen(scopeInfo));
+    res.end(await client.makeCallbackScreen(req.url));
   } else {
     res.end(client.makeStartScreen('surf-research-cloud-'));
   }
