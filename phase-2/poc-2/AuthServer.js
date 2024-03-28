@@ -61,6 +61,16 @@ class AuthServer {
       `scope=${scopeStr}&` +
       `state=${stateStr}`;
   }
+  createAllowUrl({ clientId, code, scope, state }) {
+    console.log('creating callback url', clientId, code, scope, state);
+    const clientIdStr = encodeURIComponent(clientId);
+    const scopeStr = encodeURIComponent(scope);
+    const stateStr = encodeURIComponent(state);
+    return `/allow?` +
+      `scope=${scopeStr}&` +
+      `client_id=${clientIdStr}&` +
+      `state=${stateStr}`;
+  }
 }
 
 module.exports = { AuthServer };

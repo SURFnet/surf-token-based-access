@@ -22,6 +22,19 @@ const server = new AuthServer({
   clients
 });
 
+function handleOverview(req, res, serverData) {
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.write(`
+    <body style="background-color:#faf9e3">
+    <h2>Auth server (SRAM)</h2>
+    Here are some services you may want to share resources from, connected to your account:
+    <ul>`);
+  Object.keys(serverData.grants).forEach(grant => {
+      res.write(`<li>${grant}</li>`);
+  });
+  res.end(`</ul></body>`);
+}
+
 http.createServer(async (req, res) => {  
   console.log(req.url.toString());
   if (req.url.startsWith('/callback')) {
@@ -33,7 +46,7 @@ http.createServer(async (req, res) => {
     const clientLabel = clients[clientId].label;
     const clientRedirectUri = clients[clientId].redirectUri;
     const upstreamInfo = await client.fetchScopeInfo(upstreamCode);
-    const downstreamCode = makeid(8);
+    const downstreamCode = makeid('primary-code-', 8);
     const downstreamScopeId = 'research-drive:' + upstreamScope;
     server.storeGrant(downstreamCode, downstreamScopeId);
     server.storeScopeInfo(downstreamScopeId, {
@@ -54,7 +67,10 @@ http.createServer(async (req, res) => {
     res.end(`
       <body style="background-color:#faf9e3">
       <h2>Are you sure?</h2>
-      Are you sure you want to share "${upstreamInfo.humanReadable['en-US']}" with client "${clientLabel}"?<br><a href="${downstreamCallbackUrl}">yes</a> / <a href="no.html">no</a>`);
+      Are you sure you want to share "${upstreamInfo.humanReadable['en-US']}" with client "${clientLabel}"?<br><a href="${downstreamCallbackUrl}">yes</a> / <a href="no.html">no</a>
+      <h2>Data:</h2>
+      <pre>${JSON.stringify(server.getData(), null, 2)}</pre>
+    `);
   } else if (req.url?.startsWith('/authorize')) {
     const url_parts = url.parse(req.url, true);
     const query = url_parts.query;
@@ -63,7 +79,7 @@ http.createServer(async (req, res) => {
       console.log(`need to pick ${query.scope}!`);
       if (query.state && query.client_id) {
         const clientState = query.state;
-        const upstreamTicket = makeid(8);
+        const upstreamTicket = makeid('primary-ticket-', 8);
         server.storeTicket(upstreamTicket, { clientState, clientId: query.client_id });
         const upstreamUrl = client.makeAuthorizeUrl(query.scope, upstreamTicket);
         res.end(`
@@ -84,6 +100,8 @@ http.createServer(async (req, res) => {
     server.handleToken(req, res);
   } else  if (req.url?.startsWith('/scope')) {
     server.handleScopeInfo(req, res);
+  } else {
+    handleOverview(req, res, server.getData());
   }
 }).listen(OUR_PORT);
 console.log(`Primary is running on port ${OUR_PORT}`);

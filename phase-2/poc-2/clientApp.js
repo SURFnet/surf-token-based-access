@@ -16,7 +16,7 @@ http.createServer(async (req, res) => {
     const scopeInfo = await client.fetchScopeInfo(code);
     res.end(client.makeCallbackScreen(scopeInfo));
   } else {
-    res.end(client.makeStartScreen());
+    res.end(client.makeStartScreen('surf-research-cloud-'));
   }
 }).listen(OUR_PORT);
 console.log(`Client is running on port ${OUR_PORT}`);

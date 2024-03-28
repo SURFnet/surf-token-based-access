@@ -49,31 +49,26 @@ const data = {
     }
 };
 
+function handleOverview(req, res, serverData) {
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.write(`
+    <body style="background-color:#faf9e3">
+    <h2>Auth server (SRAM)</h2>
+    Here are some services you may want to share resources from, connected to your account:
+    <ul>`);
+  Object.keys(serverData.grants).forEach(grant => {
+      res.write(`<li>${grant}</li>`);
+  });
+  res.end(`</ul></body>`);
+}
+
 http.createServer((req, res) => { 
   console.log(req.url.toString());
   if (req.url?.startsWith('/authorize')) {
-    const scopeId = makeid(8);
-    const code = makeid(16);
-    server.storeGrant(code, scopeId);
     const url_parts = url.parse(req.url, true);
     const query = url_parts.query;
     const clientId = query.client_id;
     const state = query.state;
-    console.log(`new transaction; minting scope ${scopeId} with code ${code}`, query);
-    // FIXME: store this _after_ the user consents, not before!
-    server.storeScopeInfo(scopeId, {
-      type: "ticket",
-      humanReadable: {
-        "en-US": "photos -> 2023 -> January"
-      },
-      machineReadableInternal: "RD://pietjepuk/files/photos/2023/January",
-      protocols: {
-        webdav: {
-          url: "https://dav.rd123.surf.nl:4523/pietjepuk/files/photos/2023/January",
-          "protocol-version": "8.6n"
-        }
-      }
-    });
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(`
       <body style="background-color:#e3fae7">
@@ -85,7 +80,7 @@ http.createServer((req, res) => {
           <li>2021</li>
           <li>2022</li>
           <li><ul>
-            <li><a href="${server.createCallbackUrl({ clientId, code, scope: scopeId, state })}">January</a></li>
+            <li><a href="${server.createAllowUrl({ clientId, scope: 'January', state })}">January</a></li>
             <li>...</li>
           </ul></li>    
           <li>2023</li>
@@ -93,12 +88,44 @@ http.createServer((req, res) => {
       </ul>
       <h2>Data:</h2>
       <pre>${JSON.stringify(server.getData(), null, 2)}</pre>
-    
     `);
-  } else  if (req.url?.startsWith('/token')) {
+  } else  if (req.url?.startsWith('/allow')) {
+      const scopeId = makeid('secondary-scope-', 8);
+      const code = makeid('secondary-code-', 16);
+      server.storeGrant(code, scopeId);
+      const url_parts = url.parse(req.url, true);
+      const query = url_parts.query;
+      const clientId = query.client_id;
+      const state = query.state;
+      console.log(`new transaction; minting scope ${scopeId} with code ${code}`, query);
+      // FIXME: store this _after_ the user consents, not before!
+      server.storeScopeInfo(scopeId, {
+        type: "ticket",
+        humanReadable: {
+          "en-US": "photos -> 2023 -> January"
+        },
+        machineReadableInternal: "RD://pietjepuk/files/photos/2023/January",
+        protocols: {
+          webdav: {
+            url: "https://dav.rd123.surf.nl:4523/pietjepuk/files/photos/2023/January",
+            "protocol-version": "8.6n"
+          }
+        }
+      });
+      res.writeHead(200, {'Content-Type': 'text/html'});
+      res.end(`
+        <body style="background-color:#e3fae7">
+        <a href="${server.createCallbackUrl({ clientId, code, scope: scopeId, state })}">back to where you came from</a>
+        <h2>Data:</h2>
+        <pre>${JSON.stringify(server.getData(), null, 2)}</pre>
+      
+      `);
+    } else  if (req.url?.startsWith('/token')) {
     server.handleToken(req, res);
   } else  if (req.url?.startsWith('/scope')) {
     server.handleScopeInfo(req, res);
+  } else {
+    handleOverview(req, res, server.getData());
   }
 }).listen(OUR_PORT);
 console.log(`Secondary is running on port ${OUR_PORT}`);
