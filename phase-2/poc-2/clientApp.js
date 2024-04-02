@@ -10,7 +10,7 @@ const client = new Client({
 
 http.createServer(async (req, res) => {
   res.writeHead(200, {'Content-Type': 'text/html'});
-  console.log(req.url.toString());
+  // console.log(req.url.toString());
   if (req.url.startsWith('/callback')) {
     res.end(await client.makeCallbackScreen(req.url));
   } else {

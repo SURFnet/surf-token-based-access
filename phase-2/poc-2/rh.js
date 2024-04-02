@@ -63,7 +63,7 @@ function handleOverview(req, res, serverData) {
 }
 
 http.createServer((req, res) => { 
-  console.log(req.url.toString());
+  // console.log(req.url.toString());
   if (req.url?.startsWith('/authorize')) {
     const url_parts = url.parse(req.url, true);
     const query = url_parts.query;
@@ -97,7 +97,7 @@ http.createServer((req, res) => {
       const query = url_parts.query;
       const clientId = query.client_id;
       const state = query.state;
-      console.log(`new transaction; minting scope ${scopeId} with code ${code}`, query);
+      // console.log(`new transaction; minting scope ${scopeId} with code ${code}`, query);
       // FIXME: store this _after_ the user consents, not before!
       server.storeScopeInfo(scopeId, {
         type: "description",

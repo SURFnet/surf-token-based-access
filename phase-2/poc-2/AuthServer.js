@@ -7,7 +7,7 @@ class AuthServer {
   constructor(options) {
     console.log('AuthServer created with options', options);
     this.clients = options.clients;
-    this.scopePickerPort = options.scopePickerPort;
+    this.resourceHelperPort = options.resourceHelperPort;
     this.grants = {};
     this.tickets = {};
     this.scopes = {};
@@ -52,7 +52,7 @@ class AuthServer {
     });
   }
   createCallbackUrl({ clientId, code, scope, state }) {
-    console.log('creating callback url', clientId, code, scope, state);
+    // console.log('creating callback url', clientId, code, scope, state);
     const codeStr = encodeURIComponent(code);
     const scopeStr = encodeURIComponent(scope);
     const stateStr = encodeURIComponent(state);
@@ -61,8 +61,8 @@ class AuthServer {
       `scope=${scopeStr}&` +
       `state=${stateStr}`;
   }
-  createAllowUrl({ clientId, code, scope, state }) {
-    console.log('creating callback url', clientId, code, scope, state);
+  createAllowUrl({ clientId, scope, state }) {
+    // console.log('creating allow url', clientId, code, scope, state);
     const clientIdStr = encodeURIComponent(clientId);
     const scopeStr = encodeURIComponent(scope);
     const stateStr = encodeURIComponent(state);

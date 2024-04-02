@@ -18,7 +18,7 @@ const clients = {
   }
 };
 const server = new AuthServer({
-  scopePickerPort: 3003,
+  resourceHelperPort: 3003,
   clients
 });
 
@@ -36,12 +36,12 @@ function handleOverview(req, res, serverData) {
 }
 
 http.createServer(async (req, res) => {  
-  console.log(req.url.toString());
+  // console.log(req.url.toString());
   if (req.url.startsWith('/callback')) {
     const upstreamCode = client.getCodeFromCallback(req.url);
     const upstreamScope = client.getScopeFromCallback(req.url);
     const upstreamState = client.getStateFromCallback(req.url);
-    console.log('callback', upstreamCode, upstreamScope, upstreamState);
+    // console.log('callback', upstreamCode, upstreamScope, upstreamState);
     const { clientState, clientId } = server.getTicket(upstreamState);
     const clientLabel = clients[clientId].label;
     const clientRedirectUri = clients[clientId].redirectUri;
@@ -76,9 +76,9 @@ http.createServer(async (req, res) => {
   } else if (req.url?.startsWith('/authorize')) {
     const url_parts = url.parse(req.url, true);
     const query = url_parts.query;
-    console.log('new transaction', query);
+    // console.log('new transaction', query);
     if (query.scope == 'webdav-folder') {
-      console.log(`need to pick ${query.scope}!`);
+      // console.log(`need to pick ${query.scope}!`);
       if (query.state && query.client_id) {
         const clientState = query.state;
         const upstreamTicket = makeid('as-ticket-', 8);

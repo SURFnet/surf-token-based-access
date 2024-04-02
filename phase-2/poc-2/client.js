@@ -54,7 +54,7 @@ class Client {
     const scope = this.getScopeFromCallback(urlStr);
     const state = this.getStateFromCallback(urlStr);
     const scopeInfo = await this.fetchScopeInfo(code);
-    console.log('scope info', scopeInfo);
+    // console.log('scope info', scopeInfo);
     this.tokens[code] = {
       scopeInfo,
       scope,
