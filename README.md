@@ -25,6 +25,8 @@ Now you can use your browser to see the PoC;
 
 
 ### Design choices
+In general you can browse https://github.com/pondersource/surf-token-based-access/issues?q=is%3Aissue+is%3Aclosed to see closed discussions and the questions we visited on the way.
+
 #### Name 'Resource Helper'
 We wanted to design a plugin for an OAuth authorization server, and ended up calling this plugin the Resource Helper.
 Another names we considered were 'scope picker'
