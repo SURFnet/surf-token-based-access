@@ -90,8 +90,8 @@ http.createServer((req, res) => {
       <pre>${JSON.stringify(server.getData(), null, 2)}</pre>
     `);
   } else  if (req.url?.startsWith('/allow')) {
-      const scopeId = makeid('secondary-scope-', 8);
-      const code = makeid('secondary-code-', 16);
+      const scopeId = makeid('rh-scope-', 8);
+      const code = makeid('rh-code-', 16);
       server.storeGrant(code, scopeId);
       const url_parts = url.parse(req.url, true);
       const query = url_parts.query;

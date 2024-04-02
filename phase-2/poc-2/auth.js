@@ -46,7 +46,7 @@ http.createServer(async (req, res) => {
     const clientLabel = clients[clientId].label;
     const clientRedirectUri = clients[clientId].redirectUri;
     const upstreamInfo = await client.fetchScopeInfo(upstreamCode);
-    const downstreamCode = makeid('primary-code-', 8);
+    const downstreamCode = makeid('as-code-', 8);
     const downstreamScopeId = 'research-drive:' + upstreamScope;
     server.storeGrant(downstreamCode, downstreamScopeId);
     server.storeScopeInfo(downstreamScopeId, {
@@ -79,7 +79,7 @@ http.createServer(async (req, res) => {
       console.log(`need to pick ${query.scope}!`);
       if (query.state && query.client_id) {
         const clientState = query.state;
-        const upstreamTicket = makeid('primary-ticket-', 8);
+        const upstreamTicket = makeid('as-ticket-', 8);
         server.storeTicket(upstreamTicket, { clientState, clientId: query.client_id });
         const upstreamUrl = client.makeAuthorizeUrl(query.scope, upstreamTicket);
         res.end(`
