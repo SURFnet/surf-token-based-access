@@ -15,7 +15,7 @@ const server = new AuthServer({
 
 const dialogpart1 = `
 <body style="background-color:#e3fae7">
-<h2>Research Drive</h2>
+<h2>Resource Helper</h2>
 Select which RD-specific resource you want to share
 <ul>
   <li>photos</li>
@@ -53,8 +53,8 @@ function handleOverview(req, res, serverData) {
   res.writeHead(200, {'Content-Type': 'text/html'});
   res.write(`
     <body style="background-color:#faf9e3">
-    <h2>Auth server (AS)</h2>
-    Here are some services you may want to share resources from, connected to your account:
+    <h2>Resource Helper</h2>
+    Here are grants to scope information:
     <ul>`);
   Object.keys(serverData.grants).forEach(grant => {
       res.write(`<li>${grant}</li>`);
@@ -72,7 +72,7 @@ http.createServer((req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(`
       <body style="background-color:#e3fae7">
-      <h2>Research Drive</h2>
+      <h2>Resource Helper</h2>
       Select which RD-specific resource you want to share
       <ul>
         <li>photos</li>
@@ -100,7 +100,7 @@ http.createServer((req, res) => {
       console.log(`new transaction; minting scope ${scopeId} with code ${code}`, query);
       // FIXME: store this _after_ the user consents, not before!
       server.storeScopeInfo(scopeId, {
-        type: "ticket",
+        type: "description",
         humanReadable: {
           "en-US": "photos -> 2023 -> January"
         },
@@ -115,7 +115,8 @@ http.createServer((req, res) => {
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(`
         <body style="background-color:#e3fae7">
-        <a href="${server.createCallbackUrl({ clientId, code, scope: scopeId, state })}">back to where you came from</a>
+        <h2>Resource Helper</h2>
+        <a href="${server.createCallbackUrl({ clientId, code, scope: 'webdav-folder', state })}">back to Authorization Server</a>
         <h2>Data:</h2>
         <pre>${JSON.stringify(server.getData(), null, 2)}</pre>
       
@@ -128,4 +129,4 @@ http.createServer((req, res) => {
     handleOverview(req, res, server.getData());
   }
 }).listen(OUR_PORT);
-console.log(`Secondary is running on port ${OUR_PORT}`);
+console.log(`Resource helper is running on port ${OUR_PORT}`);

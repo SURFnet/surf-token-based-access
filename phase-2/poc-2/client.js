@@ -25,7 +25,7 @@ class Client {
   makeStartScreen(prefix) {
     return `
       <body style="background-color:#e3f2fa">
-      <h2>SURF Research Cloud</h2>
+      <h2>Client</h2>
       <ul>
       <li>Click <a href="${this.makeAuthorizeUrl('webdav-folder', makeid(prefix, 8))}">here</a> to discover AS-based services to connect with your VM.</li>
       <li>Click <a href="">here</a> to discover Danish services to connect with your VM.</li>
@@ -62,7 +62,7 @@ class Client {
     };
     return `
       <body style="background-color:#e3f2fa">
-      <h2>SURF Research Cloud</h2>
+      <h2>Client</h2>
       The remote WebDAV folder you shared as: <p><tt>${scopeInfo.humanReadable['en-US']}</tt></p> was successfully mounted!
       This client will be able to access it at:<br> ${scopeInfo.protocols.webdav.url}
       <h2>Tokens:</h2>

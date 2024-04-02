@@ -66,6 +66,8 @@ http.createServer(async (req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(`
       <body style="background-color:#faf9e3">
+      <h2>Auth server (AS)</h2>
+
       <h2>Are you sure?</h2>
       Are you sure you want to share "${upstreamInfo.humanReadable['en-US']}" with client "${clientLabel}"?<br><a href="${downstreamCallbackUrl}">yes</a> / <a href="no.html">no</a>
       <h2>Data:</h2>
@@ -104,4 +106,4 @@ http.createServer(async (req, res) => {
     handleOverview(req, res, server.getData());
   }
 }).listen(OUR_PORT);
-console.log(`Primary is running on port ${OUR_PORT}`);
+console.log(`AS is running on port ${OUR_PORT}`);

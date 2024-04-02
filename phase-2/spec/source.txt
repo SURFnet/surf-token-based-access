@@ -83,7 +83,7 @@ Table of Contents
 
     The data returned from this scope info endpoint is a JSON document
     representing an object containing the following fields:
-    * type [REQUIRED]: 'informational'
+    * type [REQUIRED]: 'description'
     * id [OPTIONAL]: string to be added into the scopes parameter
     * label [REQUIRED]: string to be displayed to the resource owner in
       the rest of the authorization dialog
@@ -91,3 +91,8 @@ Table of Contents
       Cloud Mesh share definition
     * introspect [OPTIONAL]: additional info to pass to the Resource
       server
+
+    The authorization server can also provide a scope info endpoint to
+    clients, but then the type field should be set to 'grant'. This
+    indicates that the resource helper only describes the scope, whereas
+    the authorization server gives out scoped access grants.

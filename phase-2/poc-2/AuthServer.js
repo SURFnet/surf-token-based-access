@@ -12,13 +12,13 @@ class AuthServer {
     this.tickets = {};
     this.scopes = {};
   }
-  storeTicket(secondaryState, valuesObj) {
-    console.log('storing ticket', secondaryState, valuesObj)
-    this.tickets[secondaryState] = valuesObj;
+  storeTicket(resourceHelperState, valuesObj) {
+    console.log('storing ticket', resourceHelperState, valuesObj)
+    this.tickets[resourceHelperState] = valuesObj;
   }
-  getTicket(secondaryState) {
-    console.log('getting ticket', secondaryState, this.tickets[secondaryState]);
-    return this.tickets[secondaryState];
+  getTicket(resourceHelperState) {
+    console.log('getting ticket', resourceHelperState, this.tickets[resourceHelperState]);
+    return this.tickets[resourceHelperState];
   }
   storeGrant(code, scopeId) {
     this.grants[code] = scopeId;
