@@ -126,3 +126,27 @@ We also see a use for how one AS might redirect to another, and come back. This 
 ##### Scopes gathering
 Where UMA interacts with a client to negotiate claims gathering we want the AS to redirect the user to the RS to negotiate scopes gathering. The user would be redirected back to the AS once the transaction has been defined. This could follow the same mechanism as AS chaining.
 We didn't find any prior art for yet, so we will try to contact Justin Richer for advice, and explore this further in phase 2 of this project.
+
+## JWT in ownCloud PoC
+### Development
+```
+git clone https://github.com/pondersource/dev-stock
+cd dev-stock
+./scripts/init-token-based-access.sh
+./scripts/testing-token-based-access.sh
+```
+Then:
+```
+echo "{\"token\":`curl -X POST http://localhost:8080/index.php/apps/tokenbaseddav/auth/token`}" > token.json
+curl -X POST  -H "Content-Type:application/json" --data-binary @token.json http://localhost:8080/index.php/apps/tokenbaseddav/auth/test
+rm token.json
+```
+
+### JWT token:
+you can configure the app behavior according to this table: (they should be inserted in the oc_appconfig table with `appid` = `tokenbaseddav`)
+
+|config key | description | default value |
+|-----------|-------------|---------------|
+|token_issuer_public_key| the public key of the certificate that sign the tokens (RS256 algorithm)||
+
+

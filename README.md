@@ -3,10 +3,9 @@
 ## Phase 1 (exploration) completed
 [report](https://github.com/pondersource/surf-token-based-access/blob/main/phase-1/phase-1-report.md)
 
-
 ## Phase 2 (proof of concept)
 ### OAuth Scope Picker spec
-See [draft](./phase-2/spec/draft.md).
+See [draft](./phase-2/spec/out.txt).
 
 ### OAuth Scope Picker PoC
 ```
@@ -14,46 +13,29 @@ git clone https://github.com/pondersource/surf-token-based-access
 cd surf-token-based-access
 cd phase-2
 cd poc
-node client.js & node auth.js & node resource.js
+node clientApp.js & node auth.js & node rh.js
 ```
 Now you can use your browser to see the PoC;
-* Start in the client on http://localhost:3001
-* You will be redirected to the auth server on http://localhost:3002
-* The auth server gets a standard OAuth request from one of its registered client, but without `requested_scope`
-* The user selects a scope selection server from a list. Unlike the auth server, these scope selection servers are tightly coupled to specific resource servers and their offerings.
-* The user's browser is redirected to the resource server (or more precisely, the scope selection server) on http://localhost:3003, at this point only with a randomly
-generated `ticket` which acts as a transaction identifier and a `redirect_uri` pointing the way back to the auth server.
-* The user can provide credentials and interactively select the resource details to be offered in this transaction.
-* The user is redirected back to the auth server, with the transaction ID and in the query or fragment.
-* The auth server knows how to discover transaction details from the resource server, and does so.
-* The auth server displays human-readable info and allows the user to take a yes/no decision
-* The user is redirected back to the client's `redirect_uri` with a refresh token in the query string.
-* The client knows how to contact the auth server to exchange this refresh token for an access token
-* The client now needs to discover access instructions. The client directly asks the resource server for this
-### How is this different?
-* the client sends 'pick=webdav-folder' instead of 'scope=...', and gets back a URL for a structured scope
-* this scope was chosen by the user at the resource server's scope selection interface, the auth server doesn't understand it, except for the `humanReadable` field which it can display in various locales.
-* the client can deference the scope to discover the protocol version, resource URL, etc.
+* Start in the client on http://localhost:3001. This client might support connecting via various authorization servers. Pick the top one.
+* You will be redirected to the auth server on http://localhost:3002. This Auth server might support various resource servers. Pick the top one.
+* Now you see the Resource Helper on http://localhost:3003. Pick a resource (only 'January' works).
+* A scope is minted and the authorization server will receive an authorization code to access the informational API
+* The authorization server fetches and displays the scope label "photos -> 2023 -> January" and asks you to grant the client access. This scope is both custom and dynamic. Click 'yes'
+* Now the client can retrieve client config info from the AS that allow it to access the resource server
 
-## JWT in ownCloud PoC
-### Development
-```
-git clone https://github.com/pondersource/dev-stock
-cd dev-stock
-./scripts/init-token-based-access.sh
-./scripts/testing-token-based-access.sh
-```
-Then:
-```
-echo "{\"token\":`curl -X POST http://localhost:8080/index.php/apps/tokenbaseddav/auth/token`}" > token.json
-curl -X POST  -H "Content-Type:application/json" --data-binary @token.json http://localhost:8080/index.php/apps/tokenbaseddav/auth/test
-rm token.json
-```
 
-### JWT token:
-you can configure the app behavior according to this table: (they should be inserted in the oc_appconfig table with `appid` = `tokenbaseddav`)
+### Design choices
+#### Name 'Resource Helper'
+We wanted to design a plugin for an OAuth authorization server, and ended up calling this plugin the Resource Helper.
+Another names we considered were 'scope picker'
 
-|config key | description | default value |
-|-----------|-------------|---------------|
-|token_issuer_public_key| the public key of the certificate that sign the tokens (RS256 algorithm)||
+#### Name 'Scope'
+Even though the client and AS already use a 'scopes' parameter in their interactions, we decided to name the description of access scope that the Resource Helper produces a 'scope' too.
+Other options we considered are listed in https://github.com/pondersource/surf-token-based-access/issues/33#issuecomment-2018236582
 
+#### Use of OAuth for the RH informational API
+We developed a PoC version that used `scope_secret` but that quickly proved hard to use. Using OAuth-within-OAuth here is elegant and simple.
+See https://github.com/pondersource/surf-token-based-access/issues/30
+
+#### Non-goals
+We decided not to explore AS chaining in general or decentralized authorization such as https://ucan.xyz/ since it's not needed for our problem at hand of integrating may Resource Servers into one Authorization Server.
