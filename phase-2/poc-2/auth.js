@@ -7,7 +7,7 @@ const { makeid } = require('./util');
 const OUR_PORT = 3002;
 const client = new Client({
   authServerPort: 3003,
-  clientId: 'sram',
+  clientId: 'AS',
   clientSecret: 'ooD4butoomaiGhoo3EiH'
 });
 const clients = {
@@ -26,7 +26,7 @@ function handleOverview(req, res, serverData) {
   res.writeHead(200, {'Content-Type': 'text/html'});
   res.write(`
     <body style="background-color:#faf9e3">
-    <h2>Auth server (SRAM)</h2>
+    <h2>Auth server (AS)</h2>
     Here are some services you may want to share resources from, connected to your account:
     <ul>`);
   Object.keys(serverData.grants).forEach(grant => {
@@ -84,7 +84,7 @@ http.createServer(async (req, res) => {
         const upstreamUrl = client.makeAuthorizeUrl(query.scope, upstreamTicket);
         res.end(`
           <body style="background-color:#faf9e3">
-          <h2>Auth server (SRAM)</h2>
+          <h2>Auth server (AS)</h2>
           Here are some services you may want to share resources from, connected to your account:
           <ul>
             <li><a href="${upstreamUrl}">Research Drive</a></li>

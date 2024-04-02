@@ -6,7 +6,7 @@ const { makeid } = require('./util');
 const OUR_PORT = 3003
 const server = new AuthServer({
   clients: {
-    'sram': {
+    'AS': {
       clientSecret: 'ooD4butoomaiGhoo3EiH',
       redirectUri: 'http://localhost:3002/callback'
     }
@@ -53,7 +53,7 @@ function handleOverview(req, res, serverData) {
   res.writeHead(200, {'Content-Type': 'text/html'});
   res.write(`
     <body style="background-color:#faf9e3">
-    <h2>Auth server (SRAM)</h2>
+    <h2>Auth server (AS)</h2>
     Here are some services you may want to share resources from, connected to your account:
     <ul>`);
   Object.keys(serverData.grants).forEach(grant => {

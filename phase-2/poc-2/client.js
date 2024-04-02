@@ -27,7 +27,7 @@ class Client {
       <body style="background-color:#e3f2fa">
       <h2>SURF Research Cloud</h2>
       <ul>
-      <li>Click <a href="${this.makeAuthorizeUrl('webdav-folder', makeid(prefix, 8))}">here</a> to discover SRAM-based services to connect with your VM.</li>
+      <li>Click <a href="${this.makeAuthorizeUrl('webdav-folder', makeid(prefix, 8))}">here</a> to discover AS-based services to connect with your VM.</li>
       <li>Click <a href="">here</a> to discover Danish services to connect with your VM.</li>
       </ul>
       <h2>Tokens:</h2>
