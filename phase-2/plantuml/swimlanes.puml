@@ -1,0 +1,35 @@
+@startuml simelanes
+participant "Client" as C #fdf2d0
+participant "Authorization Server (AS)" as AS #d2e0e3
+participant "Resource Helper (RH)" as RH #eececd
+participant "Resource Server (RS)" as RS #d8d3e7
+C -[#0200f5]> AS: Start standard code authorization grant
+AS -[#0200f5]> RH: Sub-flow for dynamic scope selection
+rnote over RH
+  <color #0200f5>Select fine-grained scope</color>
+end note
+RH -[#0200f5]> AS: Authorization Code for RH-API
+AS -[#48742c]> RH: Access RH-API
+note over RH
+  <color #48742c>Scope info API</color>
+end note
+RH -[#48742c]> AS: Custom scope information
+AS -[#0200f5]> C: Authorization code callback (generic scopes param)
+C -> AS: Token request
+note over AS
+  <color #48742c>Token endpoint</color>
+end note
+AS -[#48742c]> C: Token response
+C -[#48742c]> AS: Retrieve RS-specific client config (optional)
+note over AS
+  <color #48742c>Scope Info API</color>
+end note
+AS -[#48742c]> C: Client config response
+C -[#48742c]> RS: Resource access request
+note over RS
+  <color #48742c>Main resource API</color>
+end note
+RS -[#48742c]> AS: Token introspection request
+AS -[#48742c]> RS: Token introspection response
+RS -[#48742c]> C: Resource access response
+@enduml
