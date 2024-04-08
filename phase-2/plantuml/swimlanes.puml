@@ -10,8 +10,8 @@ rnote over RH
 end note
 RH -[#48742c]> AS: Resource Registration Request
 note over AS
-<color #48742c>Resource Registration Endpoint</color> 
-<color #48742c>(see UMA Fed Authz)</color> 
+<color #48742c>Resource Registration Endpoint</color>
+<color #48742c>(see UMA Fed Authz)</color>
 end note
 AS -[#48742c]> RH: Resource Registration Response
 RH -[#0200f5]> AS: Scope ID
