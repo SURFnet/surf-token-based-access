@@ -63,9 +63,11 @@ class AuthServer {
       body.push(chunk)
     });
     req.on('end', () => {
+      let registration;
       body = Buffer.concat(body).toString();
+      console.log('body from resource registry request', body);
       try {
-        const registration = JSON.parse(body);
+        registration = JSON.parse(body);
       } catch (e) {
         console.log('error parsing JSON', e);
         res.writeHead(400, {'Content-Type': 'application/json'});

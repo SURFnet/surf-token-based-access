@@ -54,7 +54,12 @@ http.createServer(async (req, res) => {
         "en-US": `the RD folder ${upstreamInfo.description}`
       },
       machineReadableInternal: upstreamInfo.machineReadableInternal,
-      protocols: upstreamInfo.protocols
+      protocols: {
+        "webdav": {
+            "url": "https://dav.rd123.surf.nl:4523/pietjepuk/files/photos/2023/January",
+            "protocol-version": "8.6n"
+        }
+      }
     });
     const downstreamCallbackUrl = server.createCallbackUrl({
       clientId,

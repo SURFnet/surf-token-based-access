@@ -2,6 +2,33 @@ const http = require('http');
 const url = require('url');
 const { makeid } = require('./util');
 
+function httpRequest(url, auth, contentType, body) {
+  return new Promise((resolve, reject) => {
+    console.log(`POSTing to ${url} with body ${body}`);
+    const req = http.request(url, {
+      method: 'POST',
+      headers: {
+        Authorization: auth,
+        'Content-Type': contentType
+      }
+    }, (res2) => {
+      res2.on('data', (d) => {
+        try {
+          const obj = JSON.parse(d);
+          console.log('fetched JSON', obj)
+          resolve(obj);
+        } catch (e) {
+          console.log('error parsing JSON', e);
+          reject(e);
+        }
+      });
+    });
+    req.write(body);
+    req.end();
+  });
+}
+
+
 class Client {
   constructor(options) {
     this.ourPort = options.ourPort;
@@ -73,31 +100,8 @@ class Client {
     const username = this.clientId;
     const password = this.clientSecret;
     const auth = 'Basic ' + Buffer.from(username + ':' + password).toString('base64');
-    return new Promise((resolve, reject) => {
-      const body = `grant_type=authorization_code&code=${encodeURIComponent(code)}`;
-      console.log(`Fetching ${url} with code ${code} and body ${body}`);
-      const req = http.request(url, {
-        method: 'POST',
-        headers: {
-          Authorization: auth,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }, (res2) => {
-        res2.on('data', (d) => {
-            try {
-              const obj = JSON.parse(d);
-              console.log('fetched JSON', obj)
-              resolve(obj);
-            } catch (e) {
-              console.log('error parsing JSON', e);
-              reject(e);
-            }
-        });
-      });
-      req.write(body);
-      req.end();
-    });
-
+    const body = `grant_type=authorization_code&code=${encodeURIComponent(code)}`;
+    return httpRequest(url, auth, 'application/x-www-form-urlencoded', body);
   }
   fetchToken(code) {
     // See https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.3
@@ -109,4 +113,12 @@ class Client {
   }
 }
 
-module.exports = { Client };
+async function registerResource(resourceRegistryClient, data) {
+  const username = resourceRegistryClient.clientId;
+  const password = resourceRegistryClient.clientSecret;
+  const auth = 'Basic ' + Buffer.from(username + ':' + password).toString('base64');
+  const ret = await httpRequest(resourceRegistryClient.baseUrl, auth, 'application/json', JSON.stringify(data));
+  return ret._id;
+}
+
+module.exports = { Client, registerResource };

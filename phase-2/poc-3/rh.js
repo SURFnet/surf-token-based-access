@@ -1,7 +1,7 @@
 const http = require('http');
 const url = require('url');
 const { AuthServer } = require('./AuthServer');
-const { makeid } = require('./util');
+const { registerResource } = require('./Client');
 
 const OUR_PORT = 3003
 const server = new AuthServer({
@@ -58,42 +58,6 @@ function handleOverview(req, res, serverData) {
   res.end(`</ul></body>`);
 }
 
-async function registerResource(data) {
-  const username = resourceRegistryClient.clientId;
-  const password = resourceRegistryClient.clientSecret;
-  const auth = 'Basic ' + Buffer.from(username + ':' + password).toString('base64');
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify(data);
-    console.log(`Registering resource with body ${body}`);
-    const req = http.request(url, {
-      method: 'POST',
-      headers: {
-        Authorization: auth,
-        'Content-Type': 'application/json'
-      }
-    }, (res) => {
-      resolve('1');
-      let chunks = [];
-      res.on('data', (d) => {
-        chunks.push(d);
-      });
-      res.on('end', () => {
-        const responseBody = Buffer.concat(chunks).toString();
-        try {
-          const obj = JSON.parse(responseBody);
-          console.log('got back JSON', obj);
-          resolve(obj._id);
-        } catch (e) {
-          console.log('error parsing JSON', e);
-          reject(e);
-        }
-      });
-    });
-    req.write(body);
-    req.end();
-  });
-}
-
 http.createServer(async (req, res) => { 
   // console.log(req.url.toString());
   if (req.url?.startsWith('/authorize')) {
@@ -128,7 +92,7 @@ http.createServer(async (req, res) => {
       const state = query.state;
       // console.log(`new transaction; minting scope ${scopeId} with code ${code}`, query);
       // FIXME: store this _after_ the user consents, not before!
-      const scope = await registerResource(data);
+      const scope = await registerResource(resourceRegistryClient, data);
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(`
         <body style="background-color:#e3fae7">
