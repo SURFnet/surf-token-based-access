@@ -6,7 +6,7 @@ We define the Resource Helper as a subsystem of an OAuth authorization server th
 
 In OAuth 2.0 [RFC6749], the part of an Authorization Server that deals with scope selection is necessarily tied to the specifics of the resource server. In some deployment scenarios, where one authorization server deals with many diverse resource servers, it is desirable to make this part of the authorization server pluggable.
 
-![swimlanes](https://github.com/pondersource/surf-token-based-access/blob/main/phase-2/plantuml/simelanes.png)
+![swimlanes](https://github.com/pondersource/surf-token-based-access/blob/main/phase-2/plantuml/swimlanes.png)
 
 ## 2. The Resource Helper
 The Resource Helper consists of two parts: a Scope Info API (RH-API), and a Scope Info Authorization Server (RH-AS).
