@@ -12,6 +12,7 @@ class AuthServer {
     this.grants = {};
     this.tickets = {};
     this.scopes = {};
+    this.downstreamScopes = {};
   }
   storeTicket(resourceHelperState, valuesObj) {
     console.log('storing ticket', resourceHelperState, valuesObj)
@@ -28,11 +29,15 @@ class AuthServer {
     return {
       grants: this.grants,
       tickets: this.tickets,
-      scopes: this.scopes
+      scopes: this.scopes,
+      downstreamScopes: this.downstreamScopes
     };
   }
   storeScopeInfo(scopeId, details) {
     this.scopes[scopeId] = details;
+  }
+  storeDownstreamScopeInfo(scopeId, details) {
+    this.downstreamScopes[scopeId] = details;
   }
   localResourceRegistryLookup(scopeId) {
     return this.scopes[scopeId];
@@ -50,7 +55,7 @@ class AuthServer {
       const query = querystring.parse(body);
       const scopeId = this.grants[query.code];
       console.log('giving scope info for grant/scopeId', scopeId);
-      const details = this.scopes[scopeId];
+      const details = this.downstreamScopes[scopeId];
       res.writeHead(200, {'Content-Type': 'application/json'});
       res.end(JSON.stringify(details, null, 2));
     });
@@ -102,14 +107,16 @@ class AuthServer {
       `scope=${scopeStr}&` +
       `state=${stateStr}`;
   }
-  createAllowUrl({ clientId, scope, state }) {
+  createAllowUrl({ clientId, resource, resourceScopes, state }) {
     // console.log('creating allow url', clientId, code, scope, state);
     const clientIdStr = encodeURIComponent(clientId);
-    const scopeStr = encodeURIComponent(scope);
+    const resourceStr = encodeURIComponent(resource);
+    const resourceScopesStr = encodeURIComponent(resourceScopes);
     const stateStr = encodeURIComponent(state);
     return `/allow?` +
-      `scope=${scopeStr}&` +
-      `client_id=${clientIdStr}&` +
+    `resource=${resourceStr}&` +
+    `resource_scopes=${resourceScopesStr}&` +
+    `client_id=${clientIdStr}&` +
       `state=${stateStr}`;
   }
 }

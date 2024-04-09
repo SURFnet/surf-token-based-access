@@ -42,20 +42,24 @@ class Client {
     this.tokens = {};
   }
 
-  makeAuthorizeUrl(scope, state) {
+  makeAuthorizeUrl(scope, state, responseType) {
     return `${this.authServerUrls.authorize}?` +
-      `response_type=code&` +
-      `client_id=${this.clientId}&` +
+      `response_type=${encodeURIComponent(responseType)}&` +
       `scope=${encodeURIComponent(scope)}&` +
-      `state=${encodeURI(state)}`;
+      `client_id=${encodeURIComponent(this.clientId)}&` +
+      `state=${encodeURIComponent(state)}`;
   }
   makeStartScreen(prefix) {
     return `
       <body style="background-color:#e3f2fa">
       <h2>Client</h2>
+      <p>Logged in as <tt>alice@eosc.org</tt></p>
+      <p>SURF Research Cloud can mount WebDAV folders from any European Research Infrastructure! You can:</p>
       <ul>
-      <li>Click <a href="${this.makeAuthorizeUrl('webdav-folder', makeid(prefix, 8))}">here</a> to discover AS-based services to connect with your VM.</li>
-      <li>Click <a href="">here</a> to discover Danish services to connect with your VM.</li>
+      <li>Add <a href="${this.makeAuthorizeUrl('webdav-folder', makeid(prefix, 8), 'code')}">SURF</a> services from Dutch Research Infrastructure.</li>
+      <li>Add <a href="">SUNET</a> services from Swedish Research Infrastructure.</li>
+      <li>Add <a href="">SWITCH</a> services from Swiss Research Infrastructure.</li>
+      <li>Add <a href="">CESNET</a> services from Czech Research Infrastructure.</li>
       </ul>
       <h2>Tokens:</h2>
       <pre>${JSON.stringify(this.tokens, null, 2)}</pre>
@@ -90,7 +94,7 @@ class Client {
     return `
       <body style="background-color:#e3f2fa">
       <h2>Client</h2>
-      The remote WebDAV folder you shared as: <p><tt>${scopeInfo.humanReadable['en-US']}</tt></p> was successfully mounted!
+      The remote WebDAV folder from SURF Research Infrastructure: <p><tt>${scopeInfo.humanReadable['en-US']}</tt></p> was successfully mounted!
       This client will be able to access it at:<br> ${scopeInfo.protocols.webdav.url}
       <h2>Tokens:</h2>
       <pre>${JSON.stringify(this.tokens, null, 2)}</pre>
