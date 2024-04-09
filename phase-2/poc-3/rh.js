@@ -91,11 +91,13 @@ http.createServer(async (req, res) => {
       const state = query.state;
       const resource = query.resource;
       const resourceScopes = query.resource_scopes;
-      const scope = await registerResource(resourceRegistryClient, {
+      const details = {
         "resource_scopes": resourceScopes.split('-'),
         "description": `${resourceScopes.split('-').join(' and ')} access to the RD folder ${resource.split('/').join(' -> ')}`,
         "type": "webdav-folder"
-      });
+      };
+      const scope = await registerResource(resourceRegistryClient, details);
+      server.storeDownstreamScopeInfo(scope, details);
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(`
         <body style="background-color:#e3fae7">
