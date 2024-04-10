@@ -3,34 +3,34 @@ participant "Client" as C #fdf2d0
 participant "Authorization Server (AS)" as AS #d2e0e3
 participant "Resource Helper (RH)" as RH #eececd
 participant "Resource Server (RS)" as RS #d8d3e7
-C -[#0200f5]> AS: Start standard code authorization grant
-AS -[#0200f5]> RH: Sub-flow for dynamic scope selection
+C -[#0200f5]> AS: 1. Start standard code authorization grant
+AS -[#0200f5]> RH: 2. Sub-flow for dynamic scope selection
 rnote over RH
   <color #0200f5>Select fine-grained scope</color>
 end note
-RH -[#48742c]> AS: Resource Registration Request
+RH -[#48742c]> AS: 3. Resource Registration Request
 note over AS
 <color #48742c>Resource Registration Endpoint</color>
 <color #48742c>(see UMA Fed Authz)</color>
 end note
-AS -[#48742c]> RH: Resource Registration Response
-RH -[#0200f5]> AS: Scope ID
-AS -[#0200f5]> C: Authorization code callback (generic scopes param)
-C -> AS: Token request
+AS -[#48742c]> RH: 4. Resource Registration Response
+RH -[#0200f5]> AS: 5. Scope ID
+AS -[#0200f5]> C: 6. Authorization code callback (generic scopes param)
+C -> AS: 7. Token request
 note over AS
   <color #48742c>Token endpoint</color>
 end note
-AS -[#48742c]> C: Token response
-C -[#48742c]> AS: Retrieve RS-specific client config (optional)
+AS -[#48742c]> C: 8. Token response
+C -[#48742c]> AS: 9. Retrieve RS-specific client config (optional)
 note over AS
   <color #48742c>Scope Info API</color>
 end note
-AS -[#48742c]> C: Client config response
-C -[#48742c]> RS: Resource access request
+AS -[#48742c]> C: 10. Client config response
+C -[#48742c]> RS: 11. Resource access request
 note over RS
   <color #48742c>Main resource API</color>
 end note
-RS -[#48742c]> AS: Token introspection request
-AS -[#48742c]> RS: Token introspection response
-RS -[#48742c]> C: Resource access response
+RS -[#48742c]> AS: 12. Token introspection request
+AS -[#48742c]> RS: 13. Token introspection response
+RS -[#48742c]> C: 14. Resource access response
 @enduml
