@@ -1,6 +1,14 @@
+### Demo Preparation
+```
+git clone https://github.com/SURFnet/surf-token-based-access
+cd surf-token-based-access/
+git checkout dev
+cd phase-2/poc-3/
+npm install
+```
+### Running this demo
 Run three terminal windows:
 ```
-npm install
 clear ; node ./clientApp.js
 ```
 ```
