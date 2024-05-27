@@ -8,4 +8,5 @@ The main points I remember off the top of my head (will double-check my notes la
 
 [GNAP-RAR](https://datatracker.ietf.org/doc/html/draft-ietf-gnap-core-protocol#name-resource-access-rights) defines a format for the rights listed in this registry. See also Justin's [blogpost](https://justinsecurity.medium.com/applying-rar-in-oauth-2-and-gnap-76a7bae442da).
 
- Idea for 
+Idea for what to build in this phase:
+...
