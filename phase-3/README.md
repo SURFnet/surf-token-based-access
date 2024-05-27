@@ -32,4 +32,5 @@ In my demo I would show the standard ownCloud login screen.
 In ownCloud GUI it would make sense if this became a share type (just like we did with federated shares)
 https://tst-miskatonic.data.surfsara.nl/
 
-SRAM shares can only be created from within the GNAP-RH app
+SRAM shares can only be created from within the GNAP-RH app.
+But they should be listed and revokable like other shares.
