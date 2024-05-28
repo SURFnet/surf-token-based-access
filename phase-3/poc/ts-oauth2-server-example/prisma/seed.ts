@@ -9,7 +9,7 @@ void (async function () {
   const passwordHash = await bcryptjs.hash("password123", 10);
 
   const jasonId = "dd74961a-c348-4471-98a5-19fc3c5b5079";
-  const jason = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { id: jasonId },
     update: { passwordHash },
     create: {
@@ -21,7 +21,7 @@ void (async function () {
   });
 
   const clientId = "0e2ec2df-ee53-4327-a472-9d78c278bdbb";
-  const client = await prisma.oAuthClient.upsert({
+  await prisma.oAuthClient.upsert({
     where: { id: clientId },
     update: {},
     create: {
@@ -33,8 +33,21 @@ void (async function () {
     },
   });
 
+  const clientId2 = "9aeb7ebf-09e9-4e96-88a7-b3cf9f9739a2";
+  await prisma.oAuthClient.upsert({
+    where: { id: clientId2 },
+    update: {},
+    create: {
+      id: clientId2,
+      name: "WebDAV Mounter",
+      secret: null,
+      allowedGrants: ["authorization_code", "client_credentials", "refresh_token"],
+      redirectUris: ["http://localhost:8080/callback"],
+    },
+  });
+
   const scopeId = "c3d49dba-53c8-4d08-970f-9c567414732e";
-  const scope = await prisma.oAuthScope.upsert({
+  await prisma.oAuthScope.upsert({
     where: { id: scopeId },
     update: {},
     create: {
@@ -44,7 +57,7 @@ void (async function () {
   });
 
   const scopeId2 = "22861a6c-dd8d-47b3-be1f-a3e7b67943bc";
-  const scope2 = await prisma.oAuthScope.upsert({
+  await prisma.oAuthScope.upsert({
     where: { id: scopeId2 },
     update: {},
     create: {
