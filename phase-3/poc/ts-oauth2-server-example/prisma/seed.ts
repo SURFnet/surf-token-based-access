@@ -65,4 +65,14 @@ void (async function () {
       name: "contacts.write",
     },
   });
+
+  const scopeId3 = "d9b613f5-9b63-4044-b6f2-d6a77efd5d56";
+  await prisma.oAuthScope.upsert({
+    where: { id: scopeId3 },
+    update: {},
+    create: {
+      id: scopeId3,
+      name: "webdav-folder",
+    },
+  });
 })();

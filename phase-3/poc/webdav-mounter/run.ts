@@ -7,7 +7,7 @@ const handler = (request: Request): Response => {
     'response_type=code',
     'client_id=9aeb7ebf-09e9-4e96-88a7-b3cf9f9739a2',
     'redirect_uri=http://localhost:8080/callback',
-    'scope=contacts.read contacts.write',
+    'scope=webdav-folder',
     'state=abcdefghijklmnopqrstuvwxyz123456789',
     'code_challenge=92d3b56942866d1edf02c33339b7c3dc37c6201282bb238cb47f0d3289f28a93f1bdd8af6ca9913aed0c4c',
     'code_challenge_method=S256',
