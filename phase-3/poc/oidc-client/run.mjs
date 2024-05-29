@@ -37,7 +37,10 @@ createServer((req, res) => {
         res.writeHead(200, {
             'Content-Type': 'text/html',
         });
-        res.end('Hello World. Log in with: <a id="google">Google</a> or <span id="surf">SRAM</a>.<script>document.getElementById("google").addEventListener("click", () => { window.location.href = "/login"; });</script>');
+        res.end(`Hello World. Log in with: <a id="google">Google</a> or <span id="sram">SRAM</a>.
+        <script>document.getElementById("google").addEventListener("click", () => { window.location.href = "/login"; });</script>
+        <script>document.getElementById("sram").addEventListener("click", () => { window.location.href = "https://sram.surf.nl"; });</script>
+`);
     }
     res.end();
 }).listen(80, () => {
