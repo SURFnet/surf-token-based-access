@@ -39,6 +39,11 @@ export class ScopesController {
       csrfToken: req.csrfToken(),
       loginFormAction: "#",
       forgotPasswordLink: "#",
+      scopes: [
+        { description: 'contacts.read' },
+        { description: 'contacts.write' },
+        { description: 'webdav-folder' },
+      ],
     };
   }
 
