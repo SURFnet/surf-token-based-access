@@ -1,4 +1,3 @@
-import { npm_package_devDependencies_svelte_preprocess } from '$env/static/private';
 import { createServer } from 'http';
 import { Issuer } from 'openid-client';
 import { generators } from 'openid-client';
@@ -38,7 +37,7 @@ createServer((req, res) => {
         res.writeHead(200, {
             'Content-Type': 'text/html',
         });
-        res.end('Hello World. Log in with: <span id="google">Google</span><script>document.getElementById("google").addEventListener("click", () => { window.location.href = "/login"; });</script>');
+        res.end('Hello World. Log in with: <a id="google">Google</a> or <span id="surf">SRAM</a>.<script>document.getElementById("google").addEventListener("click", () => { window.location.href = "/login"; });</script>');
     }
     res.end();
 }).listen(80, () => {
