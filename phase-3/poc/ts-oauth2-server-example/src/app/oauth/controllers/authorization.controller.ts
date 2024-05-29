@@ -37,7 +37,7 @@ export class AuthorizationController {
       authRequest.user = user;
 
       // @todo don't hardcode this value...
-      authRequest.isAuthorizationApproved = true;
+      // authRequest.isAuthorizationApproved = true;
 
       // Once the user has approved or denied the client update the status
       // (true = approved, false = denied)
