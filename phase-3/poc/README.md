@@ -1,9 +1,9 @@
 # Phase-3 PoC
 
-* The PoC demo starts at a server you're SSH'ed into. You could also just use your laptop for this
+## Demo (work in progress)
+* The PoC demo starts at a server you're SSH'ed into. You could also just use your laptop for this.
 * Clone this branch of this repo and cd into this folder
-* Build the webdav-mounter application using [Deno](https://deno.com/): `deno compile --allow-net ./webdav-mounter.ts`
-* Now run it:
+* Now run the webdav-mounter command line application:
 ```
 ./webdav-mounter
 {
@@ -12,8 +12,10 @@
   name: "webdav-mounter-637e1df17d"
 }
 ```
+In the future this will prompt you to open a browser, and then eventually will report that it was able to access a folder over WebDAV.
 
-
-* Run the [sram-auth-poc branch on my fork of Jason Raimondi's ts-oauth2-server-example](https://github.com/michielbdejong/ts-oauth2-server-example/tree/sram-auth-poc).
-* From this folder, cd into [./webdav-mounter](./webdav-mounter/) and follow the readme instructions there
-* in a third window, run `psql postgresql://prisma:secret@localhost:8888/prismadb` to see the database of the AS
+## Development
+* Build the webdav-mounter application using [Deno](https://deno.com/): `deno compile --allow-net ./webdav-mounter.ts`
+* `ssh root@vultr3.pondersource.org` and run [the sram-auth-poc branch on my fork of ts-auth-server](https://github.com/michielbdejong/ts-oauth2-server-example/tree/sram-auth-poc) in the `sram-main` and `sram-web` screens
+* On `ssh root@vultr3.pondersource.org`, run `psql postgresql://prisma:secret@localhost:8888/prismadb` to see the database of the AS
+* see https://github.com/SURFnet/surf-token-based-access/issues for open PoC development issues
