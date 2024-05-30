@@ -15,6 +15,7 @@
 In the future this will prompt you to open a browser, and then eventually will report that it was able to access a folder over WebDAV.
 
 ## Development
+* Run the webdav-mounter application using [Deno](https://deno.com/): `deno run --allow-net ./webdav-mounter.ts`
 * Build the webdav-mounter application using [Deno](https://deno.com/): `deno compile --allow-net ./webdav-mounter.ts`
 * `ssh root@vultr3.pondersource.org` and run [the sram-auth-poc branch on my fork of ts-auth-server](https://github.com/michielbdejong/ts-oauth2-server-example/tree/sram-auth-poc) in the `sram-main` and `sram-web` screens
 * On `ssh root@vultr3.pondersource.org`, run `psql postgresql://prisma:secret@localhost:8888/prismadb` to see the database of the AS
