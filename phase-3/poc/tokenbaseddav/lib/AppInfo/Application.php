@@ -8,6 +8,9 @@ use \OCP\AppFramework\App;
 use \OCA\TokenBasedDav\Controller\AuthController;
 
 class Application extends App {
+
+	public const APP_ID = 'tokenbaseddav';
+
 	public function __construct(array $urlParams=array()) {
 		parent::__construct('tokenbaseddav', $urlParams);
 		$container = $this->getContainer();
