@@ -118,7 +118,9 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
      * @PublicPage
      */
 	public function main() {
-		return new TemplateResponse('tokenbaseddav', 'main', []);
+		return new TemplateResponse('tokenbaseddav', 'main', [
+		  "action" => generateUrl('/apps/tokenbaseddav/pick)
+		]);
     }
 
 	/**
