@@ -118,6 +118,6 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
      * @PublicPage
      */
 	public function main() {
-		return new TemplateResponse('tokenbaseddav', 'main', $params);
+		return new TemplateResponse('tokenbaseddav', 'main', []);
     }
 }
