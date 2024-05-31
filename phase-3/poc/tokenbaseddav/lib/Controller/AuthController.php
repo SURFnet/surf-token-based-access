@@ -132,6 +132,6 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
 		error_log("User picked a resource!");
 		// CURL to AS protected resource registry
 		// from https://github.com/SURFnet/surf-token-based-access/issues/61
-		return new RedirectResponse('https://google.com');
+		return new RedirectResponse('https://sram-auth-poc.pondersource.net/api/scopes');
     }
 }
