@@ -119,7 +119,6 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
      */
 	public function main() {
 		return new TemplateResponse('tokenbaseddav', 'main', [
-		  "action" => \OC::generateUrl('/apps/tokenbaseddav/pick')
 		]);
     }
 

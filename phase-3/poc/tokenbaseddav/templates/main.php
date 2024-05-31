@@ -13,7 +13,7 @@ Util::addStyle($appId, 'style');
 <div id="app">
 	<div id="app-content">
 		please pick a folder to share (coming soon)
-		<form method="POST" action="<?php $_['action'); ?>">
+		<form method="POST" id="form">
 			<input type="submit"/>
 		</form>
 	</div>
