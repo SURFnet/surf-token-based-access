@@ -13,11 +13,8 @@ Util::addStyle($appId, 'style');
 <div id="app">
 	<div id="app-content">
 		please pick a folder to share (coming soon)
-		<form method="POST" id="form">
+		<form method="POST" action="<?php echo OC.generateUrl('/apps/tokenbaseddav/pick'); ?>">
 			<input type="submit"/>
 		</form>
 	</div>
 </div>
-<script>
-	document.getElementById('form').setAttribute('action', OC.generateUrl('/apps/tokenbaseddav/pick'));
-</script>
