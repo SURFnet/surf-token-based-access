@@ -28,13 +28,14 @@ async function checkTicket(clientId: string, clientSecret: string, ticket: strin
     }),
   });
   const jsonData = await jsonResponse.json();
-  console.log(jsonData);
+  // console.log(jsonData);
   return jsonData.done;
 }
 
 let done = await checkTicket(clientId, clientSecret, ticket);
 while (done !== true) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  console.log("Checking...");
+  // console.log("Checking...");
   done = await checkTicket(clientId, clientSecret, ticket);
 }
+console.log("Done!");
