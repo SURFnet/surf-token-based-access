@@ -120,4 +120,16 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
 	public function main() {
 		return new TemplateResponse('tokenbaseddav', 'main', []);
     }
+
+	/**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     * @PublicPage
+     */
+	public function pick() {
+		error_log("User picked a resource!");
+		// CURL to AS protected resource registry
+		// from https://github.com/SURFnet/surf-token-based-access/issues/61
+		return new RedirectResponse('https://sram-auth-poc.pondersource.net/api/scopes');
+    }
 }
