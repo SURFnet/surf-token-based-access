@@ -111,4 +111,13 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
 		$token = $this->request->getParam("token"); 
 		return $this->jwtHelper->validateToken($token); 
     }
+
+	/**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     * @PublicPage
+     */
+	public function main() {
+		return new TemplateResponse('tokenbaseddav', 'main', $params);
+    }
 }
