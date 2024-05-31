@@ -12,7 +12,7 @@ Util::addStyle($appId, 'style');
 
 <div id="app">
 	<div id="app-content">
-			<?php print_unescaped($this->inc('maincontent')); ?>
+			please pick a folder to share
 	</div>
 </div>
 
