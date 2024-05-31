@@ -3,6 +3,7 @@ namespace OCA\TokenBasedDav\Controller;
 
 use OCP\AppFramework\{Controller, Http\JSONResponse, Http\TemplateResponse};
 use OC\AppFramework\Http;
+use OCP\AppFramework\Http\RedirectResponse;
 use OC\Group\Manager;
 use OC\User\Session;
 use OCA\TokenBasedDav\Services\JWTHelper;
