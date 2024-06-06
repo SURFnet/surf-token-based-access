@@ -145,10 +145,26 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
      * @NoCSRFRequired
      * @PublicPage
      */
-	public function pick() {
+	public function pick($request) {
 		error_log("User picked a resource!");
-		// CURL to AS protected resource registry
-		// from https://github.com/SURFnet/surf-token-based-access/issues/61
+		// see https://github.com/SURFnet/surf-token-based-access/issues/61
+		$url = "https://sram-auth-poc.pondersource.net/api/rreg";
+        $data = array_keys($_POST);
+		// use key 'http' even if you send the request to https://...
+		$options = [
+			'http' => [
+				'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+				'method' => 'POST',
+				'content' => http_build_query($data),
+			],
+		];
+		$context = stream_context_create($options);
+		$result = file_get_contents($url, false, $context);
+		if ($result === false) {
+			/* Handle error */
+		}
+		var_dump($result);
+
 		return new RedirectResponse('https://sram-auth-poc.pondersource.net/api/front?resource=/welcome.txt');
     }
 }
