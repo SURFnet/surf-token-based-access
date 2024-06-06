@@ -4,12 +4,17 @@ namespace OCA\TokenBasedDav\Controller;
 use OCP\AppFramework\{Controller, Http\JSONResponse, Http\TemplateResponse};
 use OC\AppFramework\Http;
 use OCP\AppFramework\Http\RedirectResponse;
+use OCP\Files\IRootFolder;
 use OC\Group\Manager;
 use OC\User\Session;
 use OCA\TokenBasedDav\Services\JWTHelper;
 use OCP\ILogger;
 use OCP\IRequest;
 use Firebase\JWT\JWT;
+
+function name($x) {
+	return $x->getName();
+}
 
 class AuthController extends Controller {
 
@@ -32,15 +37,23 @@ class AuthController extends Controller {
 	 * @var ILogger
 	 */
 	private $logger;
+
+	/**
+	 * @var IRootFolder
+	 */
+	private $rootFolder;
+	
 	public function __construct(
 		$appName,
 		IRequest $request,
 		JWTHelper $jwtHelper,
-		ILogger $logger
+		ILogger $logger,
+		IRootFolder $rootFolder
 	) {
 		parent::__construct($appName, $request);
 		$this->jwtHelper = $jwtHelper;
 		$this->logger = $logger;
+		$this->rootFolder = $rootFolder;
 	}
 
 	
@@ -119,7 +132,11 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
      * @PublicPage
      */
 	public function main() {
+		$nodes = $this->rootFolder->get('files')->getDirectoryListing();
+		$names = array_map('name', $nodes);
+
 		return new TemplateResponse('tokenbaseddav', 'main', [
+			"nodes" => $names,
 		]);
     }
 
