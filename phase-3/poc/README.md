@@ -7,13 +7,10 @@
 * Now run the webdav-mounter command line application:
 ```
 ./webdav-mounter
-{
-  clientId: "737af593-2c7c-480c-96ce-3e83d36b735b",
-  clientSecret: "ec9a9933677036f350447a152848639730ef52e26372da6e1f1324f0bc310a79ca4e30bf7d410d3da61b925492deeaca3491"... 28 more characters,
-  name: "webdav-mounter-637e1df17d"
-}
 ```
-In the future this will prompt you to open a browser, and then eventually will report that it was able to access a folder over WebDAV.
+See [screencast](https://vimeo.com/952348865)
+
+You also need to run the [Authorization Server](https://github.com/michielbdejong/ts-oauth2-server-example/tree/sram-auth-poc) and a public ownCloud server (see ./start-public-ownCloud.sh)
 
 ## Development
 * Run the webdav-mounter application using [Deno](https://deno.com/): `deno run --allow-net ./webdav-mounter.ts`
