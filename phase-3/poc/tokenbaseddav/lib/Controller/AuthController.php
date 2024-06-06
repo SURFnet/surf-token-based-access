@@ -149,7 +149,9 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
 		error_log("User picked a resource!");
 		// see https://github.com/SURFnet/surf-token-based-access/issues/61
 		$url = "https://sram-auth-poc.pondersource.net/api/rreg";
-        $data = array_keys($_POST);
+        $data = [
+			"name" => implode(" ", array_keys($_POST))
+		];
 		// use key 'http' even if you send the request to https://...
 		$options = [
 			'http' => [
@@ -163,8 +165,8 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
 		if ($result === false) {
 			/* Handle error */
 		}
-		var_dump($result);
+		error_log("scope id: " . var_export($result, true));
 
-		return new RedirectResponse('https://sram-auth-poc.pondersource.net/api/front?resource=/welcome.txt');
+		return new RedirectResponse('https://sram-auth-poc.pondersource.net/api/front?resource=' . urlencode($result));
     }
 }
