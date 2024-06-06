@@ -12,10 +12,6 @@ use OCP\ILogger;
 use OCP\IRequest;
 use Firebase\JWT\JWT;
 
-function name($x) {
-	return $x->getName();
-}
-
 class AuthController extends Controller {
 
 	/**
@@ -132,8 +128,11 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
      * @PublicPage
      */
 	public function main() {
-		$nodes = $this->rootFolder->get('files')->getDirectoryListing();
-		$names = array_map('name', $nodes);
+		$nodes = $this->rootFolder->getDirectoryListing();
+		$names = [];
+		foreach ($nodes as $node) {
+			array_push($names, $node->getName());
+		}
 
 		return new TemplateResponse('tokenbaseddav', 'main', [
 			"nodes" => $names,
