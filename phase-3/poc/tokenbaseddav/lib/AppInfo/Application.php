@@ -31,12 +31,14 @@ class Application extends App {
 		$container->registerService('OCA\TokenBasedDav\Controller\AuthController', function ($c) {
 			$server = $c->getServer();
 			$logger = $server->getLogger();
+			$rootFolder = $server->getRootFolder();
 			$jwtHelper = $c->query('OCA\TokenBasedDav\Services\JWTHelper');
 			return new AuthController(
 				$c->query('AppName'),
 				$c->query('Request'),
 				$jwtHelper,
-				$logger
+				$logger,
+				$rootFolder
 			);
 		});
 	}
