@@ -128,14 +128,15 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
      * @PublicPage
      */
 	public function main() {
-		$nodes = $this->rootFolder->getDirectoryListing();
+		$nodes = $this->rootFolder->get('einstein')->get('files')->getDirectoryListing();
 		$names = [];
 		foreach ($nodes as $node) {
 			array_push($names, $node->getName());
 		}
 
+		error_log(var_export($names, true));
 		return new TemplateResponse('tokenbaseddav', 'main', [
-			"nodes" => $names,
+			"names" => $names,
 		]);
     }
 

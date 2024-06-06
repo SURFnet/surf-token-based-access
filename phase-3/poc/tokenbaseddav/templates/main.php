@@ -14,10 +14,10 @@ script('tokenbaseddav', 'main');
 	<div id="app-content">
 		please pick a folder to share (coming soon)
 		<form method="POST" id="form">
-			<input type="submit"/>
 			<ul>
-				<?php foreach($names as $name) { echo "<li>$name</li>"}; ?>
+				<?php foreach($_['names'] as $name) { echo "<li><input type=\"checkbox\" name=\"$name\">$name</li>"; } ?>
 			</ul>
+			<input type="submit"/>
 		</form>
 	</div>
 </div>
