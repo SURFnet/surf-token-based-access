@@ -3,8 +3,8 @@
 ## Demo (work in progress)
 * The PoC demo starts at a server you're SSH'ed into. You could also just use your laptop for this.
 * Clone this branch of this repo, check out the `dev` branch, and cd into this folder
-* [Install Deno](https://docs.deno.com/runtime/manual/getting_started/installation) and run `deno compile --allow-net ./webdav-mounter.ts` to build the command line application from source. This will produce an executable called `./webdav-mounter`.
-* Now run the webdav-mounter command line application:
+* [Install Deno](https://docs.deno.com/runtime/manual/getting_started/installation) and run `deno compile --allow-net ./webdav-mounter-*.ts` to build the command line application from source. This will produce an executable called `./webdav-mounter`.
+* Now run the webdav-mounter command line applications:
 ```
 ./webdav-mounter
 ```

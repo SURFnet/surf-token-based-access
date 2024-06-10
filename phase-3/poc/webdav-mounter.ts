@@ -23,7 +23,7 @@ async function checkTicket(clientId: string, clientSecret: string, ticket: strin
     },
     body: JSON.stringify({
       clientId,
-      clientSecret,
+      // clientSecret, // FIXME: Use MTLS here? Or what else?
       ticket,
     }),
   });
