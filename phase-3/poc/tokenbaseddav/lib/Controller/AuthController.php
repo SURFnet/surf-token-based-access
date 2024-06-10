@@ -125,7 +125,6 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
 	/**
      * @NoAdminRequired
      * @NoCSRFRequired
-     * @PublicPage
      */
 	public function main() {
 		$nodes = $this->rootFolder->get('einstein')->get('files')->getDirectoryListing();
@@ -143,7 +142,6 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
 	/**
      * @NoAdminRequired
      * @NoCSRFRequired
-     * @PublicPage
      */
 	public function pick($request) {
 		error_log("User picked a resource!");
