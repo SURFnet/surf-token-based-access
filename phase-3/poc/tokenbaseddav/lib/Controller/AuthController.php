@@ -165,6 +165,6 @@ $this->jwtHelper->getconfig()->setPublicKey($publicKey);
 		}
 		error_log("scope id: " . var_export($result, true));
 
-		return new RedirectResponse('https://sram-auth-poc.pondersource.net/api/front?resource=' . urlencode($result));
+		return new RedirectResponse('https://sram-auth-poc.pondersource.net/api/front?wayg=research-drive-poc&resource=' . urlencode($result));
     }
 }
