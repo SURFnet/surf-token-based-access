@@ -1,10 +1,10 @@
 Mon 27 May: 7 hours
 Tue 28 May: 4 hours
-Wed 28 May: 6 hours
-Thu 28 May: 7 hours
-Fri 28 May: 8 hours
-Thu 6 June: 5 hours
-Fri 7 June: 3 hours
-Mon 10 Jun: 5 hours
+Wed 29 May: 6 hours
+Thu 30 May: 7 hours
+Fri 31 May: 8 hours -> 7+4+6+7+8 = 32
 
-Sum: 40 hours of ~100 spent
+Thu 6 June: 5 hours
+Fri 7 June: 3 hours -> 32 + 8 = 40
+
+Mon 10 Jun: 3 hours
