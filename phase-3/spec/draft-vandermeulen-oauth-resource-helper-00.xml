@@ -57,7 +57,7 @@
       <t>
       A Resource Helper can replace the scope-picking and scope-displaying capabilities of an OAuth Authorization Server.
       This makes the software architecture of the Authorization Server more modular, and can alleviate organisational challenges
-      when the API of a Resource Server evolve. Only the Resource Helper needs to adapt in lock-step with API changes,
+      when the API of a Resource Server evolves. Only the Resource Helper needs to adapt in lock-step with API changes,
       and the rest of the Authorization Server can be managed on a more stable software deployment cycle.
       The Resource Helper provides two endpoints: a "pick" endpoint for the selection of access scopes, and a "view" endpoint
       for viewing them.
@@ -119,23 +119,93 @@
     </section>
     
     <section>
-      <name>Pick endpoint</name>
-      <t>Body text [REPLACE]</t>
+      <name>Requirements for Viewing Access Token Scopes</name>
+      <t>During the Authorization Code Flow as described in <xref target="OAUTH2.1"/>, the authorization server authenticates the resource owner (via the user agent)
+      and establishes whether the resource owner grants or denies the client's access request. For the authorization server to meaningfully measure if the resource owner
+      grants or denies the request, it needs to display, presumably via the user agent, the details of the access token scope in a way that the resource owner will understand.
+
+      Displaying access token scope details via the user agent may involve describing specific resources and actions, in a human-readable, probably locale-dependent, and possibly even
+      persona-dependent way. And when the API of the Resource Server changes, the method of displaying access token scope details may also need to change. For instance, if a feature
+      is added that allows the end user to add a photo to an event in a calendar, then the description of an "events:654234:write" access token scope may need to change from
+      "edit the date and title of 'Birthday Bash'" may need to change to "upload photos and edit details of 'Birthday Bash'", and it may make sense to display the event's primary photo,
+      so the resource owner can better understand the access token scope they are granting, leading to a more informed decision and thus better security.
+
+      <name>Requirements for Picking Access Token Scopes</name>
+      <t>The issued access token scope may be different from the one requested by the client, based on the authorization server policy or the resource owner's instructions.
+      To allow the resource owner to instruct the authorization server to grant a smaller, larger, or different access token scope than what the client requested, especially in the case
+      where the client only specified the requested scope in generic terms, or not at all, the requirements for viewing access token scopes need to be augmented with a requirement to allow
+      the user to select, deselect, and browse specific aspects of it.
+
+      In some use cases, a client may generically ask for access to "a photo" or "a folder", without specifying a specific one, and the resource owner may have a chance to browse through a
+      photo collection or a folder tree to select a specific one. Here too, each time the functionalities of the resource server change, the resource browser interface may also need to change.
+      </t>
     </section>   
-    
+
+    <section>
+      <name>View endpoint</name>
+      <t>The view endpoint of the resource helper is a web page the authorization server can link to, which is specialized in displaying an access token scope for the resource owner to understand.
+      It takes a 'scope' parameter, an 'actions' parameter and optional 'redirect_uri' and 'state' parameters.
+      The 'action' parameter should list valid actions, for instance 'grant reject' for use from an authorization endpoint, or 'revoke cancel' for use in a revokation interface.
+      Example:
+      https://view.example.org/?scope=events:654234:write&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fauthorize&amp;state=xyz
+
+      The view endpoint will allow the resource owner to grant/reject, or revoke/cancel, after which they will be redirected back. The scope and state parameters will be copied, and the 'action' parameter
+      will be replaced by the applicable choice, for instance:
+      https://example.org/authorize?scope=events:654234:write&amp;action=grant&amp;state=xyz
+      </t>
+    </section>
+
+    <section>
+      <name>Pick endpoint</name>
+      <t>The pick endpoint of the resource helper takes the same parameters as the view endpoint, but allows the user to influence the details of the scope.
+      Example:
+      https://pick.example.org/?scope=webdav-folder&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fauthorize&amp;state=xyz
+      After allowing the user to pick a fine-grained access scope, they might be redirected back to the main authorization server with for instance:
+      https://example.org/authorize?scope=/home/john/pictures/4:write&amp;action=grant&amp;state=xyz
+      </t>
+    </section>
+
+    <section>
+      <name>Resource registry and scope templates</name>
+      <t>
+      In the previous section the scope '/home/john/pictures/4:write' was used as an example of a scope that may be picked. This scope may fit into a template, for instance "&lt;file_path&gt;:&lt;read | write&gt;".
+      Alternatively, the resource helper could register a resource set as described in <xref target="GNAP-RS"/>, or as described in <xref target="UMA-Fed-Authz" and respond with just the identifier.
+
+      Similarly, the scope parameter in the URI of the view and pick endpoint may already take the form of an identifier, to be dereferenced with a query to a resource registry of some sort.
+      </t>
+    </section>   
+
+    <section>
+      <name>Decoupled authentication</name>
+      <t>
+      Before redirecting to the resource helper, the authorization server may already have taken some measures to authenticate the user of the current user agent session.
+      The resource helper is, however, responsible for its own authentication measures. In many cases this can however rely on the same sign-in mechanisms, and not require any additional clicks from the user.
+
+      The resource helper is responsible for making sure the authenticated user is allowed to delegate the scope they select. The response coming back from the resource helper should thus be interpreted as a
+      decision made by the resource owner as identified by the resource helper, which may be different person from the one authenticated to the main authorization server.
+
+      This decoupling is by design, and will allow for scenarios where the resource helper refers to a different set of user identifiers than the authorization server. For instance, the resource server may be
+      self-hosted by the resource owner, with the resource owner authenticating as 'admin', whereas the authorization server may be hosted by a university, with the resource owner authenticating with their student
+      number.
+
+      The authorization server is trusting the resource helper to select the access token scope to be granted, and the resource helper is subsequently trusting the authorization server to select the client that will
+      receive this access. In a way, the resource helper is granting access to the resource, and the authorization server is delegating, or forwarding this grant, to the client.
+      </t>
+    </section>   
+      
     <section anchor="IANA">
-    <!-- All drafts are required to have an IANA considerations section. See RFC 8126 for a guide.-->
       <name>IANA Considerations</name>
-      <t>This memo includes no request to IANA. [CHECK]</t>
+      <t>This memo includes no request to IANA.</t>
     </section>
     
     <section anchor="Security">
-      <!-- All drafts are required to have a security considerations section. See RFC 3552 for a guide. -->
       <name>Security Considerations</name>
-      <t>This document should not affect the security of the Internet. [CHECK]</t>
+      <t>It is important to understand the value of the redirect back from resource helper to authorization server. It already contains an access grant as a half-product, for the authorization server to finalize by actually issuing
+      it to a client.
+      
+      This model differs from the Lodging Intent pattern used in <xref target="FAPI-CIBA"/>, where the intent is only a description of some intended transaction, directly between client and resource server.
+      </t>
     </section>
-    
-    <!-- NOTE: The Acknowledgements and Contributors sections are at the end of this template -->
   </middle>
 
   <back>
@@ -143,61 +213,11 @@
       <name>References</name>
       <references>
         <name>Normative References</name>
-        
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
-        <!-- The recommended and simplest way to include a well known reference -->
-        
       </references>
  
       <references>
         <name>Informative References</name>
-       
-        <reference anchor="exampleRefMin">
-        <!-- [REPLACE/DELETE] Example minimum reference -->
-          <front>
-            <title>Title [REPLACE]</title>
-            <author initials="Initials [REPLACE]" surname="Surname [REPLACE]">
-              <organization/>
-            </author>
-            <date year="2006"/>
-            <!-- [CHECK] -->
-          </front>
-        </reference>
-
-        <reference anchor="exampleRefOrg" target="http://www.example.com/">
-        <!-- [REPLACE/DELETE] Example reference written by an organization not a person -->
-          <front>
-            <title>Title [REPLACE]</title>
-            <author>
-              <organization>Organization [REPLACE]</organization>
-            </author>
-            <date year="1984"/>
-            <!-- [CHECK] -->
-          </front>
-        </reference>       
-       
       </references>
     </references>
-    
-    <section>
-      <name>Appendix 1 [REPLACE/DELETE]</name>
-      <t>This becomes an Appendix [REPLACE]</t>
-    </section>
-
-    <section anchor="Acknowledgements" numbered="false">
-      <!-- [REPLACE/DELETE] an Acknowledgements section is optional -->
-      <name>Acknowledgements</name>
-      <t>This template uses extracts from templates written by Pekka Savola, Elwyn Davies and 
-        Henrik Levkowetz. [REPLACE]</t>
-    </section>
-    
-    <section anchor="Contributors" numbered="false">
-      <!-- [REPLACE/DELETE] a Contributors section is optional -->
-      <name>Contributors</name>
-      <t>Thanks to all of the contributors. [REPLACE]</t>
-      <!-- [CHECK] it is optional to add a <contact> record for some or all contributors -->
-    </section>
-    
  </back>
 </rfc>
