@@ -8,3 +8,6 @@ Thu 6 June: 5 hours
 Fri 7 June: 3 hours -> 32 + 8 = 40
 
 Mon 10 Jun: 3 hours
+Fri 14 Jun: 2 hours -> 40 + 5 = 45
+
+Tue 18 Jun: 5 hours -> 45 + 5 = 50
