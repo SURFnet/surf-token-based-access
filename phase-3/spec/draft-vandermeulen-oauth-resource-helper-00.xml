@@ -70,39 +70,11 @@
     
     <section>
       <name>Introduction</name>
-      <t>In Research and education (R&amp;E), we see new standards evolving (e.g. in AARC https://aarc-project.eu) that address the use-cases that
-      are particularly relevant in that environment, and that are not addressed by existing OAuth standards. This is linked to a move away from
-      authentication mechanisms like passwords, SSH keys and X.509 certificates towards token based authentication. In R&amp;E, we see that the
-      organisations in control of the various resource servers and clients work together in communities. These communities run an authorization
-      server and manage trust and authorization policies. In this context we see that the authorization server does not have detailed knowledge
-      of the resources and access modes that a resource server can offer, and thus is not well-placed to present a scope selection GUI that goes
-      beyond using a generic description of the scope. This is a problem for use-cases where more fine-grained control over the level of access
-      is required. E.g. granting access to a specific folder on a storage server, or granting access to a specific computing resource and that
-      cannot be solved by establishing a list of generic scopes. Another usecase that we want to address is where there are several resource servers
-      that offer a similar service using the same protocol, e.g. storage servers that offer WebDAV access to files. In this case, the user should be
-      able to choose the resource server that they want to access, and the client should not have to know about the resource servers in advance. We
-      aim for a solution that does not require changes to existing resources servers, and that will work with existing OAuth clients. We expect that
-      our solution will be of interest to other communities that have similar requirements, where the authorization server and resource server are
-      developed by different entities.
-
-      We considered using the Lodging Intent Pattern, a "pre-dance" where the client first obtains a structured scope before initiating the main OAuth dance,
-      but we rejected this approach because it creates an undesirable many-to-many relationship between clients and the specific resource servers. Instead,
-      we want to hide the resource server behind the authorization server which acts as a trusted broker between the various clients of various the organisations
-      and the various resource servers of various (other) organisations.
-
-      We therefore want to propose an OAuth extension which adds a "scope picker" service close to each resource server, to which the authorization server
-      redirects the user in a "sub-dance", leaving the GUI of the authorization server generic and easy to maintain. This works as follows: using the standard
-      authorization code flow, the client redirects the user to the authorization server. The client can request a specific resource server by including an
-      audience, or it can use a scope to request a specific type of service (e.g. WebDAV). The authorization server then redirects the user to a well-known
-      endpoint on the resource server's scope picker service based on the client's and user's preferences and applies any restrictions based on the communities'
-      policy. The scope picker shows a GUI in which the user can select e.g. a folder and set the level from the ones they have access to and set the level of
-      access (read, write) and builds a structured scope from this information. This structured scope is given a human-readable name, either suggested by the
-      scope picker or chosen by the user. The scope picker then redirects the user back to the authorization server including all the scope information, which
-      is then able to display the human-readable description in its GUI, even though the authorization server doesn't understand what it stands for. Optionally
-      protocol specific information (e.g. the WebDAV URL to use) is returned to the authorization server, this is required because the client may not have
-      knowledge about the resource server that the user selected. When the user then 'grants access' on the authorization server, the OAuth authorization code
-      flow is continued back to the client as normal. The client can then use its access token to request the protocol specific information from the authorization
-      server using a well-known endpoint on the authorization server and use it to access the resource server.
+      <t>
+      The Authorization Server may redirect the Resource Owner to the Resource Helper's View or Pick endpoint, as part of the authorization request.
+      Optionally, the Pick endpoint may submit the selected access scope to a resource registry, and refer to it by an identifier rather than by a self-contained description.
+      From the Revokation interface, the Authorization Server may also redirect the Resource Owner to the Resource Helper's View endpoint, to allow them to view the details
+      of previously granted access, and help the Resource Owner decide whether it should be revoked or not.
       </t>
       
       <section>
@@ -119,7 +91,7 @@
     </section>
     
     <section>
-      <name>Requirements for Viewing Access Token Scopes</name>
+      <name>Viewing Access Token Scopes</name>
       <t>During the Authorization Code Flow as described in <xref target="OAUTH2.1"/>, the authorization server authenticates the resource owner (via the user agent)
       and establishes whether the resource owner grants or denies the client's access request. For the authorization server to meaningfully measure if the resource owner
       grants or denies the request, it needs to display, presumably via the user agent, the details of the access token scope in a way that the resource owner will understand.
@@ -130,20 +102,7 @@
       "edit the date and title of 'Birthday Bash'" may need to change to "upload photos and edit details of 'Birthday Bash'", and it may make sense to display the event's primary photo,
       so the resource owner can better understand the access token scope they are granting, leading to a more informed decision and thus better security.
 
-      <name>Requirements for Picking Access Token Scopes</name>
-      <t>The issued access token scope may be different from the one requested by the client, based on the authorization server policy or the resource owner's instructions.
-      To allow the resource owner to instruct the authorization server to grant a smaller, larger, or different access token scope than what the client requested, especially in the case
-      where the client only specified the requested scope in generic terms, or not at all, the requirements for viewing access token scopes need to be augmented with a requirement to allow
-      the user to select, deselect, and browse specific aspects of it.
-
-      In some use cases, a client may generically ask for access to "a photo" or "a folder", without specifying a specific one, and the resource owner may have a chance to browse through a
-      photo collection or a folder tree to select a specific one. Here too, each time the functionalities of the resource server change, the resource browser interface may also need to change.
-      </t>
-    </section>   
-
-    <section>
-      <name>View endpoint</name>
-      <t>The view endpoint of the resource helper is a web page the authorization server can link to, which is specialized in displaying an access token scope for the resource owner to understand.
+      The view endpoint of the resource helper is a web page the authorization server can link to, which is specialized in displaying an access token scope for the resource owner to understand.
       It takes a 'scope' parameter, an 'actions' parameter and optional 'redirect_uri' and 'state' parameters.
       The 'action' parameter should list valid actions, for instance 'grant reject' for use from an authorization endpoint, or 'revoke cancel' for use in a revokation interface.
       Example:
@@ -153,11 +112,17 @@
       will be replaced by the applicable choice, for instance:
       https://example.org/authorize?scope=events:654234:write&amp;action=grant&amp;state=xyz
       </t>
-    </section>
 
-    <section>
-      <name>Pick endpoint</name>
-      <t>The pick endpoint of the resource helper takes the same parameters as the view endpoint, but allows the user to influence the details of the scope.
+      <name>Picking Access Token Scopes</name>
+      <t>The issued access token scope may be different from the one requested by the client, based on the authorization server policy or the resource owner's instructions.
+      To allow the resource owner to instruct the authorization server to grant a smaller, larger, or different access token scope than what the client requested, especially in the case
+      where the client only specified the requested scope in generic terms, or not at all, the requirements for viewing access token scopes need to be augmented with a requirement to allow
+      the user to select, deselect, and browse specific aspects of it.
+
+      In some use cases, a client may generically ask for access to "a photo" or "a folder", without specifying a specific one, and the resource owner may have a chance to browse through a
+      photo collection or a folder tree to select a specific one. Here too, each time the functionalities of the resource server change, the resource browser interface may also need to change.
+
+      The pick endpoint of the resource helper takes the same parameters as the view endpoint, but allows the user to influence the details of the scope.
       Example:
       https://pick.example.org/?scope=webdav-folder&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fauthorize&amp;state=xyz
       After allowing the user to pick a fine-grained access scope, they might be redirected back to the main authorization server with for instance:
@@ -192,7 +157,17 @@
       receive this access. In a way, the resource helper is granting access to the resource, and the authorization server is delegating, or forwarding this grant, to the client.
       </t>
     </section>   
-      
+
+    <section>
+      <name>Where Are You Going?</name>
+      <t>
+      In R&amp;E it is common for authentication flows to involve a "Where Are You From?" page, where the end user can select their identity provider from for instance a list of thousands of universities, grouped per country.
+
+      Similarly, if a client is able to interact with multiple resource servers, the authorization server might display a "Where Are You Going?" page before redirecting the end user to the view or pick endpoint of the resource
+      helper that corresponds to the resource server of their choice.
+      </t>
+    </section>   
+
     <section anchor="IANA">
       <name>IANA Considerations</name>
       <t>This memo includes no request to IANA.</t>
@@ -203,7 +178,8 @@
       <t>It is important to understand the value of the redirect back from resource helper to authorization server. It already contains an access grant as a half-product, for the authorization server to finalize by actually issuing
       it to a client.
       
-      This model differs from the Lodging Intent pattern used in <xref target="FAPI-CIBA"/>, where the intent is only a description of some intended transaction, directly between client and resource server.
+      This model differs from the Lodging Intent pattern used in <xref target="FAPI-CIBA"/>, where the intent is only a description of some intended transaction, directly between client and resource server, which does not imply that
+      it was composed by an authenticated resource owner.
       </t>
     </section>
   </middle>
