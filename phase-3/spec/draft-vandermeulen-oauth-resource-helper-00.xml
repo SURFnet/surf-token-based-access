@@ -104,10 +104,12 @@
       It takes a 'scope' parameter, an 'actions' parameter and optional 'redirect_uri' and 'state' parameters.
       The 'action' parameter should be a space-delimited list of valid actions, for instance 'grant reject' for use from an authorization endpoint, or 'revoke cancel' for use in a revokation interface.
       Example:
+      </t><t>
       https://view.example.org/?scope=events:654234:write&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fauthorize&amp;state=xyz
       </t><t>
       The view endpoint will allow the resource owner to grant/reject, after which they will be redirected back. The scope and state parameters will be copied, and the 'action' parameter
       will be replaced by the applicable choice, for instance:
+      </t><t>
       https://example.org/authorize?scope=events:654234:write&amp;action=grant&amp;state=xyz
       </t>
     </section>
@@ -184,9 +186,12 @@
       <t>It is important to understand the value of the redirect back from resource helper to authorization server. It already contains an access grant as a half-product, for the authorization server to finalize by actually issuing
       it to a client.
       </t><t>
-
       This model differs from the Lodging Intent pattern used in <xref target="FAPI-CIBA"/>, where the intent is only a description of some intended transaction, directly between client and resource server, which does not imply that
       it was composed by an authenticated resource owner.
+      </t><t>
+      It's up to the Authorization Server and the Resource Helper to share their understanding of the various values of 'action'.
+      </t><t>
+      The Authorization Server should be careful not to redirect the user to the wrong URL, put a nonce in the state parameter and check that when accepting the callback redirect, and to always use https.
       </t>
     </section>
   </middle>
