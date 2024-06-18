@@ -86,13 +86,11 @@
           <xref target="RFC8174"/> when, and only when, they appear in
           all capitals, as shown here.</t>
       </section>
-      <!-- [CHECK] The 'Requirements Language' section is optional -->
-
     </section>
 
     <section>
       <name>Viewing Access Token Scopes</name>
-      <t>During the Authorization Code Flow as described in <xref target="OAUTH2.1"/>, the authorization server authenticates the resource owner (via the user agent)
+      <t>During the Authorization Code Flow as described in <xref target="I-D.ietf-oauth-v2-1"/>, the authorization server authenticates the resource owner (via the user agent)
       and establishes whether the resource owner grants or denies the client's access request. For the authorization server to meaningfully measure if the resource owner
       grants or denies the request, it needs to display, presumably via the user agent, the details of the access token scope in a way that the resource owner will understand.
 
@@ -112,7 +110,9 @@
       will be replaced by the applicable choice, for instance:
       https://example.org/authorize?scope=events:654234:write&amp;action=grant&amp;state=xyz
       </t>
+    </section>
 
+    <section>
       <name>Picking Access Token Scopes</name>
       <t>The issued access token scope may be different from the one requested by the client, based on the authorization server policy or the resource owner's instructions.
       To allow the resource owner to instruct the authorization server to grant a smaller, larger, or different access token scope than what the client requested, especially in the case
@@ -134,7 +134,7 @@
       <name>Resource registry and scope templates</name>
       <t>
       In the previous section the scope '/home/john/pictures/4:write' was used as an example of a scope that may be picked. This scope may fit into a template, for instance "&lt;file_path&gt;:&lt;read | write&gt;".
-      Alternatively, the resource helper could register a resource set as described in <xref target="GNAP-RS"/>, or as described in <xref target="UMA-Fed-Authz" and respond with just the identifier.
+      Alternatively, the resource helper could register a resource set as described in <xref target="I-D.ietf-gnap-resource-servers"/>, or as described in <xref target="UMA-Fed-Authz"/> and respond with just the identifier.
 
       Similarly, the scope parameter in the URI of the view and pick endpoint may already take the form of an identifier, to be dereferenced with a query to a resource registry of some sort.
       </t>
@@ -189,10 +189,34 @@
       <name>References</name>
       <references>
         <name>Normative References</name>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+        <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-oauth-v2-1-11.xml"/>
       </references>
 
       <references>
         <name>Informative References</name>
+        <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-gnap-resource-servers-05.xml"/>
+        <reference anchor="UMA-Fed-Authz" target="https://docs.kantarainitiative.org/uma/wg/rec-oauth-uma-federated-authz-2.0.html">
+          <front>
+            <title>UMA Federated Authorization</title>
+            <author initials="E." surname="Maler">
+              <organization/>
+            </author>
+            <date year="2018"/>
+          </front>
+        </reference>
+        <reference anchor="FAPI-CIBA" target="https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html">
+          <front>
+            <title>UMA Federated Authorization</title>
+            <author initials="G." surname="Fernandez">
+              <organization/>
+            </author>
+            <date year="2021"/>
+          </front>
+        </reference>
+        
+       
       </references>
     </references>
  </back>
