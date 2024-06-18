@@ -70,9 +70,9 @@
     
     <section>
       <name>Introduction</name>
-      <t>In Research and education (R&E), we see new standards evolving (e.g. in AARC https://aarc-project.eu) that address the use-cases that
+      <t>In Research and education (R&amp;E), we see new standards evolving (e.g. in AARC https://aarc-project.eu) that address the use-cases that
       are particularly relevant in that environment, and that are not addressed by existing OAuth standards. This is linked to a move away from
-      authentication mechanisms like passwords, SSH keys and X.509 certificates towards token based authentication. In R&E, we see that the
+      authentication mechanisms like passwords, SSH keys and X.509 certificates towards token based authentication. In R&amp;E, we see that the
       organisations in control of the various resource servers and clients work together in communities. These communities run an authorization
       server and manage trust and authorization policies. In this context we see that the authorization server does not have detailed knowledge
       of the resources and access modes that a resource server can offer, and thus is not well-placed to present a scope selection GUI that goes
