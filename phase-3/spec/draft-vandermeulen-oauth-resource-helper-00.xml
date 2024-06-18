@@ -196,6 +196,10 @@
       <t>
       The Resource Helper should not display any information that the currently authenticated user is allowed to see, even if it is instructed to display them through the scope parameter that comes from the Authorization Server.
       </t>
+      <t>
+      The scope coming back from the Resource Helper should not need to be interpreted in the context of a specific user. For instance, a scope 'my-billing-details:read' means different things for different resource owners. To avoid
+      confusion, use a globally unambiguous scope identifier, such as 'user-123:billing-detals:read'.
+      </t>
     </section>
   </middle>
 
