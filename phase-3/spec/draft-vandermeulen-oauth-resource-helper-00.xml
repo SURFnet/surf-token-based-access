@@ -33,18 +33,18 @@
           <code>3511 EP</code>
           <city>Utrecht</city>
           <country>NL</country>
-        </postal>        
+        </postal>
         <email>pieter.vandermeulen@surf.nl</email>
       </address>
     </author>
-  
+
     <author fullname="Michiel de Jong" initials="M.B." surname="de Jong">
       <organization>Ponder Source</organization>
       <address>
         <email>michiel@unhosted.org</email>
       </address>
     </author>
-   
+
     <date year="2024"/>
 
     <area>General</area>
@@ -63,11 +63,11 @@
       for viewing them.
       </t>
     </abstract>
- 
+
   </front>
 
   <middle>
-    
+
     <section>
       <name>Introduction</name>
       <t>
@@ -76,7 +76,7 @@
       From the Revokation interface, the Authorization Server may also redirect the Resource Owner to the Resource Helper's View endpoint, to allow them to view the details
       of previously granted access, and help the Resource Owner decide whether it should be revoked or not.
       </t>
-      
+
       <section>
         <name>Requirements Language</name>
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
@@ -89,7 +89,7 @@
       <!-- [CHECK] The 'Requirements Language' section is optional -->
 
     </section>
-    
+
     <section>
       <name>Viewing Access Token Scopes</name>
       <t>During the Authorization Code Flow as described in <xref target="OAUTH2.1"/>, the authorization server authenticates the resource owner (via the user agent)
@@ -138,7 +138,7 @@
 
       Similarly, the scope parameter in the URI of the view and pick endpoint may already take the form of an identifier, to be dereferenced with a query to a resource registry of some sort.
       </t>
-    </section>   
+    </section>
 
     <section>
       <name>Decoupled authentication</name>
@@ -156,7 +156,7 @@
       The authorization server is trusting the resource helper to select the access token scope to be granted, and the resource helper is subsequently trusting the authorization server to select the client that will
       receive this access. In a way, the resource helper is granting access to the resource, and the authorization server is delegating, or forwarding this grant, to the client.
       </t>
-    </section>   
+    </section>
 
     <section>
       <name>Where Are You Going?</name>
@@ -166,18 +166,18 @@
       Similarly, if a client is able to interact with multiple resource servers, the authorization server might display a "Where Are You Going?" page before redirecting the end user to the view or pick endpoint of the resource
       helper that corresponds to the resource server of their choice.
       </t>
-    </section>   
+    </section>
 
     <section anchor="IANA">
       <name>IANA Considerations</name>
       <t>This memo includes no request to IANA.</t>
     </section>
-    
+
     <section anchor="Security">
       <name>Security Considerations</name>
       <t>It is important to understand the value of the redirect back from resource helper to authorization server. It already contains an access grant as a half-product, for the authorization server to finalize by actually issuing
       it to a client.
-      
+
       This model differs from the Lodging Intent pattern used in <xref target="FAPI-CIBA"/>, where the intent is only a description of some intended transaction, directly between client and resource server, which does not imply that
       it was composed by an authenticated resource owner.
       </t>
@@ -190,7 +190,7 @@
       <references>
         <name>Normative References</name>
       </references>
- 
+
       <references>
         <name>Informative References</name>
       </references>
