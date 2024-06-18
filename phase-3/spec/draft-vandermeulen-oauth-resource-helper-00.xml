@@ -193,6 +193,9 @@
       </t><t>
       The Authorization Server should be careful not to redirect the user to the wrong URL, put a nonce in the state parameter and check that when accepting the callback redirect, and to always use https.
       </t>
+      <t>
+      The Resource Helper should not display any information that the currently authenticated user is allowed to see, even if it is instructed to display them through the scope parameter that comes from the Authorization Server.
+      </t>
     </section>
   </middle>
 
