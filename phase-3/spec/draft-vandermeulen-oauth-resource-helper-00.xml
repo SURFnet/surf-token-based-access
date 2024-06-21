@@ -145,6 +145,9 @@
       </t><t>
       Similarly, the scope parameter in the URI of the view and pick endpoint may be an element from a finite list, a string that fits a template or some other semantics, or take the form of an identifier,
       to be dereferenced with a query to some form of resource registry.
+      </t><t>
+      With a Resource Helper in play, there are four places where a scope parameter might be specified: from client to AS, from AS to RH, from RH back to AS, and from AS back to client.
+      The scopes that exist between client and AS may (partially) match those that exist between AS and RH, but they don't have to.
       </t>
     </section>
 
