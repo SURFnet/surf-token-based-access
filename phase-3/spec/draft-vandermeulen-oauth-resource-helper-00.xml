@@ -174,7 +174,7 @@
       Similarly, if a client is able to interact with multiple resource servers, the authorization server might display a "Where Are You Going?" page before redirecting the end user to the view or pick endpoint of the resource
       helper that corresponds to the resource server of their choice.
       </t><t>
-      The Authorization Server should then somehow let the client know which authorization server was picked, but the mechanism for this is not in scope for this document.
+      The Authorization Server should then somehow let the client know which resource server was picked, but the mechanism for this is not in scope for this document.
       </t>
     </section>
 
