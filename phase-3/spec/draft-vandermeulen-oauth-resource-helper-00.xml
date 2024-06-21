@@ -156,6 +156,20 @@
     </section>
 
     <section>
+      <name>Human-readable label</name>
+      <t>
+        Even though the detailed view of an access scope can only be provided by the resource helper, it is still useful if the authorisation server can at least display a string
+        label. In particular, when the authorisation server displays the final confirmation dialog, to grant the viewed or picked scope to the client in question, it could display
+        this label in much the same way as it will likely display the client label there. Also, when displaying a list of currently valid tokens, with option to revoke, it would be
+        cumbersome for the user to click 'view' on each of them, and displaying a list of one-line labels would be more convenient there.
+      </t>
+      <t>
+        This label could be produced programmatically by the resource helper, or hand-picked by the resource owner. In case a resource registry is used, it could be added
+        there as a custom field. If no resource registry is used, it could also be added as an additional response parameter in the front channel. [TODO: is that secure?]
+      </t>
+    </section>
+
+    <section>
       <name>Access Decision</name>
       <t>
         A resource server needs to take an access decision based on the full details of the scope that was selected at the resource helper. This information needs to reach it
