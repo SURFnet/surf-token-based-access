@@ -148,6 +148,25 @@
       </t><t>
       With a Resource Helper in play, there are four places where a scope parameter might be specified: from client to AS, from AS to RH, from RH back to AS, and from AS back to client.
       The scopes that exist between client and AS may (partially) match those that exist between AS and RH, but they don't have to.
+      </t><t>
+      When a scope is approved or minted in the resource helper, some interaction may be necessary to later make the resource server correctly understand the access scope of the
+      access token. For instance, the resource helper may insert an entry in the policy registry of the resource server, and ask the authorization server to insert a reference to
+      that into the token, or into the introspect response.
+      </t>
+    </section>
+
+    <section>
+      <name>Access Decision</name>
+      <t>
+        A resource server needs to take an access decision based on the full details of the scope that was selected at the resource helper. This information needs to reach it
+        somehow, either through access token payload or through token introspection.
+      </t>
+      <t>
+        Note that <xref target="I-D.ietf-gnap-resource-servers"/> already defines such a mechanism, where the resource helper could provide some custom data to be included
+        into the introspection response. Similar mechanisms could be used to allow the resource helper to include data into the token payload.
+      </t>
+      <t>
+        The resource helper might also share state with the resource server that helps the resource server to understand the access tokens issued by the authorisation server.
       </t>
     </section>
 
