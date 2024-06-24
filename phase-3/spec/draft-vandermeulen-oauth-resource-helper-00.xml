@@ -75,6 +75,17 @@
       Optionally, the Resource Helper may submit the selected access scope to a resource registry, and refer to it by an identifier rather than by a self-contained description.
       From the Revokation interface, the Authorization Server may also redirect the Resource Owner to the Resource Helper's View endpoint, to allow them to view the details
       of previously granted access, and help the Resource Owner decide whether a given token should be revoked or not.
+      <t>
+      </t>
+      During the Authorization Code Flow as described in <xref target="I-D.ietf-oauth-v2-1"/>, the authorization server authenticates the resource owner (via the user agent)
+      and establishes whether the resource owner grants or denies the client's access request. For the authorization server to meaningfully measure if the resource owner wants to
+      grant or deny the request, it needs to display, presumably via the user agent, the details of the access token scope in a way that the resource owner will understand.
+      </t><t>
+      Displaying access token scope details via the user agent may involve describing specific resources and actions, in a human-readable, probably locale-dependent, and possibly even
+      persona-dependent way. When the API of the Resource Server changes, the method of displaying access token scope details may also need to change. For instance, if a feature
+      is added that allows the end user to add a photo to an event in a calendar, then the description of an "events:654234:write" access token scope may need to change from
+      "edit the date and title of 'Birthday Bash'" to "upload photos and edit details of 'Birthday Bash'", and it may make sense to display the event's primary photo,
+      so the resource owner can better understand the access token scope they are granting, leading to a more informed decision and thus better security.
       </t>
 
       <section>
@@ -90,67 +101,78 @@
 
     <section>
       <name>Viewing Access Token Scopes</name>
-      <t>During the Authorization Code Flow as described in <xref target="I-D.ietf-oauth-v2-1"/>, the authorization server authenticates the resource owner (via the user agent)
-      and establishes whether the resource owner grants or denies the client's access request. For the authorization server to meaningfully measure if the resource owner wants to
-      grant or deny the request, it needs to display, presumably via the user agent, the details of the access token scope in a way that the resource owner will understand.
-      </t><t>
-      Displaying access token scope details via the user agent may involve describing specific resources and actions, in a human-readable, probably locale-dependent, and possibly even
-      persona-dependent way. When the API of the Resource Server changes, the method of displaying access token scope details may also need to change. For instance, if a feature
-      is added that allows the end user to add a photo to an event in a calendar, then the description of an "events:654234:write" access token scope may need to change from
-      "edit the date and title of 'Birthday Bash'" to "upload photos and edit details of 'Birthday Bash'", and it may make sense to display the event's primary photo,
-      so the resource owner can better understand the access token scope they are granting, leading to a more informed decision and thus better security.
-      </t><t>
-      The view endpoint of the resource helper is a web page the authorization server can link to, which is specialized in displaying an access token scope for the resource owner to understand.
-      It takes a 'scope' parameter, an 'actions' parameter and optional 'redirect_uri' and 'state' parameters.
-      The 'action' parameter should be a space-delimited list of valid actions, for instance 'grant reject' for use from an authorization endpoint, or 'revoke cancel' for use in a revokation interface.
+      <t><t>
+      The view endpoint of the resource helper is a web page the authorization server can link to, which is specialized in displaying
+      an access token scope for the resource owner to understand.
+      It takes 'scope', 'actions', 'redirect_uri', and optionally 'state' as its parameters.
+      The 'action' parameter should be a space-delimited list of valid actions, as agreed between Authorization Server and Resource Helper,
+      for instance 'grant reject' for use from an
+      authorization endpoint, or 'revoke cancel' for use in a revokation interface.
       Example:
       </t><t>
-      https://view.example.org/?scope=events:654234:write&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fauthorize&amp;state=xyz
+      https://view.example.org/?scope=events:654234:write&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fcontinue&amp;state=xyz
       </t><t>
-      The view endpoint will allow the resource owner to grant/reject, after which they will be redirected back. The scope and state parameters will be copied, and the 'action' parameter
+      The view endpoint will allow the resource owner to grant/reject, after which they will be redirected back.
+      The scope and state parameters will be copied, and the 'action' parameter
       will be replaced by the applicable choice, for instance:
       </t><t>
-      https://example.org/authorize?scope=events:654234:write&amp;action=grant&amp;state=xyz
+      https://example.org/continue?scope=events:654234:write&amp;action=grant&amp;state=xyz
       </t>
     </section>
 
     <section>
       <name>Picking Access Token Scopes</name>
-      <t>The issued access token scope may be different from the one requested by the client, based on the authorization server policy or the resource owner's instructions.
-      To allow the resource owner to instruct the authorization server to grant a smaller, larger, or different access token scope than what the client requested, especially in the case
-      where the client only specified the requested scope in generic terms, or not at all, the requirements for viewing access token scopes need to be augmented with a requirement to allow
+      <t>The issued access token scope may be different from the one requested by the client,
+      based on the authorization server policy or the resource owner's instructions.
+      To allow the resource owner to instruct the authorization server to grant a smaller, larger,
+      or different access token scope than what the client requested, especially in the case
+      where the client only specified the requested scope in generic terms, or not at all,
+      the requirements for viewing access token scopes need to be augmented with a requirement to allow
       the user to select, deselect, and browse specific aspects of it.
       </t><t>
-      In some use cases, a client may generically ask for access to "a photo" or "a folder", without specifying a specific one, and the resource owner may have a chance to browse through a
-      photo collection or a folder tree to select a specific one. Here too, each time the functionalities of the resource server change, the resource browser interface may also need to change.
+      In some use cases, a client may generically ask for access to "a photo" or "a folder",
+      without specifying a specific one, and the resource owner may have a chance to browse through a
+      photo collection or a folder tree to select a specific one. Here too, each time the
+      functionalities of the resource server change, the resource browser interface may also need to change.
       </t><t>
-      The pick endpoint of the resource helper takes the same parameters as the view endpoint, but allows the user to influence the details of the scope.
+      The pick endpoint of the resource helper takes the same parameters as the view endpoint,
+      but allows the user to influence the details of the scope.
       Example:
       </t><t>
-      https://pick.example.org/?scope=webdav-folder&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fauthorize&amp;state=xyz
+      https://pick.example.org/?scope=webdav-folder&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fcontinue&amp;state=xyz
       </t><t>
       After allowing the user to pick a fine-grained access scope, they might be redirected back to the main authorization server with for instance:
       </t><t>
-      https://example.org/authorize?scope=/home/john/pictures/4:write&amp;action=grant&amp;state=xyz
+      https://example.org/continue?scope=/home/john/pictures/4:write&amp;action=grant&amp;state=xyz
       </t>
     </section>
 
     <section>
       <name>Resource registry and scope templates</name>
       <t>
-      In the previous section the scope '/home/john/pictures/4:write' was used as an example of a scope that may be picked. This scope may fit into a template, for instance "&lt;file_path&gt;:&lt;read | write&gt;".
-      In simple cases the scope may come from a finite list which both the Authorization Server and the Resource Helper are configured with.
+      In the previous section the scope '/home/john/pictures/4:write' was used as an example
+      of a scope that may be picked. This scope may fit into a template,
+      for instance "&lt;file_path&gt;:&lt;read | write&gt;".
+      In simple cases the scope may come from a finite list which both the Authorization Server
+      and the Resource Helper are configured with.
       The string could also be parseable as JSON or some other syntax.
-      Alternatively, the resource helper could register a resource set dynamically, as described in <xref target="I-D.ietf-gnap-resource-servers"/>, or as described in <xref target="UMA-Fed-Authz"/> and respond with just an identifier for it.
+      Alternatively, the resource helper could register a resource set dynamically,
+      as described in <xref target="I-D.ietf-gnap-resource-servers"/>,
+      or as described in <xref target="UMA-Fed-Authz"/> and respond with just an identifier for it.
       </t><t>
-      Similarly, the scope parameter in the URI of the view and pick endpoint may be an element from a finite list, a string that fits a template or some other semantics, or take the form of an identifier,
+      Similarly, the scope parameter in the URI of the view and pick endpoint may be an
+      element from a finite list, a string that fits a template
+      or some other semantics, or take the form of an identifier,
       to be dereferenced with a query to some form of resource registry.
       </t><t>
-      With a Resource Helper in play, there are four places where a scope parameter might be specified: from client to AS, from AS to RH, from RH back to AS, and from AS back to client.
+      With a Resource Helper in play, there are four places where a scope parameter might be specified:
+      from client to AS, from AS to RH, from RH back to AS, and from AS back to client.
       The scopes that exist between client and AS may (partially) match those that exist between AS and RH, but they don't have to.
       </t><t>
-      When a scope is approved or minted in the resource helper, some interaction may be necessary to later make the resource server correctly understand the access scope of the
-      access token. For instance, the resource helper may insert an entry in the policy registry of the resource server, and ask the authorization server to insert a reference to
+      When a scope is approved or minted in the resource helper, some interaction may be necessary to
+      later make the resource server correctly understand the access scope of the
+      access token. For instance, the resource helper may insert an entry in the policy registry of
+      the resource server, and ask the authorization server to insert a reference to
       that into the token, or into the introspect response.
       </t>
     </section>
@@ -158,59 +180,78 @@
     <section>
       <name>Human-readable label</name>
       <t>
-        Even though the detailed view of an access scope can only be provided by the resource helper, it is still useful if the authorisation server can at least display a string
-        label. In particular, when the authorisation server displays the final confirmation dialog, to grant the viewed or picked scope to the client in question, it could display
-        this label in much the same way as it will likely display the client label there. Also, when displaying a list of currently valid tokens, with option to revoke, it would be
+        Even though the detailed view of an access scope can only be provided by the resource helper,
+        it is still useful if the authorisation server can at least display a string
+        label. In particular, when the authorisation server displays the final confirmation dialog,
+        to grant the viewed or picked scope to the client in question, it could display
+        this label in much the same way as it will likely display the client label there.
+        Also, when displaying a list of currently valid tokens, with option to revoke, it would be
         cumbersome for the user to click 'view' on each of them, and displaying a list of one-line labels would be more convenient there.
       </t>
       <t>
-        This label could be produced programmatically by the resource helper, or hand-picked by the resource owner. In case a resource registry is used, it could be added
-        there as a custom field. If no resource registry is used, it could also be added as an additional response parameter in the front channel. [TODO: is that secure?]
+        This label could be produced programmatically by the resource helper, or hand-picked by the resource owner.
+        In case a resource registry is used, it could be added
+        there as a custom field. If no resource registry is used, it could also be added as an additional
+        response parameter in the front channel. [TODO: is that secure?]
       </t>
     </section>
 
     <section>
       <name>Access Decision</name>
       <t>
-        A resource server needs to take an access decision based on the full details of the scope that was selected at the resource helper. This information needs to reach it
+        A resource server needs to take an access decision based on the full details of the scope that was
+        selected at the resource helper. This information needs to reach it
         somehow, either through access token payload or through token introspection.
       </t>
       <t>
-        Note that <xref target="I-D.ietf-gnap-resource-servers"/> already defines such a mechanism, where the resource helper could provide some custom data to be included
+        Note that <xref target="I-D.ietf-gnap-resource-servers"/> already defines such a mechanism,
+        where the resource helper could provide some custom data to be included
         into the introspection response. Similar mechanisms could be used to allow the resource helper to include data into the token payload.
       </t>
       <t>
-        The resource helper might also share state with the resource server that helps the resource server to understand the access tokens issued by the authorisation server.
+        The resource helper might also share state with the resource server that helps the resource
+        server to understand the access tokens issued by the authorisation server.
       </t>
     </section>
 
     <section>
       <name>Decoupled authentication</name>
       <t>
-      Before redirecting to the resource helper, the authorization server may already have taken some measures to authenticate the user of the current user agent session.
-      The resource helper is, however, responsible for its own authentication measures. In many cases this can however rely on the same sign-in mechanisms, and not require any additional clicks from the user.
+      Before redirecting to the resource helper, the authorization server may already have taken some
+      measures to authenticate the user of the current user agent session.
+      The resource helper is, however, responsible for its own authentication measures. In many cases
+      this can however rely on the same sign-in mechanisms, and not require any additional clicks from the user.
       </t><t>
-      The resource helper is responsible for making sure the authenticated user is allowed to delegate the scope they select. The response coming back from the resource helper should thus be interpreted as a
-      decision made by the resource owner as identified by the resource helper, which may be different person from the one authenticated to the main authorization server.
+      The resource helper is responsible for making sure the authenticated user is allowed to delegate
+      the scope they select. The response coming back from the resource helper should thus be interpreted as a
+      decision made by the resource owner as identified by the resource helper, which may be different
+      person from the one authenticated to the main authorization server.
       </t><t>
-      This decoupling is by design, and will allow for scenarios where the resource helper refers to a different set of user identifiers than the authorization server. For instance, the resource server may be
-      self-hosted by the resource owner, with the resource owner authenticating as 'admin', whereas the authorization server may be hosted by a university, with the resource owner authenticating with their student
+      This decoupling is by design, and will allow for scenarios where the resource helper refers to a
+      different set of user identifiers than the authorization server. For instance, the resource server may be
+      self-hosted by the resource owner, with the resource owner authenticating as 'admin', whereas the
+      authorization server may be hosted by a university, with the resource owner authenticating with their student
       number.
       </t><t>
-      The authorization server is trusting the resource helper to select the access token scope to be granted, and the resource helper is subsequently trusting the authorization server to select the client that will
-      receive this access. In a way, the resource helper is granting access to the resource, and the authorization server is delegating, or forwarding this grant, to the client.
+      The authorization server is trusting the resource helper to select the access token scope to be granted,
+      and the resource helper is subsequently trusting the authorization server to select the client that will
+      receive this access. In a way, the resource helper is granting access to the resource, and the authorization
+      server is delegating, or forwarding this grant, to the client.
       </t>
     </section>
 
     <section>
       <name>Where Are You Going?</name>
       <t>
-      In Research and Education (R&amp;E) it is common for authentication flows to involve a "Where Are You From?" page, where the end user can select their identity provider from for instance a list of thousands of universities, grouped per country.
+      In Research and Education (R&amp;E) it is common for authentication flows to involve a "Where Are You From?" page,
+      where the end user can select their identity provider from for instance a list of thousands of universities, grouped per country.
       </t><t>
-      Similarly, if a client is able to interact with multiple resource servers, the authorization server might display a "Where Are You Going?" page before redirecting the end user to the view or pick endpoint of the resource
+      Similarly, if a client is able to interact with multiple resource servers, the authorization server might
+      display a "Where Are You Going?" page before redirecting the end user to the view or pick endpoint of the resource
       helper that corresponds to the resource server of their choice.
       </t><t>
-      The Authorization Server should then somehow let the client know which resource server was picked, but the mechanism for this is not in scope for this document.
+      The Authorization Server should then somehow let the client know which resource server was picked,
+      but the mechanism for this is not in scope for this document.
       </t>
     </section>
 
@@ -221,21 +262,26 @@
 
     <section anchor="Security">
       <name>Security Considerations</name>
-      <t>It is important to understand the value of the redirect back from resource helper to authorization server. It already contains an access grant as a half-product, for the authorization server to finalize by actually issuing
+      <t>It is important to understand the value of the redirect back from resource helper to authorization server.
+      It already contains an access grant as a half-product, for the authorization server to finalize by actually issuing
       it to a client.
       </t><t>
-      This model differs from the Lodging Intent pattern used in <xref target="FAPI-CIBA"/>, where the intent is only a description of some intended transaction, directly between client and resource server, which does not imply that
+      This model differs from the Lodging Intent pattern used in <xref target="FAPI-CIBA"/>, where the intent is only
+      a description of some intended transaction, directly between client and resource server, which does not imply that
       it was composed by an authenticated resource owner.
       </t><t>
       It's up to the Authorization Server and the Resource Helper to share their understanding of the various values of 'action'.
       </t><t>
-      The Authorization Server should be careful not to redirect the user to the wrong URL, put a nonce in the state parameter and check that when accepting the callback redirect, and to always use https.
+      The Authorization Server should be careful not to redirect the user to the wrong URL, put a nonce in the state
+      parameter and check that when accepting the callback redirect, and to always use https.
       </t>
       <t>
-      The Resource Helper should not display any information that the currently authenticated user is allowed to see, even if it is instructed to display them through the scope parameter that comes from the Authorization Server.
+      The Resource Helper should not display any information that the currently authenticated user is allowed to see,
+      even if it is instructed to display them through the scope parameter that comes from the Authorization Server.
       </t>
       <t>
-      The scope coming back from the Resource Helper should not need to be interpreted in the context of a specific user. For instance, a scope 'my-billing-details:read' means different things for different resource owners. To avoid
+      The scope coming back from the Resource Helper should not need to be interpreted in the context of a specific user.
+      For instance, a scope 'my-billing-details:read' means different things for different resource owners. To avoid
       confusion, use a globally unambiguous scope identifier, such as 'user-123:billing-detals:read'.
       </t>
     </section>
