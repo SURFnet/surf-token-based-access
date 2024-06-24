@@ -75,8 +75,8 @@
       Optionally, the Resource Helper may submit the selected access scope to a resource registry, and refer to it by an identifier rather than by a self-contained description.
       From the Revokation interface, the Authorization Server may also redirect the Resource Owner to the Resource Helper's View endpoint, to allow them to view the details
       of previously granted access, and help the Resource Owner decide whether a given token should be revoked or not.
-      <t>
       </t>
+      <t>
       During the Authorization Code Flow as described in <xref target="I-D.ietf-oauth-v2-1"/>, the authorization server authenticates the resource owner (via the user agent)
       and establishes whether the resource owner grants or denies the client's access request. For the authorization server to meaningfully measure if the resource owner wants to
       grant or deny the request, it needs to display, presumably via the user agent, the details of the access token scope in a way that the resource owner will understand.
@@ -101,11 +101,11 @@
 
     <section>
       <name>Viewing Access Token Scopes</name>
-      <t><t>
+      <t>
       The view endpoint of the resource helper is a web page the authorization server can link to, which is specialized in displaying
       an access token scope for the resource owner to understand.
-      It takes 'scope', 'actions', 'redirect_uri', and optionally 'state' as its parameters.
-      The 'action' parameter should be a space-delimited list of valid actions, as agreed between Authorization Server and Resource Helper,
+      It SHOULD take 'scope', 'actions', 'redirect_uri', and optionally 'state' as its parameters.
+      The 'action' parameter SHOULD be a space-delimited list of valid actions, as agreed between Authorization Server and Resource Helper,
       for instance 'grant reject' for use from an
       authorization endpoint, or 'revoke cancel' for use in a revokation interface.
       Example:
@@ -136,7 +136,7 @@
       functionalities of the resource server change, the resource browser interface may also need to change.
       </t><t>
       The pick endpoint of the resource helper takes the same parameters as the view endpoint,
-      but allows the user to influence the details of the scope.
+      but SHOULD allow the user to influence the details of the scope.
       Example:
       </t><t>
       https://pick.example.org/?scope=webdav-folder&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fcontinue&amp;state=xyz
@@ -153,14 +153,14 @@
       In the previous section the scope '/home/john/pictures/4:write' was used as an example
       of a scope that may be picked. This scope may fit into a template,
       for instance "&lt;file_path&gt;:&lt;read | write&gt;".
-      In simple cases the scope may come from a finite list which both the Authorization Server
+      In simple cases the scope MAY come from a finite list which both the Authorization Server
       and the Resource Helper are configured with.
       The string could also be parseable as JSON or some other syntax.
       Alternatively, the resource helper could register a resource set dynamically,
       as described in section 3.4 of <xref target="I-D.ietf-gnap-resource-servers"/>,
       or as described in section 3.2 of <xref target="UMA-Fed-Authz"/> and respond with just an identifier for it.
       </t><t>
-      Similarly, the scope parameter in the URI of the view and pick endpoint may be an
+      Similarly, the scope parameter in the URI of the view and pick endpoint MAY be an
       element from a finite list, a string that fits a template
       or some other semantics, or take the form of an identifier,
       to be dereferenced with a query to some form of resource registry.
@@ -194,8 +194,8 @@
       </t>
       <t>
         This label could be produced programmatically by the resource helper, or hand-picked by the resource owner.
-        In case a resource registry is used, it could be added
-        there as a custom field. If no resource registry is used, it could also be added as an additional
+        In case a resource registry is used, it MAY be added
+        there as a custom field. If no resource registry is used, it MAY also be added as an additional
         response parameter in the front channel. [TODO: is that secure?]
       </t>
     </section>
