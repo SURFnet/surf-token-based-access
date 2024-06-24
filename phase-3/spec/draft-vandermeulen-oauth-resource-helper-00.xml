@@ -60,7 +60,7 @@
       when the API of a Resource Server evolves. The Resource Helper still needs to adapt in lock-step with API changes,
       but the rest of the Authorization Server can be managed on a more stable software deployment cycle.
       The Resource Helper provides two endpoints: a "view" endpoint for that can display access scopes in detail, and a "pick" endpoint
-      for selecting them.
+      for selecting them. Some optional additional interactions are also discussed.
       </t>
     </abstract>
 
@@ -71,10 +71,10 @@
     <section>
       <name>Introduction</name>
       <t>
-      The Authorization Server may redirect the Resource Owner to the Resource Helper's View or Pick endpoint, as part of the authorization request.
-      Optionally, the Pick endpoint may submit the selected access scope to a resource registry, and refer to it by an identifier rather than by a self-contained description.
+      The Authorization Server may redirect the Resource Owner to the Resource Helper's View or Pick endpoint, as part of the authorization flow.
+      Optionally, the Resource Helper may submit the selected access scope to a resource registry, and refer to it by an identifier rather than by a self-contained description.
       From the Revokation interface, the Authorization Server may also redirect the Resource Owner to the Resource Helper's View endpoint, to allow them to view the details
-      of previously granted access, and help the Resource Owner decide whether it should be revoked or not.
+      of previously granted access, and help the Resource Owner decide whether a given token should be revoked or not.
       </t>
 
       <section>
@@ -91,8 +91,8 @@
     <section>
       <name>Viewing Access Token Scopes</name>
       <t>During the Authorization Code Flow as described in <xref target="I-D.ietf-oauth-v2-1"/>, the authorization server authenticates the resource owner (via the user agent)
-      and establishes whether the resource owner grants or denies the client's access request. For the authorization server to meaningfully measure if the resource owner
-      grants or denies the request, it needs to display, presumably via the user agent, the details of the access token scope in a way that the resource owner will understand.
+      and establishes whether the resource owner grants or denies the client's access request. For the authorization server to meaningfully measure if the resource owner wants to
+      grant or deny the request, it needs to display, presumably via the user agent, the details of the access token scope in a way that the resource owner will understand.
       </t><t>
       Displaying access token scope details via the user agent may involve describing specific resources and actions, in a human-readable, probably locale-dependent, and possibly even
       persona-dependent way. When the API of the Resource Server changes, the method of displaying access token scope details may also need to change. For instance, if a feature
