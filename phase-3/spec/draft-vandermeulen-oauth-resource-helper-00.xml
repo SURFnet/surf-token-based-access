@@ -201,20 +201,24 @@
     </section>
 
     <section>
-      <name>Access Decision</name>
+      <name>Resource Server Access</name>
       <t>
-        A resource server needs to take an access decision based on the full details of the scope that was
+        When the client attempts to access a given resource using a given access token,
+        the resource server needs to take a decision.
+        It needs to accept or reject the resource request,
+        based on the full details of the access token scope that was
         selected at the resource helper. This information needs to reach it
         somehow, either through access token payload or through token introspection.
       </t>
       <t>
-        Note that <xref target="I-D.ietf-gnap-resource-servers"/> already defines such a mechanism,
-        where the resource helper could provide some custom data to be included
-        into the introspection response. Similar mechanisms could be used to allow the resource helper to include data into the token payload.
+        Note that <xref target="I-D.ietf-gnap-resource-servers"/> already defines a mechanism
+        where some custom data could be included into a resource registration,
+        for inclusion in the introspection response.
+        Similar mechanisms could be used to allow the resource helper to include data into the token payload.
       </t>
       <t>
         The resource helper might also share state with the resource server that helps the resource
-        server to understand the access tokens issued by the authorisation server.
+        server to understand the scope of the access tokens issued by the authorisation server.
       </t>
     </section>
 
@@ -222,14 +226,14 @@
       <name>Decoupled authentication</name>
       <t>
       Before redirecting to the resource helper, the authorization server may already have taken some
-      measures to authenticate the user of the current user agent session.
+      measures to authenticate the user in the current user agent session.
       The resource helper is, however, responsible for its own authentication measures. In many cases
       this can however rely on the same sign-in mechanisms, and not require any additional clicks from the user.
       </t><t>
       The resource helper is responsible for making sure the authenticated user is allowed to delegate
       the scope they select. The response coming back from the resource helper should thus be interpreted as a
       decision made by the resource owner as identified by the resource helper, which may be different
-      person from the one authenticated to the main authorization server.
+      from the one authenticated to the main authorization server.
       </t><t>
       This decoupling is by design, and will allow for scenarios where the resource helper refers to a
       different set of user identifiers than the authorization server. For instance, the resource server may be
@@ -240,14 +244,14 @@
       The authorization server is trusting the resource helper to select the access token scope to be granted,
       and the resource helper is subsequently trusting the authorization server to select the client that will
       receive this access. In a way, the resource helper is granting access to the resource, and the authorization
-      server is delegating, or forwarding this grant, to the client.
+      server is delegating, or forwarding this grant, binding it to a particular client.
       </t>
     </section>
 
     <section>
       <name>Where Are You Going?</name>
       <t>
-      In Research and Education (R&amp;E) it is common for authentication flows to involve a "Where Are You From?" page,
+      In Research and Education it is common for authentication flows to involve a "Where Are You From?" page,
       where the end user can select their identity provider from for instance a list of thousands of universities, grouped per country.
       </t><t>
       Similarly, if a client is able to interact with multiple resource servers, the authorization server might
@@ -280,13 +284,18 @@
       parameter and check that when accepting the callback redirect, and to always use https.
       </t>
       <t>
-      The Resource Helper should not display any information that the currently authenticated user is allowed to see,
+      The Resource Helper should not display any information that the currently authenticated user is not allowed to see,
       even if it is instructed to display them through the scope parameter that comes from the Authorization Server.
+      </t>
+      <t>
+      The Resource Helper should only grant access to resources for which the currently authenticated user is a resource owner.
+      The resulting access token scope should always be a subset (attenuation) of the Resource Owner's own access scope.
       </t>
       <t>
       The scope coming back from the Resource Helper should not need to be interpreted in the context of a specific user.
       For instance, a scope 'my-billing-details:read' means different things for different resource owners. To avoid
-      confusion, use a globally unambiguous scope identifier, such as 'user-123:billing-detals:read'.
+      confusion, especially in the light of decoupled authentication (see above), use a globally unambiguous scope
+      identifier such as 'user-123:billing-detals:read'.
       </t>
     </section>
   </middle>
