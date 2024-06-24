@@ -157,8 +157,8 @@
       and the Resource Helper are configured with.
       The string could also be parseable as JSON or some other syntax.
       Alternatively, the resource helper could register a resource set dynamically,
-      as described in <xref target="I-D.ietf-gnap-resource-servers"/>,
-      or as described in <xref target="UMA-Fed-Authz"/> and respond with just an identifier for it.
+      as described in section 3.4 of <xref target="I-D.ietf-gnap-resource-servers"/>,
+      or as described in section 3.2 of <xref target="UMA-Fed-Authz"/> and respond with just an identifier for it.
       </t><t>
       Similarly, the scope parameter in the URI of the view and pick endpoint may be an
       element from a finite list, a string that fits a template
@@ -166,13 +166,17 @@
       to be dereferenced with a query to some form of resource registry.
       </t><t>
       With a Resource Helper in play, there are four places where a scope parameter might be specified:
-      from client to AS, from AS to RH, from RH back to AS, and from AS back to client.
-      The scopes that exist between client and AS may (partially) match those that exist between AS and RH, but they don't have to.
+      from client to Authorization Server, from Authorization Server to Resource Helper,
+      from Resource Helper back to Authorization Server, and from Authorization Server back to client.
+      The scopes that exist between client and Authorization Server may (partially)
+      match those that exist between Authorization Server and Resource Helper, but they don't have to.
+      After all, the scopes used between client and Authorization Server may be hard-coded into the software,
+      and cumbersome to evolve.
       </t><t>
       When a scope is approved or minted in the resource helper, some interaction may be necessary to
       later make the resource server correctly understand the access scope of the
-      access token. For instance, the resource helper may insert an entry in the policy registry of
-      the resource server, and ask the authorization server to insert a reference to
+      access token, at the time of API access. For instance, the resource helper may insert an entry in
+      the policy registry of the resource server, and ask the authorization server to insert a reference to
       that into the token, or into the introspect response.
       </t>
     </section>
@@ -184,7 +188,7 @@
         it is still useful if the authorisation server can at least display a string
         label. In particular, when the authorisation server displays the final confirmation dialog,
         to grant the viewed or picked scope to the client in question, it could display
-        this label in much the same way as it will likely display the client label there.
+        this label in much the same way as it will likely display some label for the client's identity there.
         Also, when displaying a list of currently valid tokens, with option to revoke, it would be
         cumbersome for the user to click 'view' on each of them, and displaying a list of one-line labels would be more convenient there.
       </t>
