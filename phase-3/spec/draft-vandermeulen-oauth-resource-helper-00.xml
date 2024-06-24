@@ -25,7 +25,7 @@
 
     <seriesInfo name="Internet-Draft" value="draft-vandermeulen-oauth-resource-helper-00"/>
 
-    <author fullname="Pieter van der Meulen" initials="P." surname="van der Meulen">
+    <author fullname="Pieter van der Meulen" initials="P.G.M." surname="van der Meulen">
       <organization>SURF</organization>
       <address>
         <postal>
@@ -59,7 +59,7 @@
       This makes the software architecture of the Authorization Server more modular, and can alleviate organisational challenges
       when the API of a Resource Server evolves. The Resource Helper still needs to adapt in lock-step with API changes,
       but the rest of the Authorization Server can be managed on a more stable software deployment cycle.
-      The Resource Helper provides two endpoints: a "view" endpoint for that can display access scopes in detail, and a "pick" endpoint
+      The Resource Helper provides two endpoints: a "view" endpoint that can display access scopes in detail, and a "pick" endpoint
       for selecting them. Some optional additional interactions are also discussed.
       </t>
     </abstract>
@@ -73,7 +73,7 @@
       <t>
       The Authorization Server may redirect the Resource Owner to the Resource Helper's View or Pick endpoint, as part of the authorization flow.
       Optionally, the Resource Helper may submit the selected access scope to a resource registry, and refer to it by an identifier rather than by a self-contained description.
-      From the Revokation interface, the Authorization Server may also redirect the Resource Owner to the Resource Helper's View endpoint, to allow them to view the details
+      From the Revocation interface, the Authorization Server may also redirect the Resource Owner to the Resource Helper's View endpoint, to allow them to view the details
       of previously granted access, and help the Resource Owner decide whether a given token should be revoked or not.
       </t>
       <t>
@@ -189,7 +189,7 @@
         label. In particular, when the authorisation server displays the final confirmation dialog,
         to grant the viewed or picked scope to the client in question, it could display
         this label in much the same way as it will likely display some label for the client's identity there.
-        Also, when displaying a list of currently valid tokens, with option to revoke, it would be
+        Also, when displaying a list of currently valid tokens, with the option to revoke, it would be
         cumbersome for the user to click 'view' on each of them, and displaying a list of one-line labels would be more convenient there.
       </t>
       <t>
@@ -212,7 +212,7 @@
       </t>
       <t>
         Note that <xref target="I-D.ietf-gnap-resource-servers"/> already defines a mechanism
-        where some custom data could be included into a resource registration,
+        where some custom data could be included in a resource registration,
         for inclusion in the introspection response.
         Similar mechanisms could be used to allow the resource helper to include data into the token payload.
       </t>
