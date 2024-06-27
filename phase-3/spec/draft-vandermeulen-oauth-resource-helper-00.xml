@@ -72,7 +72,7 @@
       <name>Introduction</name>
       <t>
       The Authorization Server may redirect the Resource Owner to the Resource Helper's View or Pick endpoint, as part of the authorization flow.
-      Optionally, the Resource Helper may submit the selected access scope to a resource registry, and refer to it by an identifier rather than by a self-contained description.
+      Optionally, the Resource Helper may submit the selected access scope to a resource registration endpoint, and refer to it by an identifier rather than by a self-contained description.
       From the Revokation interface, the Authorization Server may also redirect the Resource Owner to the Resource Helper's View endpoint, to allow them to view the details
       of previously granted access, and help the Resource Owner decide whether a given token should be revoked or not.
       </t>
@@ -148,7 +148,7 @@
     </section>
 
     <section>
-      <name>Resource registry and scope templates</name>
+      <name>resource registration endpoint and scope templates</name>
       <t>
       In the previous section the scope '/home/john/pictures/4:write' was used as an example
       of a scope that may be picked. This scope may fit into a template,
@@ -163,7 +163,7 @@
       Similarly, the scope parameter in the URI of the view and pick endpoint MAY be an
       element from a finite list, a string that fits a template
       or some other semantics, or take the form of an identifier,
-      to be dereferenced with a query to some form of resource registry.
+      to be dereferenced with a query to some form of resource registration endpoint.
       </t><t>
       With a Resource Helper in play, there are four places where a scope parameter might be specified:
       from client to Authorization Server, from Authorization Server to Resource Helper,
@@ -194,8 +194,8 @@
       </t>
       <t>
         This label could be produced programmatically by the resource helper, or hand-picked by the resource owner.
-        In case a resource registry is used, it MAY be added
-        there as a custom field. If no resource registry is used, it MAY also be added as an additional
+        In case a resource registration endpoint is used, it MAY be added
+        there as a custom field. If no resource registration endpoint is used, it MAY also be added as an additional
         response parameter in the front channel. [TODO: is that secure?]
       </t>
     </section>
