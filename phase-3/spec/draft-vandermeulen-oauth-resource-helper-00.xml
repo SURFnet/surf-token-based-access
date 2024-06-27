@@ -110,26 +110,38 @@
     | Resource |
     |   Owner  |
     +----------+
-          ^
-          |
-          |
-    +-----|----+          Client Identifier      +---------------+
-    | .---+---------(1)-- & Redirect URI ------->|               |
-    | |   |    |                                 |               |
-    | |   '---------(2)-- User authenticates --->|               |
+        ^   ^
+        |   |
+        |   |
+    +---|---|-+
+    |   |   | |                                  +---------------+
+    |   | .-+-------(3)-- Redirect to RH ------->|   Resource    |
+    |   | | '-------(4)-- User Authenticates --->|    Helper     |
+    |   | |  .------(5)-- Redirect back to AS --<|               |
+    |   | |  | |                                 +---------------+
+    |   | |  | |
+    |   | |  | |                                 +---------------+
+    |   | |  '---------------------------------->|               |
+    |   | |    |                                 |               |
+    |   | '---------(3)-- Redirect to RH -------<|               |
+    |   |      |                                 |               |
+    |   |      |          Client Identifier      |               |
+    | .-+-----------(1)-- & Redirect URI ------->|               |
+    | | |      |                                 |               |
+    | | '-----------(2)-- User authenticates --->|               |
     | | User-  |                                 | Authorization |
     | | Agent  |                                 |     Server    |
     | |        |                                 |               |
-    | |    .--------(3)-- Authorization Code ---<|               |
+    | |    .--------(6)-- Authorization Code ---<|               |
     +-|----|---+                                 +---------------+
       |    |                                         ^      v
       |    |                                         |      |
       ^    v                                         |      |
     +---------+                                      |      |
-    |         |>---(4)-- Authorization Code ---------'      |
+    |         |>---(7)-- Authorization Code ---------'      |
     |  Client |          & Redirect URI                     |
     |         |                                             |
-    |         |<---(5)----- Access Token -------------------'
+    |         |<---(8)----- Access Token -------------------'
     +---------+       (w/ Optional Refresh Token)
 
         ]]>
