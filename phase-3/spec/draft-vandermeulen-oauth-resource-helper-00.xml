@@ -350,21 +350,6 @@
       </t>
     </section>
 
-    <section>
-      <name>Where Are You Going?</name>
-      <t>
-      In Research and Education it is common for authentication flows to involve a "Where Are You From?" page,
-      where the end user can select their identity provider from for instance a list of thousands of universities, grouped per country.
-      </t><t>
-      Similarly, if a client is able to interact with multiple resource servers, the authorization server might
-      display a "Where Are You Going?" page before redirecting the end user to the view or pick endpoint of the resource
-      helper that corresponds to the resource server of their choice.
-      </t><t>
-      The Authorization Server should then somehow let the client know which resource server was picked,
-      but the mechanism for this is not in scope for this document.
-      </t>
-    </section>
-
     <section anchor="IANA">
       <name>IANA Considerations</name>
       <t>This memo includes no request to IANA.</t>
