@@ -80,7 +80,8 @@
       During the Authorization Code Flow as described in <xref target="I-D.ietf-oauth-v2-1"/>, the authorization server authenticates the resource owner (via the user agent)
       and establishes whether the resource owner grants or denies the client's access request. For the authorization server to meaningfully measure if the resource owner wants to
       grant or deny the request, it needs to display, presumably via the user agent, the details of the access token scope in a way that the resource owner will understand.
-      </t><t>
+      </t>
+      <t>
       Displaying access token scope details via the user agent may involve describing specific resources and actions, in a human-readable, probably locale-dependent, and possibly even
       persona-dependent way. When the API of the Resource Server changes, the method of displaying access token scope details may also need to change. For instance, if a feature
       is added that allows the end user to add a photo to an event in a calendar, then the description of an "events:654234:write" access token scope may need to change from
@@ -159,11 +160,14 @@
       authorization endpoint, or 'revoke cancel' for use in a revokation interface.
       The state parameter here SHOULD be a nonce that is bound to the resource helper.
       Example:
-      </t><t>
+      </t>
+      <t>
       https://view.example.org/?scope=events:654234:write&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fcontinue&amp;state=xyz
-      </t><t>
+      </t>
+      <t>
       The view endpoint will allow the resource owner to grant/reject, and this answer is submitted to the authorization server through the back channel.
-      </t><t>
+      </t>
+      <t>
       POST /choice
       Content-Type: application/json
       
@@ -172,10 +176,12 @@
         "state": "xyz"
       }
       </t>
+      <t>
       After this back channel call completes the user will be redirected back in the front channel.
       The authorization should check that the state parameter matches the nonce it had included in the initial redirect, and that an answer was received through
       the back channel.
-      </t><t>
+      </t>
+      <t>
       https://example.org/continue&amp;state=xyz
       </t>
     </section>
