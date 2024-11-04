@@ -61,7 +61,8 @@
         The Resource Helper still needs to adapt in lock-step with API changes,
         but the rest of the Authorization Server can be managed on a more stable software deployment cycle.
         The Resource Helper provides one front channel endpoint: a "pick" endpoint for selecting access scopes in detail.
-        The Authorization exposes a "choice" endpoint where the Resource Helper can submit the Resource Owner's choice.
+        The Authorization exposes a "choice" endpoint where the Resource Helper can submit the Resource Owner's choice,
+        an optional "subject_info" endpoint and a redirect end point for the front channel.
       </t>
     </abstract>
     
@@ -114,11 +115,10 @@
     <section>
       <name>Resource Helper Registry</name>
       <t>
-        The Authorization Server maintains a registry of Resource Helpers it trusts,
+        The Authorization Server SHOULD maintain a registry of Resource Helpers it trusts,
         with for each Resource Helper:
-        * a fully qualified domain name (for `/.well-known/resource-helper` lookup)
-        * a `client_id`
-        * a `client_password`
+        * a fully qualified domain name (for `/.well-known/resource-helper` lookup, see below)
+        * client credentials
       </t>
     </section>
 
@@ -134,52 +134,46 @@
       <name>Resource Helper Configuration</name>
       <t>
         The Resource Helper needs to store:
-        * its `client_id`
-        * its `client_password`
-        * the `choice` endpoint of the Autorization Server (back channel)
-        * the `redirect_uri` endpoint of the Autorization Server (front channel)
-        * (optional) the `user_info` endpoint of the Autorization Server (back channel)
+        * its client credentials
+        * the `choice` endpoint URL of the Auhtorization Server (back channel)
+        * the `redirect_uri` endpoint URL of the Authorization Server (front channel)
+        * (optional) the `subject_info` endpoint URL of the Authorization Server (back channel)
      </t>
     </section>
 
     <section>
-      <name>User Info Loopup</name>
+      <name>Resource Helper Pick endpoint</name>
       <t>
-        [...]
+        The Authorization can redirect the end user to the Resource Helper's Pick endpoint, with in the query paramaters:
+        <ul>
+          <li>a nonce for this interaction</li>
+          <li>(optional) the scope parameter as specified by the client (if any)</li>
+        </ul>
+        Example: <tt>https://resource-helper.example.com/pick?nonce=12345678&scope=read</tt>.
+     </t>
+    </section>
+
+    <section>
+      <name>Subject Info Lookup</name>
+      <t>
+        The Resource Helper can optionally make a HTTP call to the Subject Info endpoint of the Authorization Server,
+        with the nonce from the pick request in the query parameter to obtain more information about the end user.
+        Alternatively, the Resource Helper could skip this step and instead take its own end user authentication measures.
+        Example: <tt>
+GET https://authorization-server.example.com/subject-info?nonce=12345678
+
+{
+  "username": "polly123@surf.nl"
+}
+</tt>
       </t>
     </section>
 
     <section>
       <name>Picking Access Token Scopes</name>
       <t>
-        The authorization server may grant an access token scope which is different from the one requested by the client,
-        based on the authorization server policy or the resource owner's instructions.
-        To allow the resource owner to instruct the authorization server to grant a smaller, larger,
-        or different access token scope than what the client requested,
-        especially in the case where the client only specified the requested scope in generic terms, or not at all,
-        the requirements for viewing access token scopes need to be augmented with a requirement to allow the user to select,
-        deselect, and browse specific aspects of it.
-      </t>
-      <t>
-        In some use cases, a client may generically ask for access to "a photo" or "a folder",
-        without specifying a specific one,
-        and the resource owner may have a chance to browse through a photo collection or a folder tree to select a specific one.
-        Here too, each time the functionalities of the resource server change,
-        the resource browser interface may also need to change.
-      </t>
-      <t>
-        The redirect to the pick endpoint can be embedded in the authorization code flow similarly to the view endpoint.
-        The Authorization Server can redirect the
-        user to the Resource Helper to pick the access token scope before continuing.
-      </t>
-
-      <t>
-        The pick endpoint of the resource helper takes the same parameters as the view endpoint,
-        but SHOULD allow the user to influence the details of the scope.
-        Example:
-      </t>
-      <t>
-        https://pick.example.org/?scope=webdav-folder&amp;action=grant%20reject&amp;redirect_uri=https%3A%2F%2Fexample.org%2Fcontinue&amp;state=xyz
+        The authorization server may grant an access token scope which may be different from the one requested by the client,
+        based on the authorization server policy and the resource owner's instructions.
       </t>
       <t>
         After allowing the user to pick a fine-grained access scope, the resulting choice submission would include a scope field:
@@ -189,9 +183,11 @@
         Content-Type: application/json
 
         {
-          "action": "grant",
-          "state": "xyz",
-          "scope": "/home/john/pictures/4:write"
+          "nonce": "12345678",
+          "scope": "/home/john/pictures/4:write",
+          "payload": (opaque),
+          "introspect": (opaque),
+          "label": "Write access to John's picture 4"
         }
       </t>
     </section>
