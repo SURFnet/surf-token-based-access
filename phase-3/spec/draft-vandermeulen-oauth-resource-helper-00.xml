@@ -151,6 +151,18 @@
         from this registry.
         It SHOULD also NOT accept authenticated choice submissions from Resource Helpers other than the ones
         from this registry.
+        The Authorization Server SHOULD maintain a registry of trustworthy Resource Helpers,
+        containing for each Resource Helper:
+      </t>
+      <ul>
+        <li>a fully qualified domain name (for `/.well-known/resource-helper` lookup, see below)</li>
+        <li>client credentials</li>
+      </ul>
+      <t>
+        The Authorization Server SHOULD NOT redirect the end user to Resource Helpers other than the ones
+        from this registry.
+        It SHOULD also NOT accept authenticated choice submissions from Resource Helpers other than the ones
+        from this registry.
       </t>
     </section>
 
@@ -168,12 +180,15 @@
       <t>
         The Resource Helper needs to persist:
       </t>
-      <ul>
-        <li>its client credentials for use in backchannel calls to the Authorization server</li>
-        <li>(optional) the <tt>subject_info</tt> back channel endpoint URL of the Authorization Server</li>
-        <li>the `choice` back channel endpoint URL of the Authorization Server</li>
-        <li>the callback redirect URL of the Authorization Server</li>
-      </ul>
+      <t>
+        <ul>
+          <li>its client credentials for use in backchannel calls to the Authorization server</li>
+          <li>(optional) the <tt>subject_info</tt> back channel endpoint URL of the Authorization Server</li>
+          <li>the `choice` back channel endpoint URL of the Authorization Server</li>
+          <li>the callback redirect URL of the Authorization Server</li>
+        </ul>
+        The Resource Helper needs to persist:
+      </t>
     </section>
 
     <section>
@@ -273,7 +288,7 @@ Content-Type: application/json
         displaying a list of one-line labels could be convenient there.
       </t>
       <t>
-        This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.
+        This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.        
       </t>
     </section>
     <section>
