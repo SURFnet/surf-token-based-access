@@ -196,11 +196,13 @@
       <name>Resource Helper Pick endpoint</name>
       <t>
         The Authorization can redirect the end user to the Resource Helper's Pick endpoint, with in the query paramaters:
-        <ul>
-          <li>a nonce for this interaction</li>
-          <li>(optional) the scope parameter as specified by the client (if any)</li>
-        </ul>
-        Example: <tt>https://resource-helper.example.com/pick?nonce=12345678&scope=read</tt>.
+     </t>
+      <ul>
+        <li>a nonce for this interaction</li>
+        <li>(optional) the scope parameter as specified by the client (if any)</li>
+      </ul>
+     <t>
+        Example: <tt>https://resource-helper.example.com/pick?nonce=12345678&amp;scope=read</tt>.
      </t>
     </section>
 
@@ -299,6 +301,16 @@ GET https://authorization-server.example.com/subject-info?nonce=12345678
         that helps the resource server to understand the scope of the access tokens issued by the authorisation server.
       </t>
       </section>
+    </section>
+
+    <section>
+      <name>Redirect back to the Authorization Server</name>
+      <t>
+        [...]
+     </t>
+     <t>
+        Example: <tt>https://authorization-server.example.com/callback?nonce=12345678&amp;scope=read&amp;result=ok</tt>.
+     </t>
     </section>
 
     <section anchor="IANA">
