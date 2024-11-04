@@ -166,36 +166,47 @@
     <section>
       <name>Resource Helper Registry</name>
       <t>
-        The Authorization Server SHOULD maintain a registry of Resource Helpers it trusts,
-        with for each Resource Helper:
-        * a fully qualified domain name (for `/.well-known/resource-helper` lookup, see below)
-        * client credentials
+        The Authorization Server SHOULD maintain a registry of trustworthy Resource Helpers,
+        containing for each Resource Helper:
+      </t>
+      <ul>
+        <li>a fully qualified domain name (for `/.well-known/resource-helper` lookup, see below)</li>
+        <li>client credentials</li>
+      </ul>
+      <t>
+        The Authorization Server SHOULD NOT redirect the end user to Resource Helpers other than the ones
+        from this registry.
+        It SHOULD also NOT accept authenticated choice submissions from Resource Helpers other than the ones
+        from this registry.
       </t>
     </section>
 
     <section>
       <name>Resource Helper Well-Known Endpoint</name>
       <t>
-        At the `/.well-known/resource-helper` end point, the Resource Helper lists the URI for
-        the `pick` endpoint (front channel).
+        At its `/.well-known/resource-helper` end point, the Resource Helper SHOULD serve a JSON document,
+        containing an object with a member whose key is &quot;pick&quot; and whose value is the URI for
+        the pick endpoint to which the Authorization Server can redirect the user.
      </t>
     </section>
 
     <section>
       <name>Resource Helper Configuration</name>
       <t>
-        The Resource Helper needs to store:
-        * its client credentials
-        * the `choice` endpoint URL of the Auhtorization Server (back channel)
-        * the `redirect_uri` endpoint URL of the Authorization Server (front channel)
-        * (optional) the `subject_info` endpoint URL of the Authorization Server (back channel)
-     </t>
+        The Resource Helper needs to persist:
+      </t>
+      <ul>
+        <li>its client credentials for use in backchannel calls to the Authorization server</li>
+        <li>(optional) the <tt>subject_info</tt> back channel endpoint URL of the Authorization Server</li>
+        <li>the `choice` back channel endpoint URL of the Authorization Server</li>
+        <li>the callback redirect URL of the Authorization Server</li>
+      </ul>
     </section>
 
     <section>
       <name>Resource Helper Pick endpoint</name>
       <t>
-        The Authorization can redirect the end user to the Resource Helper's Pick endpoint, with in the query paramaters:
+        The Authorization can redirect the end user to the Resource Helper's Pick endpoint, with in the query parameters:
      </t>
       <ul>
         <li>a nonce for this interaction</li>
@@ -212,9 +223,14 @@
         The Resource Helper can optionally make a HTTP call to the Subject Info endpoint of the Authorization Server,
         with the nonce from the pick request in the query parameter to obtain more information about the end user.
         Alternatively, the Resource Helper could skip this step and instead take its own end user authentication measures.
-        Example: <tt>
-GET https://authorization-server.example.com/subject-info?nonce=12345678
-
+        Example request:
+<tt>
+GET /subject-info?nonce=12345678 HTTP/1.1
+Host: authorization-server.example.com
+Authorization: <...>
+</tt>
+Example response:
+</tt>
 {
   "username": "polly123@surf.nl"
 }
@@ -228,27 +244,21 @@ GET https://authorization-server.example.com/subject-info?nonce=12345678
         The authorization server may grant an access token scope which may be different from the one requested by the client,
         based on the authorization server policy and the resource owner's instructions.
       </t>
-      <t>
-        After allowing the user to pick a fine-grained access scope, the resulting choice submission would include a scope field:
-      </t>
-      <t>
-        POST /choice
-        Content-Type: application/json
-
-        {
-          "nonce": "12345678",
-          "scope": "/home/john/pictures/4:write",
-          "payload": (opaque),
-          "introspect": (opaque),
-          "label": "Write access to John's picture 4"
-        }
-      </t>
     </section>
 
     <section>
       <name>The Choice endpoint</name>
       <t>
-        The authorization server MAY receive additional types of information from the resource helper through the Choice endpoint.
+        After allowing the user to pick an access scope, the resulting choice submission would include:
+      </t>
+      <ul>
+        <li>nonce (the nonce from the previous step)</li>
+        <li>action (must contain the string 'grant' or the string 'deny' as appropriate)</li>
+        <li>label (a human-readable string for display in for instance the Authorization Server's token revokation interface)</li>
+        <li>(optional) a scope field, if different from the one that was requested (to be passed back to the client)</li>
+        <li>(optional) an opaque payload object (to be included in the access token payload)</li>
+        <li>(optional) an opaque introspect object (to be included in the introspection response for the access token, if applicable)</li>
+      <t>
         Here is a non-normative example:
       </t>
       <t>
@@ -256,8 +266,8 @@ GET https://authorization-server.example.com/subject-info?nonce=12345678
         Content-Type: application/json
 
         {
+          "nonce": "12345678",
           "action": "grant",
-          "state": "xyz",
           "scope": "/home/john/pictures/4:write",
           "label": {
             "en-US": "John's picture number 4 (write access)"
@@ -280,11 +290,10 @@ GET https://authorization-server.example.com/subject-info?nonce=12345678
         to grant the viewed or picked scope to the client in question,
         it could display this label in much the same way as it will likely display some label for the client's identity there.
         Also, when displaying a list of currently valid tokens, with the option to revoke,
-        it would be cumbersome for the user to click 'view' on each of them,
-        and displaying a list of one-line labels would be more convenient there.
+        displaying a list of one-line labels could be convenient there.
       </t>
       <t>
-        This label could be produced programmatically by the resource helper, or hand-picked by the resource owner.
+        This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.
       </t>
     </section>
     <section>
