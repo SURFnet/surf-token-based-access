@@ -27,7 +27,8 @@ function handleOverview(req, res, serverData) {
   res.write(`
     <body style="background-color:#faf9e3">
     <h2>Auth server (AS)</h2>
-    Here are some services you may want to share resources from, connected to your account:
+    <p>Logged in as <tt>alice@surf.nl</tt></p>
+    <p>Overview:</p>
     <ul>`);
   Object.keys(serverData.grants).forEach(grant => {
       res.write(`<li>${grant}</li>`);
@@ -48,10 +49,10 @@ http.createServer(async (req, res) => {
     const downstreamCode = makeid('as-code-', 8);
     const downstreamScopeId = 'research-drive:' + upstreamScope;
     server.storeGrant(downstreamCode, downstreamScopeId);
-    server.storeScopeInfo(downstreamScopeId, {
+    server.storeDownstreamScopeInfo(downstreamScopeId, {
       type: "grant",
       humanReadable: {
-        "en-US": `the RD folder ${upstreamInfo.description}`
+        "en-US": `[from SURF Research Drive] ${upstreamInfo.description}`
       },
       machineReadableInternal: upstreamInfo.machineReadableInternal,
       protocols: {
@@ -87,11 +88,12 @@ http.createServer(async (req, res) => {
         const clientState = query.state;
         const upstreamTicket = makeid('as-ticket-', 8);
         server.storeTicket(upstreamTicket, { clientState, clientId: query.client_id });
-        const upstreamUrl = client.makeAuthorizeUrl(query.scope, upstreamTicket);
+        const upstreamUrl = client.makeAuthorizeUrl(query.scope, upstreamTicket, 'scope');
         res.end(`
           <body style="background-color:#faf9e3">
           <h2>Auth server (AS)</h2>
-          Here are some services you may want to share resources from, connected to your account:
+          <p>Logged in as <tt>alice@surf.nl</tt></p>
+          <p>Here are some SURF services you may want to share resources from, connected to your account:</p>
           <ul>
             <li><a href="${upstreamUrl}">Research Drive</a></li>
             <li><a href="">iRods</a></li>

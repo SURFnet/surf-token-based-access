@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<info>
+    <id>tokenbaseddav</id>
+    <name>Token base DAV</name>
+    <description>enabling token acces on DAV file sharing</description>
+    <licence>AGPL</licence>
+    <author>Ponder source</author>
+    <version>0.0.2</version>
+    <namespace>TokenBasedDav</namespace>
+    <website>https://github.com/SURFnet/surf-token-based-access</website>
+	<bugs>https://github.com/SURFnet/surf-token-based-access/issues</bugs>
+	<repository type="git">https://github.com/SURFnet/surf-token-based-access.git</repository>
+    <category>tool</category>
+    <dependencies>
+        <owncloud min-version="10" max-version="10" />
+    </dependencies>
+    <types>
+        <authentication/>
+        <dav/>
+    </types>
+
+    <sabre>
+		<plugins>
+			<plugin>OCA\TokenBasedDav\DAVPlugin\TokenAuth</plugin>
+		</plugins>
+	</sabre>
+</info>

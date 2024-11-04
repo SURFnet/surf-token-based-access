@@ -3,22 +3,22 @@
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 
 <!DOCTYPE rfc [
-        <!ENTITY nbsp    "&#160;">
-        <!ENTITY zwsp   "&#8203;">
-        <!ENTITY nbhy   "&#8209;">
-        <!ENTITY wj     "&#8288;">
-        ]>
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
+]>
 
 <rfc
-        xmlns:xi="http://www.w3.org/2001/XInclude"
-        category="info"
-        docName="draft-vandermeulen-oauth-resource-helper-00"
-        ipr="trust200902"
-        obsoletes=""
-        updates=""
-        submissionType="IETF"
-        xml:lang="en"
-        version="3">
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  category="info"
+  docName="draft-vandermeulen-oauth-resource-helper-00"
+  ipr="trust200902"
+  obsoletes=""
+  updates=""
+  submissionType="IETF"
+  xml:lang="en"
+  version="3">
 
   <front>
     <title abbrev="OAuth Resource Helper">OAuth Resource Helper</title>

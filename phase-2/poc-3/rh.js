@@ -39,11 +39,6 @@ const dialogpart5 = `">January</a></li>
   </ul></li>
 </ul>
 `;
-const data = {
-  "resource_scopes": [ "read", "write"],
-  "description": "the RD folder photos -> 2023 -> January",
-  "type": "webdav-folder"
-};
 
 function handleOverview(req, res, serverData) {
   res.writeHead(200, {'Content-Type': 'text/html'});
@@ -76,7 +71,11 @@ http.createServer(async (req, res) => {
           <li>2021</li>
           <li>2022</li>
           <li><ul>
-            <li><a href="${server.createAllowUrl({ clientId, scope: 'January', state })}">January</a></li>
+            <li>
+              January
+              <a href="${server.createAllowUrl({ clientId, resource: 'photos/2022/January', resourceScopes: 'read', state })}">read-only</a>
+              <a href="${server.createAllowUrl({ clientId, resource: 'photos/2022/January', resourceScopes: 'read-write', state })}">read-write</a>
+            </li>
             <li>...</li>
           </ul></li>    
           <li>2023</li>
@@ -90,14 +89,23 @@ http.createServer(async (req, res) => {
       const query = url_parts.query;
       const clientId = query.client_id;
       const state = query.state;
-      // console.log(`new transaction; minting scope ${scopeId} with code ${code}`, query);
-      // FIXME: store this _after_ the user consents, not before!
-      const scope = await registerResource(resourceRegistryClient, data);
+      const resource = query.resource;
+      const resourceScopes = query.resource_scopes;
+      const details = {
+        "resource_scopes": resourceScopes.split('-'),
+        "description": `${resourceScopes.split('-').join(' and ')} access to the RD folder ${resource.split('/').join(' -> ')}`,
+        "type": "webdav-folder"
+      };
+      const scope = await registerResource(resourceRegistryClient, details);
+      server.storeDownstreamScopeInfo(scope, details);
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(`
         <body style="background-color:#e3fae7">
         <h2>Resource Helper</h2>
-        <a href="${server.createResourceHelperCallbackUrl({ clientId, scope, state })}">back to Authorization Server</a>
+        <p><tt>${resource}</tt> <tt>${resourceScopes}</p>
+        <p>
+          <a href="${server.createResourceHelperCallbackUrl({ clientId, scope, state })}">Continue</a>
+        </p>
         <h2>Data:</h2>
         <pre>${JSON.stringify(server.getData(), null, 2)}</pre>
       
