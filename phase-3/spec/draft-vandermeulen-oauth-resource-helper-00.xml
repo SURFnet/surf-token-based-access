@@ -240,18 +240,18 @@
         with the nonce from the pick request in the query parameter to obtain more information about the end user.
         Alternatively, the Resource Helper could skip this step and instead take its own end user authentication measures.
         Example request:
+      </t>
 <tt>
 GET /subject-info?nonce=12345678 HTTP/1.1
 Host: authorization-server.example.com
-Authorization: <...>
+Authorization: &lt;...&gt;
 </tt>
 Example response:
-</tt>
+<tt>
 {
   "username": "polly123@surf.nl"
 }
 </tt>
-      </t>
     </section>
 
     <section>
@@ -274,6 +274,7 @@ Example response:
         <li>(optional) a scope field, if different from the one that was requested (to be passed back to the client)</li>
         <li>(optional) an opaque payload object (to be included in the access token payload)</li>
         <li>(optional) an opaque introspect object (to be included in the introspection response for the access token, if applicable)</li>
+      </ul>
       <t>
         Here is a non-normative example:
       </t>
