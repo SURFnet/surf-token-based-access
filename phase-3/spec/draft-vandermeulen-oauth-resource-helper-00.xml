@@ -298,7 +298,6 @@ Authorization: &lt;...&gt;
         that helps the Resource Server to understand the scope of the access tokens issued by the Authorisation Server,
         for instance through a database backend that is shared between the Resource Helper and the Resource Server.
       </t>
-      </section>
     </section>
 
     <section>
@@ -344,6 +343,7 @@ Authorization: &lt;...&gt;
   },
 }
       </sourcecode>
+    </section>
 
     <section>
       <name>Redirect back to the Authorization Server</name>
@@ -388,16 +388,16 @@ Authorization: &lt;...&gt;
         as described in section 3.4 of <xref target="I-D.ietf-gnap-resource-servers"/>,
         or as described in section 3.2 of <xref target="UMA-Fed-Authz"/>,
         which only describe a resource.
-      </tt>
-      <tt>
+      </t>
+      <t>
         The choice submission represents more than a description of a transaction scope or a
         resource registration.
         It additionally represents an assessment that this description was intentionally
         composed or approved by an authenticated Resource Owner, authorized to
         grant access to such resources, actually taking an active decision to grant such
         access.
-      </tt>
-      <tt>
+      </t>
+      <t>
         What it does not include is the information to which particular Client they will grant it.
         That remains the jurisdiction of the Authorization Server.
       </t>
