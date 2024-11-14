@@ -167,14 +167,14 @@
         <li>3. [Nonce] Get user information (optional)</li>
         <li>4. [Nonce] Return user information (optional)</li>
         <li>5. User select scopes and RS access token custom info</li>
-        <li>6. [Nonce, token info] Send scope, RS constom JSON for in access token and token label</li>
+        <li>6. [Nonce, token info] Send scope, RS custom JSON for in access token, and token label</li>
         <li>7. [Nonce, Result] Redirect to AS </li>
         <li>8. OAuth 2.0 Redirect to client with code</li>
         <li>9. OAuth 2.0 Token request</li>
         <li>10. Token response</li>
         <li>11. Resource access request</li>
-        <li>12. OAuth 2.0 Token introspection request</li>
-        <li>13. OAuth 2.0 Token introspection response</li>
+        <li>12. OAuth 2.0 Token introspection request (optional)</li>
+        <li>13. OAuth 2.0 Token introspection response (optional)</li>
         <li>14. Resource access response</li>
       </ul>
     </section>
@@ -253,7 +253,7 @@ Authorization: &lt;...&gt;
       </t>
 <sourcecode>
 {
-  "username": "polly123@surf.nl"
+  "username": "polly123@example.com"
 }
 </sourcecode>
     </section>
@@ -261,48 +261,14 @@ Authorization: &lt;...&gt;
     <section>
       <name>Picking Access Token Scopes</name>
       <t>
-        The authorization server may grant an access token scope which may be different from the one requested by the client,
-        based on the authorization server policy and the resource owner's instructions.
+        The Resource Helper will guide the end user in picking access scopes.
+        Note that it is the responsibility of the Resource Helper to help the end user make the right decisions
+        here. The choice will be opaque to the Authorization Server, to eventually be interpreted by the Resource
+        Server during resource access (step 11 in the diagram above).
       </t>
     </section>
 
     <section>
-      <name>The Choice endpoint</name>
-      <t>
-        After allowing the user to pick an access scope, the resulting choice submission would include:
-      </t>
-      <ul>
-        <li>nonce (the nonce from the previous step)</li>
-        <li>action (must contain the string 'grant' or the string 'deny' as appropriate)</li>
-        <li>label (a human-readable string for display in for instance the Authorization Server's token revokation interface)</li>
-        <li>(optional) a scope field, if different from the one that was requested (to be passed back to the client)</li>
-        <li>(optional) an opaque payload object (to be included in the access token payload)</li>
-        <li>(optional) an opaque introspect object (to be included in the introspection response for the access token, if applicable)</li>
-      </ul>
-      <t>
-        Here is a non-normative example:
-      </t>
-      <sourcecode>
-POST /choice
-Content-Type: application/json
-
-{
-  "nonce": "12345678",
-  "action": "grant",
-  "scope": "/home/john/pictures/4:write",
-  "label": {
-    "en-US": "John's picture number 4 (write access)"
-  },
-  "payload": {
-    "user": "john"
-  },
-  "introspect": {
-    "path": "storage-5:~pictures/4",
-    "modes": "rwx"
-  },
-}
-      </sourcecode>
-      <section>
       <name>Human-readable label</name>
       <t>
         Even though the detailed view of an access scope can only be provided by the resource helper,
@@ -317,30 +283,89 @@ Content-Type: application/json
         This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.
       </t>
     </section>
+
     <section>
       <name>Introspect and token payload options</name>
       <t>
         To make it easier for existing resource servers to start accepting access tokens issued by the authorization server,
-        some custom arrangements may be included in the resource helper's software, that interacts well with the resource server's
+        some custom arrangements may be included in the resource helper's software, that interact well with the resource server's
         existing processes and policies.
-        To facilitate this, the authorization server MAY allow the resource helper to specify opaque data to be included in the access token payload
+        To facilitate this, the authorization server MUST allow the resource helper to specify opaque data to be included in the access token payload
         and in the token introspect response.
       </t>
       <t>
-        The resource helper might also share state with the resource server
-        that helps the resource server to understand the scope of the access tokens issued by the authorisation server.
+        The Resource Helper might also share state with the Resource Server
+        that helps the Resource Server to understand the scope of the access tokens issued by the Authorisation Server,
+        for instance through a database backend that is shared between the Resource Helper and the Resource Server.
       </t>
       </section>
     </section>
 
     <section>
+      <name>The Choice endpoint</name>
+      <t>
+        After allowing the user to pick an access scope, the resulting choice submission (step 6 in the diagram above) would include:
+      </t>
+      <ul>
+        <li>nonce (the nonce from the previous steps)</li>
+        <li>action (must contain the string 'grant' or the string 'deny' as appropriate)</li>
+        <li>label (a human-readable string for display in for instance the Authorization Server's token revokation interface)</li>
+        <li>(optional) a scope field, if different from the one that was requested (to be passed back to the client)</li>
+        <li>(optional) an opaque payload object (to be included in the access token payload)</li>
+        <li>(optional) an opaque introspect object (to be included in the introspection response for the access token, if applicable)</li>
+      </ul>
+      <t>
+        Apart from the inclusion of the nonce which binds this back channel call to the initial front channel redirect (step 2 in the diagram
+        above), the Resource Helper MUST also provide credentials that can identify it as a trusted member of the Authorization Server's
+        Resource Helper Registry, for instance through an `Authorization` header as agreed between Authorization Server and Resource Helper,
+        and this request MUST be made over TLS, to the choice endpoint of the Authorization Server.
+      </t>
+      <t>
+        Here is a non-normative example:
+      </t>
+      <sourcecode>
+POST /choice
+Content-Type: application/json
+Authorization: &lt;...&gt;
+
+{
+  "nonce": "12345678",
+  "action": "grant",
+  "label": {
+    "en-US": "John's picture number 4 (write access)"
+  },
+  "scope": "/home/john/pictures/4:write",
+  "payload": {
+    "user": "john"
+  },
+  "introspect": {
+    "path": "storage-5:~pictures/4",
+    "modes": "rwx"
+  },
+}
+      </sourcecode>
+
+    <section>
       <name>Redirect back to the Authorization Server</name>
       <t>
-        [...]
-     </t>
-     <t>
-        Example: <tt>https://authorization-server.example.com/callback?nonce=12345678&amp;scope=read&amp;result=ok</tt>.
-     </t>
+        After the choice information has been successfully submitted to the Authorization Server, the end user can be
+        redirected back to the Authorization Server to continue the OAuth flow as usual. This redirect MUST contain
+        the nonce for this interaction in the query parameter, and <tt>result=ok</tt> if all steps were completed
+        successfully. Other values for the <tt>result</tt> query parameter SHOULD be used to indicate different types
+        of errors:
+      </t>
+      <ul>
+        <li>ok: all steps completed successfully</li>
+        <li>deny: if <tt>action: deny</tt> was passed in the choice call</li>
+        <li>unauth: if no end user could be authenticated</li>
+        <li>cancel: if the end user chose to abort the process</li>
+        <li>error: if the back channel call to the choice end point resulted in no response or in an error response</li>
+        <li>invalid: if the Resource Helper could not unambiguously interpret its task</li>
+        <li>fail: if the Resource Helper was unable to perform it tasks for other reasons</li>
+      </ul>
+      <t>
+        Example: <tt>https://authorization-server.example.com/callback?nonce=12345678&amp;result=ok</tt>.
+      </t>
     </section>
 
     <section anchor="IANA">
@@ -351,37 +376,43 @@ Content-Type: application/json
     <section anchor="Security">
       <name>Security Considerations</name>
       <t>
-        It is important to understand the value of the redirect back from resource helper to authorization server.
+        It is important to understand the value of the choice submission from Resource Helper to Authorization Server.
         It already contains an access grant as a half-product,
         for the authorization server to finalize by actually issuing it to a client.
       </t>
       <t>
         This model differs from the Lodging Intent pattern used in<xref target="FAPI-CIBA"/>,
         where the intent is only a description of some intended transaction,
-        directly between client and resource server,
-        which does not imply that it was composed by an authenticated resource owner.
+        directly between Client and Resource Server,
+        and from Resource Registries
+        as described in section 3.4 of <xref target="I-D.ietf-gnap-resource-servers"/>,
+        or as described in section 3.2 of <xref target="UMA-Fed-Authz"/>,
+        which only describe a resource.
+      </tt>
+      <tt>
+        The choice submission represents more than a description of a transaction scope or a
+        resource registration.
+        It additionally represents an assessment that this description was intentionally
+        composed or approved by an authenticated Resource Owner, authorized to
+        grant access to such resources, actually taking an active decision to grant such
+        access.
+      </tt>
+      <tt>
+        What it does not include is the information to which particular Client they will grant it.
+        That remains the jurisdiction of the Authorization Server.
       </t>
       <t>
-        It's up to the Authorization Server and the Resource Helper
-        to share their understanding of the various values of 'action'.
-      </t>
-      <t>
-        The Authorization Server should be careful not to redirect the user to the wrong URL,
-        put a nonce in the state parameter and check that when accepting the callback redirect,
-        and to always use https.
-      </t>
-      <t>
-        The Resource Helper should not display any information that the currently authenticated user is not allowed to see,
+        The Resource Helper MUST NOT display any information that the currently authenticated user is not allowed to see,
         even if it is instructed to display them through the scope parameter that comes from the Authorization Server.
       </t>
       <t>
-        The Resource Helper should only grant access to resources for which the currently authenticated user is a resource owner.
-        The resulting access token scope should always be a subset (attenuation) of the Resource Owner's own access scope.
+        The Resource Helper MUST only grant access to resources for which the currently authenticated user is a Resource Owner.
+        The resulting access token scope MUST always be a subset (attenuation) of the Resource Owner's own access scope.
       </t>
       <t>
-        The scope coming back from the Resource Helper should not need to be interpreted in the context of a specific user.
-        For instance, a scope 'my-billing-details:read' means different things for different resource owners.
-        To avoid confusion, especially in the light of decoupled authentication (see above),
+        The scope coming back from the Resource Helper SHOULD be interpretable outside the context of a specific user.
+        For instance, a scope 'my-billing-details:read' means different things for different Resource Owners.
+        To avoid confusion, especially if authentication was handled through the Authorization Server's <tt>user_info</tt> end point (see above),
         use a globally unambiguous scope identifier such as 'user-123:billing-detals:read'.
       </t>
     </section>
