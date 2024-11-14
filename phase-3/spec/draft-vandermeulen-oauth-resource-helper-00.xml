@@ -260,7 +260,7 @@ Authorization: &lt;...&gt;
         The Resource Helper will guide the end user in picking access scopes.
         Note that it is the responsibility of the Resource Helper to help the end user make the right decisions
         here. The choice will be opaque to the Authorization Server, to eventually be interpreted by the Resource
-        Server during resource access (step 11 in the diagram above).
+        Server during resource access.
       </t>
     </section>
 
@@ -310,7 +310,7 @@ Authorization: &lt;...&gt;
         <li>(optional) an opaque introspect object (to be included in the introspection response for the access token, if applicable)</li>
       </ul>
       <t>
-        Apart from the inclusion of the nonce which binds this back channel call to the initial front channel redirect (step 2 in the diagram
+        Apart from the inclusion of the nonce which binds this back channel call to the initial front channel redirect (step B in the diagram
         above), the Resource Helper MUST also provide credentials that can identify it as a trusted member of the Authorization Server's
         Resource Helper Registry, for instance through an `Authorization` header as agreed between Authorization Server and Resource Helper,
         and this request MUST be made over TLS, to the choice endpoint of the Authorization Server.
