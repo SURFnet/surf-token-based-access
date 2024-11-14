@@ -133,7 +133,27 @@
 
     <section>
       <name>Generic Flow</name>
-      <artwork type="ascii-art" src="seq.txt" />
+      <artwork type="ascii-art">
+      <![CDATA[
++--------+                                             +---------------+
+|        |-(A)---------Authorization Grant------------>|               |
+|        |                                             |               |
+|        |   +----------+                              |               |
+|        |   |          |<------------Pick---------(B)-|               |
+|        |   |          |                              |               |
+|        |   |          |-(C)-----Get Subject--------->|               |
+|        |   | Resource |                              | Authorization |
+| Client |   |  Helper  |        Submit Scopes,        |    Server     |
+|        |   |          |-(D)---Token data, and ------>|               |
+|        |   |          |      Introspection data      |               |
+|        |   |          |                              |               |
+|        |   |          |-(E)--------Return----------->|               |
+|        |   +----------+                              |               |
+|        |                                             |               |
+|        |<---------------Access Token-------------(F)-|               |
++--------+                                             +---------------+
+      ]]>
+      </artwork>
     </section>
 
     <section>
