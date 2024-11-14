@@ -74,13 +74,13 @@
       <name>Introduction</name>
       <t>
         In OAuth 2.0 <xref target="RFC6749" /> an Authorization Server is responsible for the autorization process.
-        We introduce a Resource Helper, which is a separate component that can handle part of the OAuth Grant Flow of the Authorization Server, 
+        We introduce a Resource Helper, which is a separate component that can handle part of the OAuth Grant Flow of the Authorization Server,
         making the Authorization Server more modular.
         A Resouce Helper is associated with a specific Resource Server and provides the user interface for the Resource Owner to pick access Scopes
-        <xref target="RFC6749" section="3.3" sectionFormat="parens" />,        
-        and possibly other Resource Server specific to put in the Access Token, or in a Introspection Response <xref target="RFC7662" section="2.2" sectionFormat="parens" />.
-        This allows an Authorization Server to remain generic and stable, while the a Resource Helper can be updated in lock-step with the functionality of the Resource Server.
-        This document describes the protocal and interface and beteen the Authorization Server and the Resource Helper.
+        <xref target="RFC6749" section="3.3" sectionFormat="parens" />,
+        and possibly other Resource Server specific information to put in the Access Token, or in an Introspection Response <xref target="RFC7662" section="2.2" sectionFormat="parens" />.
+        This allows an Authorization Server to remain generic and stable, while the Resource Helper can be updated in lock-step with the functionality of the Resource Server.
+        This document describes the protocol and interface between the Authorization Server and the Resource Helper.
       </t>
       <t>
         During an OAuth 2.0 Authorization Grant Flow,
@@ -88,8 +88,8 @@
         and establishes whether the resource owner (partially) grants or denies the client's request for a token.
         For the authorization server to meaningfully measure if the resource owner wants to grant or deny the request,
         it needs to display, presumably via the user agent,
-        the details of the authorization that the resource owner about do give in a way that they will understand.
-        This is especially the case when the resource owner wants provide a more fine-grained authorization than just 'yes' or 'no'.
+        the details of the authorization that the resource owner is about to give in a way that they will understand.
+        This is especially the case when the resource owner wants to provide a more fine-grained authorization than just 'yes' or 'no'.
         For example when the resource owner only wants to allow specific kinds of operations on specific resources, for example:
         "allow the client to view these three pictures, but not to delete them", or "allow the client write access to only this specific directory".
       </t>
@@ -98,13 +98,13 @@
       </t>
       <ul>
         <li>
-          In OAuth 2.0 Rich Authorization Requests<xref target="RFC7662" />, the client includes a JSON description with the 
-          <tt>authorization_details</tt> of the requested authorization in the in the Authorization Request to the Authorization Server.
-          This requires the client and the resource server to agree on the format and meaning of the authorization_details to that the client can create it 
+          In OAuth 2.0 Rich Authorization Requests<xref target="RFC7662" />, the client includes a JSON description with the
+          <tt>authorization_details</tt> of the requested authorization in the Authorization Request to the Authorization Server.
+          This requires the client and the resource server to agree on the format and meaning of the authorization_details so that the client can create it
           and the authorization server can interpret it and display it to the resource owner.
         </li>
         <li>
-          In OAuth 2.0 Resource Set Registration <xref target="UMA-Fed-Authz" />, a API is defined on the Authorization Server to allow a Resource Server to register
+          In OAuth 2.0 Resource Set Registration <xref target="UMA-Fed-Authz" />, an API is defined on the Authorization Server to allow a Resource Server to register
           Resource Sets at the Authorization Server. A resource set consists of scopes, a description and an icon to allow the Authorization Server to display
           the available resource sets to the Resource Owner in a meaningful way.
         </li>
@@ -117,9 +117,9 @@
       </ul>
       <t>
         Displaying access token scope details via the user agent may involve describing specific resources and actions,
-        in a human-viewable, probably locale-dependent, and possibly even persona-dependent way, 
-        possibly using a combination of text, images, and layout.        
-        The Resource Helper can specialise in this task, leaving the Authorization Server more generic and stable.        
+        in a human-viewable, probably locale-dependent, and possibly even persona-dependent way,
+        possibly using a combination of text, images, and layout.
+        The Resource Helper can specialise in this task, leaving the Authorization Server more generic and stable.
       </t>
 
       <section>
