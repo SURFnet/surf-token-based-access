@@ -188,11 +188,12 @@
       <ul>
         <li>a fully qualified domain name (for `/.well-known/resource-helper` lookup, see below)</li>
         <li>client credentials</li>
+        <li>which scope-picking tasks it can be used for</li>
       </ul>
       <t>
         The Authorization Server SHOULD NOT redirect the end user to Resource Helpers other than the ones
         from this registry.
-        It SHOULD also NOT accept authenticated choice submissions from Resource Helpers other than the ones
+        It SHOULD also NOT accept choice submissions from Resource Helpers other than the ones
         from this registry.
       </t>
     </section>
@@ -201,8 +202,8 @@
       <name>Resource Helper Well-Known Endpoint</name>
       <t>
         At its `/.well-known/resource-helper` end point, the Resource Helper SHOULD serve a JSON document,
-        containing an object with a member whose key is &quot;pick&quot; and whose value is the URI for
-        the pick endpoint to which the Authorization Server can redirect the user.
+        containing an object with a member whose key is &quot;pick&quot; and whose value is the front channel
+        URL for the pick endpoint to which the Authorization Server can redirect the user.
      </t>
     </section>
 
@@ -212,17 +213,18 @@
         The Resource Helper needs to persist:
       </t>
       <ul>
-        <li>its client credentials for use in backchannel calls to the Authorization server</li>
-        <li>(optional) the <tt>subject_info</tt> back channel endpoint URL of the Authorization Server</li>
         <li>the `choice` back channel endpoint URL of the Authorization Server</li>
-        <li>the callback redirect URL of the Authorization Server</li>
+        <li>(optional) the <tt>subject_info</tt> back channel endpoint URL of the Authorization Server</li>
+        <li>the front channel callback URL of the Authorization Server</li>
+        <li>its client credentials for use in backchannel calls to the Authorization server</li>
       </ul>
     </section>
 
     <section>
       <name>Resource Helper Pick endpoint</name>
       <t>
-        The Authorization can redirect the end user to the Resource Helper's Pick endpoint, with in the query parameters:
+        The Authorization Server can redirect the end user to the Resource Helper's Pick endpoint, with the
+        following query parameters:
      </t>
       <ul>
         <li>a nonce for this interaction</li>
@@ -241,17 +243,19 @@
         Alternatively, the Resource Helper could skip this step and instead take its own end user authentication measures.
         Example request:
       </t>
-<tt>
+<sourcecode>
 GET /subject-info?nonce=12345678 HTTP/1.1
 Host: authorization-server.example.com
 Authorization: &lt;...&gt;
-</tt>
-Example response:
-<tt>
+</sourcecode>
+      <t>
+        Example response:
+      </t>
+<sourcecode>
 {
   "username": "polly123@surf.nl"
 }
-</tt>
+</sourcecode>
     </section>
 
     <section>
@@ -278,26 +282,26 @@ Example response:
       <t>
         Here is a non-normative example:
       </t>
-      <t>
-        POST /choice
-        Content-Type: application/json
+      <sourcecode>
+POST /choice
+Content-Type: application/json
 
-        {
-          "nonce": "12345678",
-          "action": "grant",
-          "scope": "/home/john/pictures/4:write",
-          "label": {
-            "en-US": "John's picture number 4 (write access)"
-          },
-          "payload": {
-            "user": "john"
-          },
-          "introspect": {
-            "path": "storage-5:~pictures/4",
-            "modes": "rwx"
-          },
-        }
-      </t>
+{
+  "nonce": "12345678",
+  "action": "grant",
+  "scope": "/home/john/pictures/4:write",
+  "label": {
+    "en-US": "John's picture number 4 (write access)"
+  },
+  "payload": {
+    "user": "john"
+  },
+  "introspect": {
+    "path": "storage-5:~pictures/4",
+    "modes": "rwx"
+  },
+}
+      </sourcecode>
       <section>
       <name>Human-readable label</name>
       <t>
