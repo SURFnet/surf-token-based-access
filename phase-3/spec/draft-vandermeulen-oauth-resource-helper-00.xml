@@ -180,14 +180,14 @@
       <name>Resource Helper Pick endpoint</name>
       <t>
         The Authorization can redirect the end user to the Resource Helper's Pick endpoint, with in the query parameters:
-     </t>
+      </t>
       <ul>
         <li>a nonce for this interaction</li>
         <li>(optional) the scope parameter as specified by the client (if any)</li>
       </ul>
-     <t>
-        Example: <tt>https://resource-helper.example.com/pick?nonce=12345678&amp;scope=read</tt>.
-     </t>
+      <t>
+        Example: <tt>https://resource-helper.example.com/pick?nonce=12345678&amp;scope=read</tt>
+      </t>
     </section>
 
     <section>
@@ -197,18 +197,22 @@
         with the nonce from the pick request in the query parameter to obtain more information about the end user.
         Alternatively, the Resource Helper could skip this step and instead take its own end user authentication measures.
         Example request:
-<tt>
+      </t>
+      <sourcecode><![CDATA[ 
 GET /subject-info?nonce=12345678 HTTP/1.1
 Host: authorization-server.example.com
-Authorization: <...>
-</tt>
-Example response:
-</tt>
+Authorization: <...>;
+      ]]>
+      </sourcecode>
+      <t>
+        Example response:
+      </t>
+      <sourcecode><![CDATA[
 {
   "username": "polly123@surf.nl"
 }
-</tt>
-      </t>
+        ]]>
+      </sourcecode>
     </section>
 
     <section>
@@ -231,29 +235,32 @@ Example response:
         <li>(optional) a scope field, if different from the one that was requested (to be passed back to the client)</li>
         <li>(optional) an opaque payload object (to be included in the access token payload)</li>
         <li>(optional) an opaque introspect object (to be included in the introspection response for the access token, if applicable)</li>
+      </ul>
       <t>
         Here is a non-normative example:
       </t>
-      <t>
-        POST /choice
-        Content-Type: application/json
+      <sourcecode><![CDATA[ 
+POST /choice
+Content-Type: application/json
 
-        {
-          "nonce": "12345678",
-          "action": "grant",
-          "scope": "/home/john/pictures/4:write",
-          "label": {
-            "en-US": "John's picture number 4 (write access)"
-          },
-          "payload": {
-            "user": "john"
-          },
-          "introspect": {
-            "path": "storage-5:~pictures/4",
-            "modes": "rwx"
-          },
-        }
-      </t>
+{
+  "nonce": "12345678",
+  "action": "grant",
+  "scope": "/home/john/pictures/4:write",
+  "label": {
+    "en-US": "John's picture number 4 (write access)"
+  },
+  "payload": {
+    "user": "john"
+  },
+  "introspect": {
+    "path": "storage-5:~pictures/4",
+    "modes": "rwx"
+  },
+}
+      ]]>
+      </sourcecode>
+  
       <section>
       <name>Human-readable label</name>
       <t>
