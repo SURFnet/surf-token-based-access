@@ -65,7 +65,7 @@
         an optional "subject_info" endpoint and a redirect end point for the front channel.
       </t>
     </abstract>
-    
+
   </front>
 
   <middle>
@@ -74,13 +74,13 @@
       <name>Introduction</name>
       <t>
         In OAuth 2.0 <xref target="RFC6749" /> an Authorization Server is responsible for the autorization process.
-        We introduce a Resource Helper, which is a separate component that can handle part of the OAuth Grant Flow of the Authorization Server, 
+        We introduce a Resource Helper, which is a separate component that can handle part of the OAuth Grant Flow of the Authorization Server,
         making the Authorization Server more modular.
         A Resouce Helper is associated with a specific Resource Server and provides the user interface for the Resource Owner to pick access Scopes
-        <xref target="RFC6749" section="3.3" sectionFormat="parens" />,        
-        and possibly other Resource Server specific to put in the Access Token, or in a Introspection Response <xref target="RFC7662" section="2.2" sectionFormat="parens" />.
-        This allows an Authorization Server to remain generic and stable, while the a Resource Helper can be updated in lock-step with the functionality of the Resource Server.
-        This document describes the protocal and interface and beteen the Authorization Server and the Resource Helper.
+        <xref target="RFC6749" section="3.3" sectionFormat="parens" />,
+        and possibly other Resource Server specific information to put in the Access Token, or in an Introspection Response <xref target="RFC7662" section="2.2" sectionFormat="parens" />.
+        This allows an Authorization Server to remain generic and stable, while the Resource Helper can be updated in lock-step with the functionality of the Resource Server.
+        This document describes the protocol and interface between the Authorization Server and the Resource Helper.
       </t>
       <t>
         During an OAuth 2.0 Authorization Grant Flow,
@@ -88,8 +88,8 @@
         and establishes whether the resource owner (partially) grants or denies the client's request for a token.
         For the authorization server to meaningfully measure if the resource owner wants to grant or deny the request,
         it needs to display, presumably via the user agent,
-        the details of the authorization that the resource owner about do give in a way that they will understand.
-        This is especially the case when the resource owner wants provide a more fine-grained authorization than just 'yes' or 'no'.
+        the details of the authorization that the resource owner is about to give in a way that they will understand.
+        This is especially the case when the resource owner wants to provide a more fine-grained authorization than just 'yes' or 'no'.
         For example when the resource owner only wants to allow specific kinds of operations on specific resources, for example:
         "allow the client to view these three pictures, but not to delete them", or "allow the client write access to only this specific directory".
       </t>
@@ -98,13 +98,13 @@
       </t>
       <ul>
         <li>
-          In OAuth 2.0 Rich Authorization Requests<xref target="RFC7662" />, the client includes a JSON description with the 
-          <tt>authorization_details</tt> of the requested authorization in the in the Authorization Request to the Authorization Server.
-          This requires the client and the resource server to agree on the format and meaning of the authorization_details to that the client can create it 
+          In OAuth 2.0 Rich Authorization Requests<xref target="RFC7662" />, the client includes a JSON description with the
+          <tt>authorization_details</tt> of the requested authorization in the Authorization Request to the Authorization Server.
+          This requires the client and the resource server to agree on the format and meaning of the authorization_details so that the client can create it
           and the authorization server can interpret it and display it to the resource owner.
         </li>
         <li>
-          In OAuth 2.0 Resource Set Registration <xref target="UMA-Fed-Authz" />, a API is defined on the Authorization Server to allow a Resource Server to register
+          In OAuth 2.0 Resource Set Registration <xref target="UMA-Fed-Authz" />, an API is defined on the Authorization Server to allow a Resource Server to register
           Resource Sets at the Authorization Server. A resource set consists of scopes, a description and an icon to allow the Authorization Server to display
           the available resource sets to the Resource Owner in a meaningful way.
         </li>
@@ -117,9 +117,9 @@
       </ul>
       <t>
         Displaying access token scope details via the user agent may involve describing specific resources and actions,
-        in a human-viewable, probably locale-dependent, and possibly even persona-dependent way, 
-        possibly using a combination of text, images, and layout.        
-        The Resource Helper can specialise in this task, leaving the Authorization Server more generic and stable.        
+        in a human-viewable, probably locale-dependent, and possibly even persona-dependent way,
+        possibly using a combination of text, images, and layout.
+        The Resource Helper can specialise in this task, leaving the Authorization Server more generic and stable.
       </t>
 
       <section>
@@ -237,7 +237,7 @@
         Alternatively, the Resource Helper could skip this step and instead take its own end user authentication measures.
         Example request:
       </t>
-      <sourcecode><![CDATA[ 
+      <sourcecode><![CDATA[
 GET /subject-info?nonce=12345678 HTTP/1.1
 Host: authorization-server.example.com
 Authorization: &lt;...&gt;
@@ -260,7 +260,7 @@ Authorization: &lt;...&gt;
         The Resource Helper will guide the end user in picking access scopes.
         Note that it is the responsibility of the Resource Helper to help the end user make the right decisions
         here. The choice will be opaque to the Authorization Server, to eventually be interpreted by the Resource
-        Server during resource access (step 11 in the diagram above).
+        Server during resource access.
       </t>
     </section>
 
@@ -276,7 +276,7 @@ Authorization: &lt;...&gt;
         displaying a list of one-line labels could be convenient there.
       </t>
       <t>
-        This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.        
+        This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.
       </t>
     </section>
 
@@ -310,7 +310,7 @@ Authorization: &lt;...&gt;
         <li>(optional) an opaque introspect object (to be included in the introspection response for the access token, if applicable)</li>
       </ul>
       <t>
-        Apart from the inclusion of the nonce which binds this back channel call to the initial front channel redirect (step 2 in the diagram
+        Apart from the inclusion of the nonce which binds this back channel call to the initial front channel redirect (step B in the diagram
         above), the Resource Helper MUST also provide credentials that can identify it as a trusted member of the Authorization Server's
         Resource Helper Registry, for instance through an `Authorization` header as agreed between Authorization Server and Resource Helper,
         and this request MUST be made over TLS, to the choice endpoint of the Authorization Server.
@@ -318,7 +318,7 @@ Authorization: &lt;...&gt;
       <t>
         Here is a non-normative example:
       </t>
-      <sourcecode><![CDATA[ 
+      <sourcecode><![CDATA[
 POST /choice
 Content-Type: application/json
 Authorization: &lt;...&gt;
@@ -421,10 +421,9 @@ Authorization: &lt;...&gt;
       <references>
         <name>Normative References</name>
         <!-- Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words -->
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>        
-
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
         <!-- Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words -->
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>        
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
       </references>
 
       <references>
@@ -440,7 +439,7 @@ Authorization: &lt;...&gt;
 
         <!-- OAuth 2.0 Rich Authorization Requests -->
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9396.xml"/>
-        
+
         <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-gnap-resource-servers-05.xml"/>
 
         <reference anchor="UMA-Fed-Authz"
