@@ -65,7 +65,7 @@
         an optional "subject_info" endpoint and a redirect end point for the front channel.
       </t>
     </abstract>
-    
+
   </front>
 
   <middle>
@@ -237,7 +237,7 @@
         Alternatively, the Resource Helper could skip this step and instead take its own end user authentication measures.
         Example request:
       </t>
-      <sourcecode><![CDATA[ 
+      <sourcecode><![CDATA[
 GET /subject-info?nonce=12345678 HTTP/1.1
 Host: authorization-server.example.com
 Authorization: &lt;...&gt;
@@ -276,7 +276,7 @@ Authorization: &lt;...&gt;
         displaying a list of one-line labels could be convenient there.
       </t>
       <t>
-        This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.        
+        This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.
       </t>
     </section>
 
@@ -318,7 +318,7 @@ Authorization: &lt;...&gt;
       <t>
         Here is a non-normative example:
       </t>
-      <sourcecode><![CDATA[ 
+      <sourcecode><![CDATA[
 POST /choice
 Content-Type: application/json
 Authorization: &lt;...&gt;
@@ -421,10 +421,9 @@ Authorization: &lt;...&gt;
       <references>
         <name>Normative References</name>
         <!-- Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words -->
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>        
-
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
         <!-- Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words -->
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>        
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
       </references>
 
       <references>
@@ -440,7 +439,7 @@ Authorization: &lt;...&gt;
 
         <!-- OAuth 2.0 Rich Authorization Requests -->
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9396.xml"/>
-        
+
         <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-gnap-resource-servers-05.xml"/>
 
         <reference anchor="UMA-Fed-Authz"
