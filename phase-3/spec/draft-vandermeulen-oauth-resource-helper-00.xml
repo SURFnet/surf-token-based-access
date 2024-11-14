@@ -73,22 +73,48 @@
     <section>
       <name>Introduction</name>
       <t>
-        The Authorization Server may redirect the Resource Owner to the Resource Helper's Pick endpoint,
-        as part of the authorization flow.
+        In OAuth 2.0 <xref target="RFC6749" /> an Authorization Server is responsible for the autorization process.
+        We introduce a Resource Helper, which is a separate component that can handle part of the OAuth Grant Flow of the Authorization Server, 
+        making the Authorization Server more modular.
+        A Resouce Helper is associated with a specific Resource Server and provides the user interface for the Resource Owner to pick access Scopes
+        <xref target="RFC6749" section="3.3" sectionFormat="parens" />,        
+        and possibly other Resource Server specific to put in the Access Token, or in a Introspection Response <xref target="RFC7662" section="2.2" sectionFormat="parens" />.
+        This allows an Authorization Server to remain generic and stable, while the a Resource Helper can be updated in lock-step with the functionality of the Resource Server.
+        This document describes the protocal and interface and beteen the Authorization Server and the Resource Helper.
       </t>
       <t>
-        During the Authorization Code Flow as described in <xref target="I-D.ietf-oauth-v2-1"/>,
-        the authorization server authenticates the resource owner (via the user agent)
-        and establishes whether the resource owner (partially) grants or denies the client's access request.
+        During an OAuth 2.0 Authorization Grant Flow,
+        the Authorization Server authenticates the resource owner (via the user agent)
+        and establishes whether the resource owner (partially) grants or denies the client's request for a token.
         For the authorization server to meaningfully measure if the resource owner wants to grant or deny the request,
         it needs to display, presumably via the user agent,
-        the details of the access token scope in a way that the resource owner will understand.
+        the details of the authorization that the resource owner about do give in a way that they will understand.
+        This is especially the case when the resource owner wants provide a more fine-grained authorization than just 'yes' or 'no'.
+        For example when the resource owner only wants to allow specific kinds of operations on specific resources, for example:
+        "allow the client to view these three pictures, but not to delete them", or "allow the client write access to only this specific directory".
       </t>
       <t>
+        Several extension to OAuth have been created to allow for more control over the authorization process outside of the Authorization Server.
+        <ul>
+          In OAuth 2.0 Rich Authorization Requests<xref target="RFC7662" />, the client includes a JSON description with the 
+          <tt>authorization_details</tt> of the requested authorization in the in the Authorization Request to the Authorization Server.
+          This requires the client and the resource server to agree on the format and meaning of the authorization_details to that the client can create it 
+          and the authorization server can interpret it and display it to the resource owner.
+        </ul>
+          In OAuth 2.0 Resource Set Registration <xref target="UMA-Fed-Authz" />, a API is defined on the Authorization Server to allow a Resource Server to register
+          Resource Sets at the Authorization Server. A resource set consists of scopes, a description and an icon to allow the Authorization Server to display
+          the available resource sets to the Resource Owner in a meaningful way.
+        <ul>
+          UMA Federated Authorization ...
+        </ul>
+        <ul>
+          ...
+        </ul>
+
         Displaying access token scope details via the user agent may involve describing specific resources and actions,
-        in a human-viewable, probably locale-dependent, and possibly even persona-dependent way, possibly using a combination
-        of text, images, and layout. The Resource Helper can specialise in this task, leaving the Authorization Server more
-        generic and stable.
+        in a human-viewable, probably locale-dependent, and possibly even persona-dependent way, 
+        possibly using a combination of text, images, and layout.        
+        The Resource Helper can specialise in this task, leaving the Authorization Server more generic and stable.        
       </t>
 
       <section>
@@ -107,76 +133,7 @@
 
     <section>
       <name>Generic Flow</name>
-      <t>
-        [sequence diagram etc]
-      </t>
-       <artwork type="ascii-art">
-        <![CDATA[
-     ,------.           ,--.           ,--.           ,--.
-     |Client|           |AS|           |RH|           |RS|
-     `---+--'           `-+'           `-+'           `-+'
-         |      1.        |              |              | 
-         |--------------->|              |              | 
-         |                |              |              | 
-         |                |     2.       |              | 
-         |                |------------->|              | 
-         |                |              |              | 
-         |                |     3.       |              | 
-         |                |<-------------|              | 
-         |                |              |              | 
-         |                |     4.       |              | 
-         |                |------------->|              | 
-         |                |              |              | 
-         |                |            ,----.           | 
-         |                |            |5.  |           | 
-         |                |            `----'           | 
-         |                |     6.       |              | 
-         |                |<-------------|              | 
-         |                |              |              | 
-         |                |     7.       |              | 
-         |                |<-------------|              | 
-         |                |              |              | 
-         |      8.        |              |              | 
-         |<---------------|              |              | 
-         |                |              |              | 
-         |      9.        |              |              | 
-         |--------------->|              |              | 
-         |                |              |              | 
-         |      10.       |              |              | 
-         |<---------------|              |              | 
-         |                |              |              | 
-         |                |    11.       |              | 
-         |--------------------------------------------->| 
-         |                |              |              | 
-         |                |            12.              | 
-         |                |<----------------------------| 
-         |                |              |              | 
-         |                |            13.              | 
-         |                |---------------------------->| 
-         |                |              |              | 
-         |                |    14.       |              | 
-         |<---------------------------------------------| 
-     ,---+--.           ,-+.           ,-+.           ,-+.
-     |Client|           |AS|           |RH|           |RS|
-     `------'           `--'           `--'           `--'
-        ]]>
-      </artwork>
-      <ul>
-        <li>1. Start OAuth 2.0 authorization code flow</li>
-        <li>2. [Nonce] Start Resource helper Sub-flow</li>
-        <li>3. [Nonce] Get user information (optional)</li>
-        <li>4. [Nonce] Return user information (optional)</li>
-        <li>5. User select scopes and RS access token custom info</li>
-        <li>6. [Nonce, token info] Send scope, RS custom JSON for in access token, and token label</li>
-        <li>7. [Nonce, Result] Redirect to AS </li>
-        <li>8. OAuth 2.0 Redirect to client with code</li>
-        <li>9. OAuth 2.0 Token request</li>
-        <li>10. Token response</li>
-        <li>11. Resource access request</li>
-        <li>12. OAuth 2.0 Token introspection request (optional)</li>
-        <li>13. OAuth 2.0 Token introspection response (optional)</li>
-        <li>14. Resource access response</li>
-      </ul>
+      <artwork type="ascii-art" src="seq.txt" />
     </section>
 
     <section>
@@ -194,6 +151,18 @@
         The Authorization Server SHOULD NOT redirect the end user to Resource Helpers other than the ones
         from this registry.
         It SHOULD also NOT accept choice submissions from Resource Helpers other than the ones
+        from this registry.
+        The Authorization Server SHOULD maintain a registry of trustworthy Resource Helpers,
+        containing for each Resource Helper:
+      </t>
+      <ul>
+        <li>a fully qualified domain name (for `/.well-known/resource-helper` lookup, see below)</li>
+        <li>client credentials</li>
+      </ul>
+      <t>
+        The Authorization Server SHOULD NOT redirect the end user to Resource Helpers other than the ones
+        from this registry.
+        It SHOULD also NOT accept authenticated choice submissions from Resource Helpers other than the ones
         from this registry.
       </t>
     </section>
@@ -230,9 +199,9 @@
         <li>a nonce for this interaction</li>
         <li>(optional) the scope parameter as specified by the client (if any)</li>
       </ul>
-     <t>
-        Example: <tt>https://resource-helper.example.com/pick?nonce=12345678&amp;scope=read</tt>.
-     </t>
+      <t>
+        Example: <tt>https://resource-helper.example.com/pick?nonce=12345678&amp;scope=read</tt>
+      </t>
     </section>
 
     <section>
@@ -243,19 +212,21 @@
         Alternatively, the Resource Helper could skip this step and instead take its own end user authentication measures.
         Example request:
       </t>
-<sourcecode>
+      <sourcecode><![CDATA[ 
 GET /subject-info?nonce=12345678 HTTP/1.1
 Host: authorization-server.example.com
 Authorization: &lt;...&gt;
-</sourcecode>
+      ]]>
+      </sourcecode>
       <t>
         Example response:
       </t>
-<sourcecode>
+      <sourcecode><![CDATA[
 {
   "username": "polly123@example.com"
 }
-</sourcecode>
+        ]]>
+      </sourcecode>
     </section>
 
     <section>
@@ -280,7 +251,7 @@ Authorization: &lt;...&gt;
         displaying a list of one-line labels could be convenient there.
       </t>
       <t>
-        This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.
+        This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.        
       </t>
     </section>
 
@@ -303,7 +274,7 @@ Authorization: &lt;...&gt;
     <section>
       <name>The Choice endpoint</name>
       <t>
-        After allowing the user to pick an access scope, the resulting choice submission (step 6 in the diagram above) would include:
+        After allowing the user to pick an access scope, the resulting choice submission would include:
       </t>
       <ul>
         <li>nonce (the nonce from the previous steps)</li>
@@ -322,7 +293,7 @@ Authorization: &lt;...&gt;
       <t>
         Here is a non-normative example:
       </t>
-      <sourcecode>
+      <sourcecode><![CDATA[ 
 POST /choice
 Content-Type: application/json
 Authorization: &lt;...&gt;
@@ -342,6 +313,7 @@ Authorization: &lt;...&gt;
     "modes": "rwx"
   },
 }
+      ]]>
       </sourcecode>
     </section>
 
@@ -423,14 +395,29 @@ Authorization: &lt;...&gt;
       <name>References</name>
       <references>
         <name>Normative References</name>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
-        <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-oauth-v2-1-11.xml"/>
+        <!-- Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words -->
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>        
+
+        <!-- Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words -->
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>        
       </references>
 
       <references>
         <name>Informative References</name>
+        <!-- The OAuth 2.0 Authorization Framework -->
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6749.xml"/>
+
+        <!-- OAuth 2.1 draft-->
+        <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-oauth-v2-1-11.xml"/>
+
+        <!-- Token introspection -->
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7662.xml"/>
+
+        <!-- OAuth 2.0 Rich Authorization Requests -->
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9396.xml"/>
+        
         <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-gnap-resource-servers-05.xml"/>
+
         <reference anchor="UMA-Fed-Authz"
                    target="https://docs.kantarainitiative.org/uma/wg/rec-oauth-uma-federated-authz-2.0.html">
           <front>
