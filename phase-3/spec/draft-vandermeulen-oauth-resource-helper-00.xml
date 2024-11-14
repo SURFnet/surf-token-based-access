@@ -95,22 +95,27 @@
       </t>
       <t>
         Several extension to OAuth have been created to allow for more control over the authorization process outside of the Authorization Server.
-        <ul>
+      </t>
+      <ul>
+        <li>
           In OAuth 2.0 Rich Authorization Requests<xref target="RFC7662" />, the client includes a JSON description with the 
           <tt>authorization_details</tt> of the requested authorization in the in the Authorization Request to the Authorization Server.
           This requires the client and the resource server to agree on the format and meaning of the authorization_details to that the client can create it 
           and the authorization server can interpret it and display it to the resource owner.
-        </ul>
+        </li>
+        <li>
           In OAuth 2.0 Resource Set Registration <xref target="UMA-Fed-Authz" />, a API is defined on the Authorization Server to allow a Resource Server to register
           Resource Sets at the Authorization Server. A resource set consists of scopes, a description and an icon to allow the Authorization Server to display
           the available resource sets to the Resource Owner in a meaningful way.
-        <ul>
+        </li>
+        <li>
           UMA Federated Authorization ...
-        </ul>
-        <ul>
+        </li>
+        <li>
           ...
-        </ul>
-
+        </li>
+      </ul>
+      <t>
         Displaying access token scope details via the user agent may involve describing specific resources and actions,
         in a human-viewable, probably locale-dependent, and possibly even persona-dependent way, 
         possibly using a combination of text, images, and layout.        
