@@ -104,18 +104,14 @@
           and the authorization server can interpret it and display it to the resource owner.
         </li>
         <li>
-          In OAuth 2.0 Resource Set Registration <xref target="UMA-Fed-Authz" />, an API is defined on the Authorization Server to allow a Resource Server to register
+          In Resource Set Registration as proposed in <xref target="UMA-Fed-Authz" /> and similarly in <xref target="I-D.ietf-gnap-resource-servers"/>,
+          an API is defined on the Authorization Server to allow a Resource Server to register
           Resource Sets at the Authorization Server. A resource set consists of scopes, a description and an icon to allow the Authorization Server to display
           the available resource sets to the Resource Owner in a meaningful way.
         </li>
-        <li>
-          UMA Federated Authorization ...
-        </li>
-        <li>
-          ...
-        </li>
       </ul>
       <t>
+        The role of the Resource Helper we propose is smaller and more interactive than these existing OAuth extensions.
         Displaying access token scope details via the user agent may involve describing specific resources and actions,
         in a human-viewable, probably locale-dependent, and possibly even persona-dependent way,
         possibly using a combination of text, images, and layout.
