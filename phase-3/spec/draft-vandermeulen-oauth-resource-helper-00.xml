@@ -55,13 +55,13 @@
 
     <abstract>
       <t>
-        A Resource Helper can replace the scope-picking capabilities of an OAuth Authorization Server.
-        This makes the software architecture of the Authorization Server more modular,
-        and can alleviate organisational challenges when the API of a Resource Server evolves.
-        The Resource Helper still needs to adapt in lock-step with API changes,
-        but the rest of the Authorization Server can be managed on a more stable software deployment cycle.
-        The Resource Helper provides one front channel endpoint: a "pick" endpoint for selecting access scopes in detail.
-        The Authorization exposes a "choice" endpoint where the Resource Helper can submit the Resource Owner's choice,
+        A resource helper can replace the scope-picking capabilities of an OAuth authorization server.
+        This makes the software architecture of the authorization server more modular,
+        and can alleviate organisational challenges when the API of a resource server evolves.
+        The resource helper still needs to adapt in lock-step with API changes,
+        but the rest of the authorization server can be managed on a more stable software deployment cycle.
+        The resource helper provides one front channel endpoint: a "pick" endpoint for selecting access scopes in detail.
+        The authorization server exposes a "choice" endpoint where the resource helper can submit the resource owner's choice,
         an optional "subject_info" endpoint and a redirect end point for the front channel.
       </t>
     </abstract>
@@ -73,49 +73,50 @@
     <section>
       <name>Introduction</name>
       <t>
-        In OAuth 2.0 <xref target="RFC6749" /> an Authorization Server is responsible for the autorization process.
-        We introduce a Resource Helper, which is a separate component that can handle part of the OAuth Grant Flow of the Authorization Server,
-        making the Authorization Server more modular.
-        A Resouce Helper is associated with a specific Resource Server and provides the user interface for the Resource Owner to pick access Scopes
+        In OAuth 2.0 <xref target="RFC6749" /> an authorization server is responsible for the authorization process.
+        We introduce a resource helper, which is a separate component that can handle part of the OAuth Grant Flow of the authorization server,
+        making the authorization server more modular.
+        A Resouce Helper is associated with a specific resource server and provides the user interface for the resource owner to pick Access Token Scopes
         <xref target="RFC6749" section="3.3" sectionFormat="parens" />,
-        and possibly other Resource Server specific information to put in the Access Token, or in an Introspection Response <xref target="RFC7662" section="2.2" sectionFormat="parens" />.
-        This allows an Authorization Server to remain generic and stable, while the Resource Helper can be updated in lock-step with the functionality of the Resource Server.
-        This document describes the protocol and interface between the Authorization Server and the Resource Helper.
+        and possibly other resource server specific information to put in the Access Token, or in an Introspection Response <xref target="RFC7662" section="2.2" sectionFormat="parens" />.
+        This allows an authorization server to remain generic and stable, while the resource helper can be updated in lock-step with the functionality of the resource server.
+        This document describes the protocol and interface between the authorization server and the resource helper.
       </t>
       <t>
         During an OAuth 2.0 Authorization Grant Flow,
-        the Authorization Server authenticates the resource owner (via the user agent)
+        the authorization server authenticates the resource owner (via the user agent)
         and establishes whether the resource owner (partially) grants or denies the client's request for a token.
         For the authorization server to meaningfully measure if the resource owner wants to grant or deny the request,
         it needs to display, presumably via the user agent,
         the details of the authorization that the resource owner is about to give in a way that they will understand.
-        This is especially the case when the resource owner wants to provide a more fine-grained authorization than just 'yes' or 'no'.
-        For example when the resource owner only wants to allow specific kinds of operations on specific resources, for example:
+        These details can be very specific for the resource server's current functionality,
+        especially when the resource owner wants to provide a more fine-grained authorization than just 'yes' or 'no'.
+        For example when the resource owner only wants to allow specific kinds of operations on specific resources, like
         "allow the client to view these three pictures, but not to delete them", or "allow the client write access to only this specific directory".
       </t>
       <t>
-        Several extension to OAuth have been created to allow for more control over the authorization process outside of the Authorization Server.
+        Several extension to OAuth have been created to allow for more control over the authorization process outside of the authorization server.
       </t>
       <ul>
         <li>
           In OAuth 2.0 Rich Authorization Requests<xref target="RFC9396" />, the client includes a JSON description with the
-          <tt>authorization_details</tt> of the requested authorization in the Authorization Request to the Authorization Server.
+          <tt>authorization_details</tt> of the requested authorization in the Authorization Request to the authorization server.
           This requires the client and the resource server to agree on the format and meaning of the authorization_details so that the client can create it
           and the authorization server can interpret it and display it to the resource owner.
         </li>
         <li>
           In Resource Set Registration as proposed in <xref target="UMA-Fed-Authz" /> and similarly in <xref target="I-D.ietf-gnap-resource-servers"/>,
-          an API is defined on the Authorization Server to allow a Resource Server to register
-          Resource Sets at the Authorization Server. A resource set consists of scopes, a description and an icon to allow the Authorization Server to display
-          the available resource sets to the Resource Owner in a meaningful way.
+          an API is defined on the authorization server to allow a resource server to register
+          Resource Sets at the authorization server. A resource set consists of scopes, a description and an icon to allow the authorization server to display
+          the available resource sets to the resource owner in a meaningful way.
         </li>
       </ul>
       <t>
-        The role of the Resource Helper we propose is smaller and more interactive than these existing OAuth extensions.
+        The role of the resource helper we propose is smaller and more interactive than these existing OAuth extensions.
         Displaying access token scope details via the user agent may involve describing specific resources and actions,
         in a human-viewable, probably locale-dependent, and possibly even persona-dependent way,
         possibly using a combination of text, images, and layout.
-        The Resource Helper can specialise in this task, leaving the Authorization Server more generic and stable.
+        The resource helper can specialise in this task, leaving the authorization server more generic and stable.
       </t>
 
       <section>
@@ -160,8 +161,8 @@
     <section>
       <name>Resource Helper Registry</name>
       <t>
-        The Authorization Server SHOULD maintain a registry of trustworthy Resource Helpers,
-        containing for each Resource Helper:
+        The authorization server SHOULD maintain a registry of trustworthy resource helpers,
+        containing for each resource helper:
       </t>
       <ul>
         <li>a fully qualified domain name (for `/.well-known/resource-helper` lookup, see below)</li>
@@ -169,21 +170,21 @@
         <li>which scope-picking tasks it can be used for</li>
       </ul>
       <t>
-        The Authorization Server SHOULD NOT redirect the end user to Resource Helpers other than the ones
+        The authorization server SHOULD NOT redirect the end user to resource helpers other than the ones
         from this registry.
-        It SHOULD also NOT accept choice submissions from Resource Helpers other than the ones
+        It SHOULD also NOT accept choice submissions from resource helpers other than the ones
         from this registry.
-        The Authorization Server SHOULD maintain a registry of trustworthy Resource Helpers,
-        containing for each Resource Helper:
+        The authorization server SHOULD maintain a registry of trustworthy resource helpers,
+        containing for each resource helper:
       </t>
       <ul>
         <li>a fully qualified domain name (for `/.well-known/resource-helper` lookup, see below)</li>
         <li>client credentials</li>
       </ul>
       <t>
-        The Authorization Server SHOULD NOT redirect the end user to Resource Helpers other than the ones
+        The authorization server SHOULD NOT redirect the end user to resource helpers other than the ones
         from this registry.
-        It SHOULD also NOT accept authenticated choice submissions from Resource Helpers other than the ones
+        It SHOULD also NOT accept authenticated choice submissions from resource helpers other than the ones
         from this registry.
       </t>
     </section>
@@ -191,21 +192,21 @@
     <section>
       <name>Resource Helper Well-Known Endpoint</name>
       <t>
-        At its `/.well-known/resource-helper` end point, the Resource Helper SHOULD serve a JSON document,
+        At its `/.well-known/resource-helper` end point, the resource helper SHOULD serve a JSON document,
         containing an object with a member whose key is &quot;pick&quot; and whose value is the front channel
-        URL for the pick endpoint to which the Authorization Server can redirect the user.
+        URL for the pick endpoint to which the authorization server can redirect the user.
      </t>
     </section>
 
     <section>
       <name>Resource Helper Configuration</name>
       <t>
-        The Resource Helper needs to persist:
+        The resource helper needs to persist:
       </t>
       <ul>
-        <li>the `choice` back channel endpoint URL of the Authorization Server</li>
-        <li>(optional) the <tt>subject_info</tt> back channel endpoint URL of the Authorization Server</li>
-        <li>the front channel callback URL of the Authorization Server</li>
+        <li>the `choice` back channel endpoint URL of the authorization server</li>
+        <li>(optional) the <tt>subject_info</tt> back channel endpoint URL of the authorization server</li>
+        <li>the front channel callback URL of the authorization server</li>
         <li>its client credentials for use in backchannel calls to the Authorization server</li>
       </ul>
     </section>
@@ -213,7 +214,7 @@
     <section>
       <name>Resource Helper Pick endpoint</name>
       <t>
-        The Authorization Server can redirect the end user to the Resource Helper's Pick endpoint, with the
+        The authorization server can redirect the end user to the resource helper's Pick endpoint, with the
         following query parameters:
      </t>
       <ul>
@@ -228,9 +229,9 @@
     <section>
       <name>Subject Info Lookup</name>
       <t>
-        The Resource Helper can optionally make a HTTP call to the Subject Info endpoint of the Authorization Server,
+        The resource helper can optionally make a HTTP call to the Subject Info endpoint of the authorization server,
         with the nonce from the pick request in the query parameter to obtain more information about the end user.
-        Alternatively, the Resource Helper could skip this step and instead take its own end user authentication measures.
+        Alternatively, the resource helper could skip this step and instead take its own end user authentication measures.
         Example request:
       </t>
       <sourcecode><![CDATA[
@@ -253,9 +254,9 @@ Authorization: &lt;...&gt;
     <section>
       <name>Picking Access Token Scopes</name>
       <t>
-        The Resource Helper will guide the end user in picking access scopes.
-        Note that it is the responsibility of the Resource Helper to help the end user make the right decisions
-        here. The choice will be opaque to the Authorization Server, to eventually be interpreted by the Resource
+        The resource helper will guide the end user in picking access scopes.
+        Note that it is the responsibility of the resource helper to help the end user make the right decisions
+        here. The choice will be opaque to the authorization server, to eventually be interpreted by the Resource
         Server during resource access.
       </t>
     </section>
@@ -264,15 +265,15 @@ Authorization: &lt;...&gt;
       <name>Human-readable label</name>
       <t>
         Even though the detailed view of an access scope can only be provided by the resource helper,
-        it is still useful if the authorisation server can at least display a string label.
-        In particular, when the authorisation server displays the final confirmation dialog,
+        it is still useful if the authorization server can at least display a string label.
+        In particular, when the authorization server displays the final confirmation dialog,
         to grant the viewed or picked scope to the client in question,
         it could display this label in much the same way as it will likely display some label for the client's identity there.
         Also, when displaying a list of currently valid tokens, with the option to revoke,
         displaying a list of one-line labels could be convenient there.
       </t>
       <t>
-        This label could be produced programmatically by the Resource Helper, or hand-picked by the Resource Owner.
+        This label could be produced programmatically by the resource helper, or hand-picked by the resource owner.
       </t>
     </section>
 
@@ -286,9 +287,9 @@ Authorization: &lt;...&gt;
         and in the token introspect response.
       </t>
       <t>
-        The Resource Helper might also share state with the Resource Server
-        that helps the Resource Server to understand the scope of the access tokens issued by the Authorisation Server,
-        for instance through a database backend that is shared between the Resource Helper and the Resource Server.
+        The resource helper might also share state with the resource server
+        that helps the resource server to understand the scope of the access tokens issued by the authorization server,
+        for instance through a database backend that is shared between the resource helper and the resource server.
       </t>
     </section>
 
@@ -300,16 +301,16 @@ Authorization: &lt;...&gt;
       <ul>
         <li>nonce (the nonce from the previous steps)</li>
         <li>action (must contain the string 'grant' or the string 'deny' as appropriate)</li>
-        <li>label (a human-readable string for display in for instance the Authorization Server's token revokation interface)</li>
+        <li>label (a human-readable string for display in for instance the authorization server's token revokation interface)</li>
         <li>(optional) a scope field, if different from the one that was requested (to be passed back to the client)</li>
         <li>(optional) an opaque payload object (to be included in the access token payload)</li>
         <li>(optional) an opaque introspect object (to be included in the introspection response for the access token, if applicable)</li>
       </ul>
       <t>
         Apart from the inclusion of the nonce which binds this back channel call to the initial front channel redirect (step B in the diagram
-        above), the Resource Helper MUST also provide credentials that can identify it as a trusted member of the Authorization Server's
-        Resource Helper Registry, for instance through an `Authorization` header as agreed between Authorization Server and Resource Helper,
-        and this request MUST be made over TLS, to the choice endpoint of the Authorization Server.
+        above), the resource helper MUST also provide credentials that can identify it as a trusted member of the authorization server's
+        resource helper Registry, for instance through an `Authorization` header as agreed between authorization server and resource helper,
+        and this request MUST be made over TLS, to the choice endpoint of the authorization server.
       </t>
       <t>
         Here is a non-normative example:
@@ -339,10 +340,10 @@ Authorization: &lt;...&gt;
     </section>
 
     <section>
-      <name>Redirect back to the Authorization Server</name>
+      <name>Redirect back to the authorization server</name>
       <t>
-        After the choice information has been successfully submitted to the Authorization Server, the end user can be
-        redirected back to the Authorization Server to continue the OAuth flow as usual. This redirect MUST contain
+        After the choice information has been successfully submitted to the authorization server, the end user can be
+        redirected back to the authorization server to continue the OAuth flow as usual. This redirect MUST contain
         the nonce for this interaction in the query parameter, and <tt>result=ok</tt> if all steps were completed
         successfully. Other values for the <tt>result</tt> query parameter SHOULD be used to indicate different types
         of errors:
@@ -353,8 +354,8 @@ Authorization: &lt;...&gt;
         <li>unauth: if no end user could be authenticated</li>
         <li>cancel: if the end user chose to abort the process</li>
         <li>error: if the back channel call to the choice end point resulted in no response or in an error response</li>
-        <li>invalid: if the Resource Helper could not unambiguously interpret its task</li>
-        <li>fail: if the Resource Helper was unable to perform it tasks for other reasons</li>
+        <li>invalid: if the resource helper could not unambiguously interpret its task</li>
+        <li>fail: if the resource helper was unable to perform it tasks for other reasons</li>
       </ul>
       <t>
         Example: <tt>https://authorization-server.example.com/callback?nonce=12345678&amp;result=ok</tt>.
@@ -369,14 +370,14 @@ Authorization: &lt;...&gt;
     <section anchor="Security">
       <name>Security Considerations</name>
       <t>
-        It is important to understand the value of the choice submission from Resource Helper to Authorization Server.
+        It is important to understand the value of the choice submission from resource helper to authorization server.
         It already contains an access grant as a half-product,
         for the authorization server to finalize by actually issuing it to a client.
       </t>
       <t>
         This model differs from the Lodging Intent pattern used in<xref target="FAPI-CIBA"/>,
         where the intent is only a description of some intended transaction,
-        directly between Client and Resource Server,
+        directly between client and resource server,
         and from Resource Registries
         as described in section 3.4 of <xref target="I-D.ietf-gnap-resource-servers"/>,
         or as described in section 3.2 of <xref target="UMA-Fed-Authz"/>,
@@ -386,26 +387,26 @@ Authorization: &lt;...&gt;
         The choice submission represents more than a description of a transaction scope or a
         resource registration.
         It additionally represents an assessment that this description was intentionally
-        composed or approved by an authenticated Resource Owner, authorized to
+        composed or approved by an authenticated resource owner, authorized to
         grant access to such resources, actually taking an active decision to grant such
         access.
       </t>
       <t>
-        What it does not include is the information to which particular Client they will grant it.
-        That remains the jurisdiction of the Authorization Server.
+        What it does not include is the information to which particular client they will grant it.
+        That remains the jurisdiction of the authorization server.
       </t>
       <t>
-        The Resource Helper MUST NOT display any information that the currently authenticated user is not allowed to see,
-        even if it is instructed to display them through the scope parameter that comes from the Authorization Server.
+        The resource helper MUST NOT display any information that the currently authenticated user is not allowed to see,
+        even if it is instructed to display them through the scope parameter that comes from the authorization server.
       </t>
       <t>
-        The Resource Helper MUST only grant access to resources for which the currently authenticated user is a Resource Owner.
-        The resulting access token scope MUST always be a subset (attenuation) of the Resource Owner's own access scope.
+        The resource helper MUST only grant access to resources for which the currently authenticated user is a resource owner.
+        The resulting access token scope MUST always be a subset (attenuation) of the resource owner's own access scope.
       </t>
       <t>
-        The scope coming back from the Resource Helper SHOULD be interpretable outside the context of a specific user.
-        For instance, a scope 'my-billing-details:read' means different things for different Resource Owners.
-        To avoid confusion, especially if authentication was handled through the Authorization Server's <tt>user_info</tt> end point (see above),
+        The scope coming back from the resource helper SHOULD be interpretable outside the context of a specific user.
+        For instance, a scope 'my-billing-details:read' means different things for different resource owners.
+        To avoid confusion, especially if authentication was handled through the authorization server's <tt>user_info</tt> end point (see above),
         use a globally unambiguous scope identifier such as 'user-123:billing-detals:read'.
       </t>
     </section>
