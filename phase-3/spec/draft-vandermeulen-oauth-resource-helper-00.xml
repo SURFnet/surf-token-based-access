@@ -98,7 +98,7 @@
       </t>
       <ul>
         <li>
-          In OAuth 2.0 Rich Authorization Requests<xref target="RFC7662" />, the client includes a JSON description with the
+          In OAuth 2.0 Rich Authorization Requests<xref target="RFC9396" />, the client includes a JSON description with the
           <tt>authorization_details</tt> of the requested authorization in the Authorization Request to the Authorization Server.
           This requires the client and the resource server to agree on the format and meaning of the authorization_details so that the client can create it
           and the authorization server can interpret it and display it to the resource owner.
@@ -426,9 +426,6 @@ Authorization: &lt;...&gt;
         <name>Informative References</name>
         <!-- The OAuth 2.0 Authorization Framework -->
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6749.xml"/>
-
-        <!-- OAuth 2.1 draft-->
-        <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-oauth-v2-1-11.xml"/>
 
         <!-- Token introspection -->
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7662.xml"/>
