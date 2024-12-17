@@ -1,23 +1,17 @@
-                                                                        
-                                                                        
-                                                                        
-                                                                        
-                                                                        
-                                                                        
-+--------+                                             +---------------+
-|        |-(A)---------Authorization Grant------------>|               |
-|        |                                             |               |
-|        |   +----------+                              |               |
-|        |   |          |<------------Pick---------(B)-|               |
-|        |   |          |                              |               |
-|        |   |          |-(C)-----Get Subject--------->|               |
-|        |   | Resource |                              | Authorization |
-| Client |   |  Helper  |        Submit Scopes,        |    Server     |
-|        |   |          |-(D)---Token data, and ------>|               |
-|        |   |          |      Introspection data      |               |
-|        |   |          |                              |               |
-|        |   |          |-(E)--------Return----------->|               |
-|        |   +----------+                              |               |
-|        |                                             |               |
-|        |<---------------Access Token-------------(F)-|               |
-+--------+                                             +---------------+
++--------+                                          +---------------+
+|        |-(A)-------Authorization Grant----------->|               |
+|        |                                          |               |
+|        |   +----------+                           |               |
+|        |   |          |<----------Pick--------(B)-|               |
+|        |   |          |                           |               |
+|        |   |          |-(C)----Get Subject------->|               |
+|        |   | Resource |                           | Authorization |
+| Client |   |  Helper  |      Submit Scopes,       |    Server     |
+|        |   |          |-(D)--Token data, and ---->|               |
+|        |   |          |    Introspection data     |               |
+|        |   |          |                           |               |
+|        |   |          |-(E)------Return---------->|               |
+|        |   +----------+                           |               |
+|        |                                          |               |
+|        |<--------------Access Token-----------(F)-|               |
++--------+                                          +---------------+
