@@ -55,14 +55,14 @@
 
     <abstract>
       <t>
-        A resource helper can replace the scope-picking capabilities of an OAuth authorization server.
-        This makes the software architecture of the authorization server more modular,
-        and can alleviate organisational challenges when the API of a resource server evolves.
-        The resource helper still needs to adapt in lock-step with API changes,
-        but the rest of the authorization server can be managed on a more stable software deployment cycle.
-        The resource helper provides one front channel endpoint: a "pick" endpoint for selecting access scopes in detail.
-        The authorization server exposes a "choice" endpoint where the resource helper can submit the resource owner's choice,
-        an optional "subject_info" endpoint and a redirect end point for the front channel.
+        This RFC introduces the concept of a Resource Helper in OAuth 2.0.
+        A Resource Helper is a modular component that assists the Authorization Server in managing fine-grained authorization processes.
+        The Resource Helper, associated with a specific Resource Server, handles scope selection and resource-specific details,
+        providing the user-interface for the Resource Owner to approve or refine access requests.
+        By offloading scope-related user interaction to the Resource Helper,
+        the Authorization Server remains generic and stable while the Resource Helper evolves alongside the Resource Server's requirements.
+        This specification defines the protocol, interfaces, and flow between the Authorization Server and the Resource Helper.
+        Introducing a Resource Helper does not affect the OAuth client or the interaction between the OAuth client and the Resource Server.
       </t>
     </abstract>
 
