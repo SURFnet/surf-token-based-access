@@ -252,8 +252,8 @@ Authorization: &lt;...&gt;
       <name>Picking Access Token Scopes</name>
       <t>
         The resource helper will guide the end user in picking access scopes.
-        Note that it is the responsibility of the resource helper to help the end user make the right decisions
-        here. The choice will be opaque to the authorization server, to eventually be interpreted by the Resource
+        Note that it is the responsibility of the resource helper to help the end user make the right decisions here.
+        The choice will be opaque to the authorization server, to eventually be interpreted by the Resource
         Server during resource access.
       </t>
     </section>
