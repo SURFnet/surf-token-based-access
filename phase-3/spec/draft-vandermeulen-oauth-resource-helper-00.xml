@@ -281,7 +281,7 @@ Authorization: &lt;...&gt;
         some custom arrangements may be included in the resource helper's software, that interact well with the resource server's
         existing processes and policies.
         To facilitate this, the authorization server MUST allow the resource helper to specify opaque data to be included in the access token payload
-        and in the token introspect response.
+        and when supported by the authorization server, the token introspect response <xref target="RFC7662" section="2.2" sectionFormat="parens" />.
       </t>
       <t>
         The resource helper might also share state with the resource server
