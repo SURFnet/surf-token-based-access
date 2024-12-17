@@ -180,7 +180,7 @@
     <section>
       <name>Resource Helper Well-Known Endpoint</name>
       <t>
-        At its `/.well-known/resource-helper` end point, the resource helper SHOULD serve a JSON document,
+        At its `/.well-known/resource-helper` endpoint, the resource helper SHOULD serve a JSON document,
         containing an object with a member whose key is &quot;pick&quot; and whose value is the front channel
         URL for the pick endpoint to which the authorization server can redirect the user.
      </t>
@@ -350,7 +350,7 @@ Authorization: &lt;...&gt;
         <li>deny: if <tt>action: deny</tt> was passed in the choice call</li>
         <li>unauth: if no end user could be authenticated</li>
         <li>cancel: if the end user chose to abort the process</li>
-        <li>error: if the back channel call to the choice end point resulted in no response or in an error response</li>
+        <li>error: if the back channel call to the choice endpoint resulted in no response or in an error response</li>
         <li>invalid: if the resource helper could not unambiguously interpret its task</li>
         <li>fail: if the resource helper was unable to perform it tasks for other reasons</li>
       </ul>
@@ -403,7 +403,7 @@ Authorization: &lt;...&gt;
       <t>
         The scope coming back from the resource helper SHOULD be interpretable outside the context of a specific user.
         For instance, a scope 'my-billing-details:read' means different things for different resource owners.
-        To avoid confusion, especially if authentication was handled through the authorization server's <tt>user_info</tt> end point (see above),
+        To avoid confusion, especially if authentication was handled through the authorization server's <tt>user_info</tt> endpoint (see above),
         use a globally unambiguous scope identifier such as 'user-123:billing-detals:read'.
       </t>
     </section>
