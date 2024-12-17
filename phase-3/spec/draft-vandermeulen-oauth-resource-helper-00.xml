@@ -90,7 +90,7 @@
         it needs to display, presumably via the user agent,
         the details of the authorization that the resource owner is about to give in a way that they will understand.
         These details can be very specific for the resource server's current functionality,
-        especially when the resource owner wants to provide a more fine-grained authorization than just 'yes' or 'no'.
+        especially when the resource owner wants to provide a more fine-grained authorization than just "yes" or "no".
         For example when the resource owner only wants to allow specific kinds of operations on specific resources, like
         "allow the client to view these three pictures, but not to delete them", or "allow the client write access to only this specific directory".
       </t>
@@ -115,8 +115,8 @@
         The role of the resource helper we propose is smaller and more interactive than these existing OAuth extensions.
         Displaying access token scope details via the user agent may involve describing specific resources and actions,
         in a human-viewable, probably locale-dependent, and possibly even persona-dependent way,
-        possibly using a combination of text, images, and layout.
-        The resource helper can specialise in this task, leaving the authorization server more generic and stable.
+        using a combination of text, images, and layout.
+        The resource helper executes this task entirely, leaving the authorization server more generic and stable.
       </t>
 
       <section>
@@ -174,18 +174,6 @@
         from this registry.
         It SHOULD also NOT accept choice submissions from resource helpers other than the ones
         from this registry.
-        The authorization server SHOULD maintain a registry of trustworthy resource helpers,
-        containing for each resource helper:
-      </t>
-      <ul>
-        <li>a fully qualified domain name (for `/.well-known/resource-helper` lookup, see below)</li>
-        <li>client credentials</li>
-      </ul>
-      <t>
-        The authorization server SHOULD NOT redirect the end user to resource helpers other than the ones
-        from this registry.
-        It SHOULD also NOT accept authenticated choice submissions from resource helpers other than the ones
-        from this registry.
       </t>
     </section>
 
@@ -207,7 +195,7 @@
         <li>the `choice` back channel endpoint URL of the authorization server</li>
         <li>(optional) the <tt>subject_info</tt> back channel endpoint URL of the authorization server</li>
         <li>the front channel callback URL of the authorization server</li>
-        <li>its client credentials for use in backchannel calls to the Authorization server</li>
+        <li>its client credentials for use in backchannel calls to the authorization server</li>
       </ul>
     </section>
 
@@ -231,7 +219,8 @@
       <t>
         The resource helper can optionally make a HTTP call to the Subject Info endpoint of the authorization server,
         with the nonce from the pick request in the query parameter to obtain more information about the end user.
-        Alternatively, the resource helper could skip this step and instead take its own end user authentication measures.
+        Apart from checking the value of the nonce query parameter, the authorization header SHOULD check the Authorization
+        header to establish authentication of the resource helper before responding with any restricted information.
         Example request:
       </t>
       <sourcecode><![CDATA[
@@ -249,6 +238,9 @@ Authorization: &lt;...&gt;
 }
         ]]>
       </sourcecode>
+      <t>
+        Alternatively, the resource helper could skip this step and instead take its own end user authentication measures.
+      </t>
     </section>
 
     <section>
@@ -267,7 +259,7 @@ Authorization: &lt;...&gt;
         Even though the detailed view of an access scope can only be provided by the resource helper,
         it is still useful if the authorization server can at least display a string label.
         In particular, when the authorization server displays the final confirmation dialog,
-        to grant the viewed or picked scope to the client in question,
+        to grant the selected scope to the client in question,
         it could display this label in much the same way as it will likely display some label for the client's identity there.
         Also, when displaying a list of currently valid tokens, with the option to revoke,
         displaying a list of one-line labels could be convenient there.
@@ -300,7 +292,7 @@ Authorization: &lt;...&gt;
       </t>
       <ul>
         <li>nonce (the nonce from the previous steps)</li>
-        <li>action (must contain the string 'grant' or the string 'deny' as appropriate)</li>
+        <li>action (must contain the string "grant" or the string "deny" as appropriate)</li>
         <li>label (a human-readable string for display in for instance the authorization server's token revokation interface)</li>
         <li>(optional) a scope field, if different from the one that was requested (to be passed back to the client)</li>
         <li>(optional) an opaque payload object (to be included in the access token payload)</li>
@@ -400,14 +392,14 @@ Authorization: &lt;...&gt;
         even if it is instructed to display them through the scope parameter that comes from the authorization server.
       </t>
       <t>
-        The resource helper MUST only grant access to resources for which the currently authenticated user is a resource owner.
+        The resource helper MUST only allow picking resources for which the currently authenticated user is a resource owner.
         The resulting access token scope MUST always be a subset (attenuation) of the resource owner's own access scope.
       </t>
       <t>
         The scope coming back from the resource helper SHOULD be interpretable outside the context of a specific user.
-        For instance, a scope 'my-billing-details:read' means different things for different resource owners.
+        For instance, a scope "my-billing-details:read" means different things for different resource owners.
         To avoid confusion, especially if authentication was handled through the authorization server's <tt>user_info</tt> end point (see above),
-        use a globally unambiguous scope identifier such as 'user-123:billing-detals:read'.
+        use a globally unambiguous scope identifier such as "user-123:billing-detals:read".
       </t>
     </section>
   </middle>
