@@ -212,7 +212,7 @@
     </section>
 
     <section>
-      <name>Resource Helper Pick endpoint</name>
+      <name>Resource Helper Pick Endpoint</name>
       <t>
         The authorization server can redirect the end user to the resource helper's Pick endpoint, with the
         following query parameters:
@@ -262,7 +262,7 @@ Authorization: &lt;...&gt;
     </section>
 
     <section>
-      <name>Human-readable label</name>
+      <name>Human-readable Label</name>
       <t>
         Even though the detailed view of an access scope can only be provided by the resource helper,
         it is still useful if the authorization server can at least display a string label.
@@ -278,7 +278,7 @@ Authorization: &lt;...&gt;
     </section>
 
     <section>
-      <name>Introspect and token payload options</name>
+      <name>Introspect and Token Payload Options</name>
       <t>
         To make it easier for existing resource servers to start accepting access tokens issued by the authorization server,
         some custom arrangements may be included in the resource helper's software, that interact well with the resource server's
@@ -294,7 +294,7 @@ Authorization: &lt;...&gt;
     </section>
 
     <section>
-      <name>The Choice endpoint</name>
+      <name>The Choice Endpoint</name>
       <t>
         After allowing the user to pick an access scope, the resulting choice submission would include:
       </t>
@@ -340,7 +340,7 @@ Authorization: &lt;...&gt;
     </section>
 
     <section>
-      <name>Redirect back to the authorization server</name>
+      <name>Redirect Back to the Authorization Server</name>
       <t>
         After the choice information has been successfully submitted to the authorization server, the end user can be
         redirected back to the authorization server to continue the OAuth flow as usual. This redirect MUST contain
