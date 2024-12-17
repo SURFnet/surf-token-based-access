@@ -184,6 +184,15 @@
         containing an object with a member whose key is &quot;pick&quot; and whose value is the front channel
         URL for the pick endpoint to which the authorization server can redirect the user.
      </t>
+     <t>
+       Example:
+     </t>
+      <sourcecode><![CDATA[
+      {
+          "pick": "https://resource-helper.example.org/pick"
+      }
+      ]]>
+      </sourcecode>
     </section>
 
     <section>
