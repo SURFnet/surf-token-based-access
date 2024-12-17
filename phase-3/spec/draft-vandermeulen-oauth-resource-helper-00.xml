@@ -228,7 +228,7 @@
       <t>
         The resource helper can optionally make a HTTP call to the Subject Info endpoint of the authorization server,
         with the nonce from the pick request in the query parameter to obtain more information about the end user.
-        Alternatively, the resource helper could skip this step and instead take its own end user authentication measures.
+        Alternatively, the resource helper could skip this step and authenticate the end user another way.
         Example request:
       </t>
       <sourcecode><![CDATA[
