@@ -1,29 +1,29 @@
 @startuml swimlanes
 participant "Client" as C #fdf2d0
-participant "Authorization Server (AS)" as AS #d2e0e3
-participant "Resource Helper (RH)" as RH #eececd
-participant "Resource Server (RS)" as RS #d8d3e7
-C -[#0200f5]> AS: 1. Start OAuth 2.0 authorization code flow
+participant "AS" as AS #d2e0e3
+participant "RH" as RH #eececd
+participant "RS" as RS #d8d3e7
+C -[#0200f5]> AS: 1.
 
-AS -[#0200f5]> RH: 2. [Nonce] Start Resource helper Sub-flow
+AS -[#0200f5]> RH: 2.
 
-RH -[#48742c]> AS: 3. [Nonce] Get user information (optional)
+RH -[#48742c]> AS: 3.
 
-AS -[#48742c]> RH: 4. [Nonce] Return user information (optional)
+AS -[#48742c]> RH: 4.
 
 rnote over RH
-  User select scopes and RS access token custom info 
+  5.
 end note
 
-RH -[#48742c]> AS: 5. [Nonce, token info] Send scope, RS constom JSON for in access token and token label
+RH -[#48742c]> AS: 6.
 
-RH -[#0200f5]> AS: 6. [Nonce, Result] Redirect to AS 
+RH -[#0200f5]> AS: 7.
 
-AS -[#0200f5]> C: 7. OAuth 2.0 Redirect to client with code
-C -> AS: 7. OAuth 2.0 Token request
-AS -[#48742c]> C: 8. Token response
-C -[#48742c]> RS: 9. Resource access request
-RS -[#48742c]> AS: 10. OAuth 2.0 Token introspection request
-AS -[#48742c]> RS: 11. OAuth 2.0 Token introspection response
-RS -[#48742c]> C: 12. Resource access response
+AS -[#0200f5]> C: 8.
+C -> AS: 9.
+AS -[#48742c]> C: 10.
+C -[#48742c]> RS: 11.
+RS -[#48742c]> AS: 12.
+AS -[#48742c]> RS: 13.
+RS -[#48742c]> C: 14.
 @enduml
