@@ -172,19 +172,7 @@
       <t>
         The authorization server SHOULD NOT redirect the end user to resource helpers other than the ones
         from this registry.
-        It SHOULD also NOT accept choice submissions from resource helpers other than the ones
-        from this registry.
-        The authorization server SHOULD maintain a registry of trustworthy resource helpers,
-        containing for each resource helper:
-      </t>
-      <ul>
-        <li>a fully qualified domain name (for `/.well-known/resource-helper` lookup, see below)</li>
-        <li>client credentials</li>
-      </ul>
-      <t>
-        The authorization server SHOULD NOT redirect the end user to resource helpers other than the ones
-        from this registry.
-        It SHOULD also NOT accept authenticated choice submissions from resource helpers other than the ones
+        The authorization server SHOULD also NOT accept choice submissions from resource helpers other than the ones
         from this registry.
       </t>
     </section>
