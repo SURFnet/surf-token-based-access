@@ -86,7 +86,7 @@
         During an OAuth 2.0 Authorization Grant Flow,
         the authorization server authenticates the resource owner (via the user agent)
         and establishes whether the resource owner (partially) grants or denies the client's request for a token.
-        For the authorization server to meaningfully measure if the resource owner wants to grant or deny the request,
+        For the authorization server to meaningfully measure if the resource owner wants to grant or deny the request
         it needs to display, presumably via the user agent,
         the details of the authorization that the resource owner is about to give in a way that they will understand.
         These details can be very specific for the resource server's current functionality,
@@ -95,7 +95,7 @@
         "allow the client to view these three pictures, but not to delete them", or "allow the client write access to only this specific directory".
       </t>
       <t>
-        Several extension to OAuth have been created to allow for more control over the authorization process outside of the authorization server.
+        Several extension to OAuth 2.0 have been created to allow for more control over the authorization process outside of the authorization server.
       </t>
       <ul>
         <li>
@@ -137,23 +137,23 @@
       <name>Generic Flow</name>
       <artwork type="ascii-art">
       <![CDATA[
-+--------+                                             +---------------+
-|        |-(A)---------Authorization Grant------------>|               |
-|        |                                             |               |
-|        |   +----------+                              |               |
-|        |   |          |<------------Pick---------(B)-|               |
-|        |   |          |                              |               |
-|        |   |          |-(C)-----Get Subject--------->|               |
-|        |   | Resource |                              | Authorization |
-| Client |   |  Helper  |        Submit Scopes,        |    Server     |
-|        |   |          |-(D)---Token data, and ------>|               |
-|        |   |          |      Introspection data      |               |
-|        |   |          |                              |               |
-|        |   |          |-(E)--------Return----------->|               |
-|        |   +----------+                              |               |
-|        |                                             |               |
-|        |<---------------Access Token-------------(F)-|               |
-+--------+                                             +---------------+
++--------+                                          +---------------+
+|        |-(A)-------Authorization Grant----------->|               |
+|        |                                          |               |
+|        |   +----------+                           |               |
+|        |   |          |<----------Pick--------(B)-|               |
+|        |   |          |                           |               |
+|        |   |          |-(C)----Get Subject------->|               |
+|        |   | Resource |                           | Authorization |
+| Client |   |  Helper  |      Submit Scopes,       |    Server     |
+|        |   |          |-(D)--Token data, and ---->|               |
+|        |   |          |    Introspection data     |               |
+|        |   |          |                           |               |
+|        |   |          |-(E)------Return---------->|               |
+|        |   +----------+                           |               |
+|        |                                          |               |
+|        |<--------------Access Token-----------(F)-|               |
++--------+                                          +---------------+
       ]]>
       </artwork>
     </section>
