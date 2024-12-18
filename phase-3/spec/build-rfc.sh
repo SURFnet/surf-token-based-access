@@ -13,4 +13,4 @@ else
 fi
 
 # Generate the RFC
-"$XML2RFC" draft-vandermeulen-oauth-resource-helper-00.xml --text
+"$XML2RFC" draft-vandermeulen-oauth-resource-helper-00.xml --text --html
