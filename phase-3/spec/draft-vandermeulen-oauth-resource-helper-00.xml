@@ -142,6 +142,33 @@
       <figure anchor="seq">
         <artwork alt="Interaction between client, authorization server and resource helper" type="ascii-art" src="seq.txt"/>
       </figure>
+      <ul>
+        <li>
+          (A): The OAuth client initiates the authorization grant process by sending a request to the authorization server.
+        </li>
+        <li>
+          (B): The authorization server authenticates the user and then redirects the user (via their user agent) to the "Pick" endpoint of the Resource Helper that is registered for the resource server.
+          This redirection includes a unique nonce and, optionally, the scope parameter specified by the client, to initiate the scope selection process.
+        </li>
+        <li>
+          (C): The Resource Helper may call the authorization server's "Subject Info" to retrieve additional user-specific information (e.g., a username or other identifiers).
+          This call uses the nonce from step B and the resource helper's credentials to authenticate this request.
+        </li>
+        <li>
+          (D): Once the user has selected their desired scope and permissions,
+          the Resource Helper submits this choice to the authorization server.
+          This submission includes the scope, optional token payload, optional introspection details,
+          and a label with a description of the access that was granted.
+          This call uses the nonce from step B and the resource helper's credentials to authenticate this request.
+        </li>
+        <li>
+          (E): The authorization server processes the Resource Helper's submission.
+          It finalizes the scope and token details and prepares the access token for the client.
+        </li>
+        <li>
+          (F): The authorization server issues the access token to the client, completing the flow.
+        </li>
+      </ul>
     </section>
 
     <section>
