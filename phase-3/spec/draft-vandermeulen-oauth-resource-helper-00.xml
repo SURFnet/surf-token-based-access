@@ -135,27 +135,13 @@
 
     <section>
       <name>Generic Flow</name>
-      <artwork type="ascii-art">
-      <![CDATA[
-+--------+                                          +---------------+
-|        |-(A)-------Authorization Grant----------->|               |
-|        |                                          |               |
-|        |   +----------+                           |               |
-|        |   |          |<----------Pick--------(B)-|               |
-|        |   |          |                           |               |
-|        |   |          |-(C)----Get Subject------->|               |
-|        |   | Resource |                           | Authorization |
-| Client |   |  Helper  |      Submit Scopes,       |    Server     |
-|        |   |          |-(D)--Token data, and ---->|               |
-|        |   |          |    Introspection data     |               |
-|        |   |          |                           |               |
-|        |   |          |-(E)------Return---------->|               |
-|        |   +----------+                           |               |
-|        |                                          |               |
-|        |<--------------Access Token-----------(F)-|               |
-+--------+                                          +---------------+
-      ]]>
-      </artwork>
+      <t>
+        The figure below shows the interaction between the authorization server and the resource helper
+        when a client starts the authorization grant process.
+      </t>
+      <figure>
+        <artwork alt="Interaction between client, authorization server and resource helper" anchor="seq" type="ascii-art" src="seq.txt"/>
+      </figure>
     </section>
 
     <section>
