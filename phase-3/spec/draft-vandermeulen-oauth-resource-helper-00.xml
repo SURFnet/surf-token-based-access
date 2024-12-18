@@ -285,8 +285,9 @@ Authorization: &lt;...&gt;
         <li>(optional) an opaque introspect object (to be included in the introspection response for the access token, if applicable)</li>
       </ul>
       <t>
-        Apart from the inclusion of the nonce which binds this back channel call to the initial front channel redirect (step B in the diagram
-        above), the resource helper MUST also provide credentials that can identify it as a trusted member of the authorization server's
+        Apart from the inclusion of the nonce which binds this back channel call to the initial front channel redirect
+        (step B in <xref target="seq"/>),
+        the resource helper MUST also provide credentials that can identify it as a trusted member of the authorization server's
         resource helper Registry, for instance through an `Authorization` header as agreed between authorization server and resource helper,
         and this request MUST be made over TLS, to the choice endpoint of the authorization server.
       </t>
