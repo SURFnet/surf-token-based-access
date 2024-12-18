@@ -2,7 +2,11 @@
 
 This repository contains notes and code from the token-based access project.
 It is divided into three phases, see the corresponding folders.
-For the latest work happening in phase 3, see [that folder in the `dev` branch](https://github.com/SURFnet/surf-token-based-access/tree/dev/phase-3).
+For the latest work happening in phase 3, see [that folder](https://github.com/SURFnet/surf-token-based-access/tree/main/phase-3).
+
+We're working on a draft RFC there. See[draft-vandermeulen-oauth-resource-helper-00.xml](phase-3/spec/draft-vandermeulen-oauth-resource-helper-00.xml)
+
+Build the RFC using [xml2rfc](https://pypi.org/project/xml2rfc/) or the [build-rfc.sh](phase-3/spec/build-rfc.sh) script.
 
 # OAuth Resource Helper
 ### Abstract
