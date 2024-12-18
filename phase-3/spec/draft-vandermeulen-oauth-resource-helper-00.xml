@@ -139,8 +139,8 @@
         The figure below shows the interaction between the authorization server and the resource helper
         when a client starts the authorization grant process.
       </t>
-      <figure>
-        <artwork alt="Interaction between client, authorization server and resource helper" anchor="seq" type="ascii-art" src="seq.txt"/>
+      <figure anchor="seq">
+        <artwork alt="Interaction between client, authorization server and resource helper" type="ascii-art" src="seq.txt"/>
       </figure>
     </section>
 
