@@ -232,7 +232,7 @@
       <t>
         The resource helper can optionally make a HTTP call to the Subject Info endpoint of the authorization server,
         with the nonce from the pick request in the query parameter to obtain more information about the end user.
-        Apart from checking the value of the nonce query parameter, the authorization header SHOULD check the Authorization
+        Apart from checking the value of the nonce query parameter, the authorization server SHOULD check the Authorization
         header to establish authentication of the resource helper before responding with any restricted information.
         Example request:
       </t>
