@@ -41,6 +41,12 @@
     <author fullname="Michiel de Jong" initials="M.B." surname="de Jong">
       <organization>Ponder Source</organization>
       <address>
+        <postal>
+          <street>Torenlaan 5A</street>
+          <code>1402 AT</code>
+          <city>Bussum</city>
+          <country>NL</country>
+        </postal>
         <email>michiel@unhosted.org</email>
       </address>
     </author>
@@ -140,7 +146,7 @@
         when a client starts the authorization grant process.
       </t>
       <figure anchor="seq">
-        <artwork alt="Interaction between client, authorization server and resource helper" type="ascii-art" src="seq.txt"/>
+        <artwork alt="Interaction between client, authorization server and resource helper" type="ascii-art" src="https://raw.githubusercontent.com/SURFnet/surf-token-based-access/refs/heads/main/phase-3/spec/seq.txt"/>
       </figure>
       <ul>
         <li>
