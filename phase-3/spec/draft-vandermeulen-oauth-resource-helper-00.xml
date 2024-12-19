@@ -55,7 +55,7 @@
 
     <abstract>
       <t>
-        This RFC introduces the concept of a Resource Helper in OAuth 2.0.
+        This Internet Draft introduces the concept of a Resource Helper in OAuth 2.0.
         A Resource Helper is a modular component that assists the Authorization Server in managing fine-grained authorization processes.
         The Resource Helper, associated with a specific Resource Server, handles scope selection and resource-specific details,
         providing the user-interface for the Resource Owner to approve or refine access requests.
